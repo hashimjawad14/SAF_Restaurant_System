@@ -689,11 +689,13 @@
         constructor() {
           this.orders = [];
           this.filteredOrders = [];
-          this.apiEndpoint = "https://ordersystembysaflink.online/api/orders";
+          // this.apiEndpoint = "https://ordersystembysaflink.online/api/orders";
 
           // === Define your desk range here ===
           this.startDesk = 78;
           this.endDesk = 102;
+
+          this.firstLoad = true;
 
           // === Define custom desk numbers here ===
           this.customDesks = [
@@ -805,9 +807,10 @@
         }
 
         handleOrdersUpdate(newOrders, silent) {
-          // 🔔 Notify only for new orders that are within the allowed desk range
-          if (!silent) {
-            const prevIds = new Set(this.orders.map((o) => String(o.id)));
+          const prevIds = new Set(this.orders.map((o) => String(o.id)));
+
+          if (!this.firstLoad) {
+            // only skip first load
             const newlyAddedInRange = [...newOrders]
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
               .find(
@@ -835,6 +838,8 @@
           );
           this.filterOrders();
           this.updateStats();
+
+          this.firstLoad = false; // 👈 mark first load done
         }
 
         filterOrders() {
