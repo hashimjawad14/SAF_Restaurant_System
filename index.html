@@ -1,0 +1,1871 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office Beverage Order</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        transition: all 0.3s ease;
+      }
+
+      /* Theme Variables */
+      body.original-tea {
+        background-color: #f8f9fa;
+        color: #1a1a1a;
+      }
+
+      body.dashboard-company {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #1a1a1a;
+      }
+
+      .container {
+        background: linear-gradient(135deg, #00785c4f 0%, #a574014a 100%);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 48px 40px;
+        width: 100%;
+        max-width: 480px;
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+
+      body.dashboard-company .container {
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        margin: 0 auto 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      body.original-tea .logo {
+        background: white;
+      }
+
+      body.dashboard-company .logo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .logo svg {
+        width: 36px;
+        height: 36px;
+      }
+
+      .logo img {
+        width: 100px;
+        height: 100px;
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 12px;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #1a1a1a;
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+
+      .company-name {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        padding: 6px 16px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
+
+      body.original-tea .company-name {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      body.dashboard-company .company-name {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      /* small top-right actions */
+      .top-actions {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+        display: flex;
+        gap: 8px;
+      }
+      .tiny-btn {
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        color: #111827;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .tiny-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      body.dashboard-company .tiny-btn {
+        border-color: #e0e7ff;
+        background: #f8f9ff;
+        color: #111827;
+      }
+
+      .location-info {
+        text-align: center;
+        background: linear-gradient(135deg, #f5f5f5 0%, #f0f0f0 100%);
+        padding: 14px 20px;
+        border-radius: 12px;
+        margin-bottom: 36px;
+        font-size: 14px;
+        color: #4a4a4a;
+        border: 1px solid #e5e5e5;
+        font-weight: 500;
+      }
+
+      body.dashboard-company .location-info {
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+        border-color: #e0e7ff;
+      }
+
+      .beverage-section {
+        margin-bottom: 32px;
+      }
+
+      .beverage-category {
+        background: #fafafa;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s ease;
+      }
+
+      body.dashboard-company .beverage-category {
+        background: #f8f9ff;
+        border-color: #e0e7ff;
+      }
+
+      .beverage-category.active {
+        border-color: #1a1a1a;
+        background: #f5f5f5;
+      }
+
+      body.dashboard-company .beverage-category.active {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .category-icon {
+        width: 56px;
+        height: 56px;
+        background: white;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .beverage-category.active .category-icon {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      body.original-tea .beverage-category.active .category-icon {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .beverage-category.active .category-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .category-icon svg {
+        width: 30px;
+        height: 30px;
+        transition: all 0.3s ease;
+        fill: #1a1a1a;
+      }
+
+      .beverage-category.active .category-icon svg {
+        fill: white;
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 4px;
+        color: #1a1a1a;
+      }
+
+      .category-desc {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .category-toggle {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .beverage-category.active .category-toggle {
+        border-color: #1a1a1a;
+        transform: rotate(180deg);
+      }
+
+      body.original-tea .beverage-category.active .category-toggle {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .beverage-category.active .category-toggle {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+      }
+
+      .category-toggle svg {
+        width: 16px;
+        height: 16px;
+        transition: all 0.3s ease;
+        fill: #6b7280;
+      }
+
+      .beverage-category.active .category-toggle svg {
+        fill: white;
+      }
+
+      .options-container {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 20px;
+      }
+
+      .beverage-category.active .options-container {
+        max-height: 2000px;
+      }
+
+      .option-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: default;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        position: relative;
+      }
+
+      .option-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .option-item:hover {
+        background: #fafafa;
+        transform: translateX(4px);
+      }
+
+      .option-item.selected {
+        background: #f0f0f0;
+        border-color: #1a1a1a;
+      }
+
+      body.dashboard-company .option-item.selected {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      /* (kept for compatibility with original styles; no checkbox now) */
+      .option-item input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .option-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #d1d5db;
+        border-radius: 6px;
+        margin-right: 14px;
+        display: none; /* hidden because we now use quantity controls */
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .option-item.selected .option-checkbox {
+        border-color: #1a1a1a;
+      }
+
+      body.original-tea .option-item.selected .option-checkbox {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .option-item.selected .option-checkbox {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+      }
+
+      .option-checkbox::after {
+        content: "✓";
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.2s ease;
+      }
+
+      .option-item.selected .option-checkbox::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .option-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1a1a1a;
+        flex: 1;
+        min-width: 0; /* allows flex child to shrink */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal; /* ensures wrapping */
+      }
+
+      @media (max-width: 520px) {
+        .option-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .qty-control {
+          margin-top: 8px;
+          align-self: flex-end;
+        }
+      }
+
+      /* Quantity controls */
+      .qty-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ffffff;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 6px;
+      }
+      .qty-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1;
+        cursor: pointer;
+        background: #f3f4f6;
+        color: #111827;
+        transition: transform 0.1s ease, background 0.2s ease;
+      }
+      .qty-btn:active {
+        transform: scale(0.97);
+      }
+      .qty-input {
+        width: 40px;
+        text-align: center;
+        border: none;
+        font-weight: 700;
+        font-size: 14px;
+        outline: none;
+        background: transparent;
+        color: #111827;
+      }
+      body.dashboard-company .qty-control {
+        border-color: #e0e7ff;
+        background: #f8f9ff;
+      }
+      body.dashboard-company .qty-btn {
+        background: #eef2ff;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 20px;
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-size: 17px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      body.original-tea .submit-btn {
+        background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+      }
+
+      body.dashboard-company .submit-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      body.dashboard-company .submit-btn:hover {
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .message {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        padding: 18px 28px;
+        border-radius: 14px;
+        font-weight: 600;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1000;
+        min-width: 240px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .message.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .message.success {
+        background: #10b981;
+        color: white;
+      }
+
+      .message.error {
+        background: #ef4444;
+        color: white;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .order-summary {
+        background: #fafafa;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+        display: none;
+        border: 1px solid #e5e5e5;
+      }
+
+      body.dashboard-company .order-summary {
+        background: #f8f9ff;
+        border-color: #e0e7ff;
+      }
+
+      .order-summary.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .summary-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1a1a1a;
+      }
+
+      .summary-item {
+        color: #6b7280;
+        margin-left: 16px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 520px) {
+        .container {
+          padding: 36px 24px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .category-icon {
+          width: 48px;
+          height: 48px;
+        }
+
+        .category-icon svg {
+          width: 26px;
+          height: 26px;
+        }
+
+        .category-name {
+          font-size: 16px;
+        }
+      }
+
+      /* ===== Settings Page Styles (added) ===== */
+      .hidden {
+        display: none !important;
+      }
+      .settings-wrap {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 28px 24px;
+        width: 100%;
+        max-width: 960px;
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .settings-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .settings-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111827;
+      }
+      .settings-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .settings-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 8px 10px;
+        background: #ffffff;
+      }
+      .settings-input input[type="number"] {
+        width: 80px;
+        border: none;
+        outline: none;
+        font-weight: 700;
+      }
+      .save-btn,
+      .back-btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 800;
+        cursor: pointer;
+        color: #fff;
+      }
+      .save-btn {
+        background: #10b981;
+      }
+      .back-btn {
+        background: #111827;
+      }
+      .desk-grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+      }
+      @media (min-width: 720px) {
+        .desk-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 800px) {
+        .container {
+          width: 100vw;
+          margin: 0;
+          border-radius: 0px;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      .desk-card {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 14px;
+        background: #fafafa;
+      }
+      .desk-card h4 {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 800;
+        color: #111827;
+      }
+      .desk-card .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .desk-card label {
+        display: block;
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+      .desk-card input {
+        width: 100%;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 10px;
+        outline: none;
+        font-weight: 600;
+        background: #fff;
+      }
+      .route-hint {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .routes-list {
+        margin-top: 12px;
+        background: #f9fafb;
+        border: 1px dashed #e5e7eb;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 12px;
+        color: #374151;
+      }
+      .routes-list a {
+        display: inline-block;
+        margin-right: 8px;
+        margin-bottom: 6px;
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        color: #111827;
+        background: #fff;
+      }
+
+      .order-note {
+        margin-bottom: 20px;
+      }
+
+      .copyright {
+        margin-top: 30px;
+        font-size: 17px;
+        color: black;
+        text-align: center;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="orderPage">
+      <div class="top-actions">
+        <!-- <button id="goToDesk1Btn" class="tiny-btn" title="Go to Desk 1">
+          Desk 1
+        </button> -->
+        <!-- <button id="deskSettingsBtn" class="tiny-btn" title="Configure desks">
+          Desk Settings
+        </button> -->
+      </div>
+
+      <div class="logo" id="companyLogo">
+        <!-- <svg viewBox="0 0 24 24" fill="white">
+          <path
+            d="M20 3H4v10c0 2.21 1.79 4 4 4h6c2.21 0 4-1.79 4-4v-3h2c1.11 0 2-.9 2-2V5c0-1.11-.89-2-2-2zm0 5h-2V5h2v3zM4 19h16v2H4z"
+          />
+        </svg> -->
+        <img src="logo_ai.png" alt="Logo" />
+      </div>
+      <div class="company-name" id="companyName"></div>
+      <h1 id="deskTitle">Order Beverages</h1>
+      <p class="subtitle">Select your drinks for delivery</p>
+      <div class="location-info" id="locationInfo">Loading location...</div>
+
+      <form id="orderForm">
+        <div class="beverage-section" id="beverageSection">
+          <!-- Categories will be dynamically generated -->
+        </div>
+
+        <div class="order-summary" id="orderSummary">
+          <div class="summary-title">Your Order:</div>
+          <div id="summaryContent"></div>
+        </div>
+
+        <div class="order-note">
+          <label
+            for="orderNote"
+            style="display: block; font-weight: 600; margin-bottom: 6px"
+          >
+            Order Note (optional)
+          </label>
+          <textarea
+            id="orderNote"
+            name="orderNote"
+            placeholder="Add any special instructions..."
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 10px;
+              border: 1.5px solid #e5e7eb;
+              resize: vertical;
+              min-height: 60px;
+              font-size: 14px;
+            "
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Submit Order
+        </button>
+      </form>
+
+      <div class="copyright">Powered by SAF</div>
+    </div>
+
+    <!-- Settings Page (hidden by default) -->
+    <div id="settingsPage" class="settings-wrap hidden">
+      <div class="settings-head">
+        <div class="settings-title">Desk Settings</div>
+        <div class="settings-controls">
+          <div class="settings-input">
+            <label
+              for="numDesksInput"
+              style="font-size: 12px; color: #6b7280; font-weight: 700"
+              >Number of desks</label
+            >
+            <input id="numDesksInput" type="number" min="1" value="10" />
+          </div>
+          <button id="saveSettingsBtn" class="save-btn">Save</button>
+          <button id="backToOrderBtn" class="back-btn">Back</button>
+        </div>
+      </div>
+
+      <div class="route-hint">
+        Routes will work like <strong>/desk1</strong>, <strong>/desk2</strong>,
+        etc.
+      </div>
+      <div class="routes-list" id="routesList"></div>
+
+      <div id="deskGrid" class="desk-grid">
+        <!-- Desk cards generated dynamically -->
+      </div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <script>
+      // ===== API + Storage CONFIG =====
+      const API_DESKS_URL = "/api/desks"; // relative URL for your backend API
+      const STORAGE_KEY_SETTINGS = "deskSettings_cache"; // local cache key
+
+      // Fallback default seed (used if API unavailable)
+      const DEFAULT_DESK_SETTINGS = {
+        numDesks: 10,
+        desks: {
+          1: { building: "Building A", floor: "2", teaBoy: "Ahmed" },
+          2: { building: "Building A", floor: "2", teaBoy: "Ahmed" },
+          3: { building: "Building A", floor: "2", teaBoy: "Ahmed" },
+          4: { building: "Building A", floor: "2", teaBoy: "Ahmed" },
+          5: { building: "Building A", floor: "2", teaBoy: "Ahmed" },
+          6: { building: "Building B", floor: "1", teaBoy: "Mohammed" },
+          7: { building: "Building B", floor: "1", teaBoy: "Mohammed" },
+          8: { building: "Building B", floor: "1", teaBoy: "Mohammed" },
+          9: { building: "Building B", floor: "1", teaBoy: "Mohammed" },
+          10: { building: "Building B", floor: "1", teaBoy: "Mohammed" },
+        },
+      };
+
+      // In-memory cache
+      let cachedDeskSettings = null;
+
+      // Load desk settings from API (GET /api/desks) with local fallback
+      async function loadDeskSettings() {
+        // Return cached if present
+        if (cachedDeskSettings) return cachedDeskSettings;
+
+        // Try API first
+        try {
+          const res = await fetch(API_DESKS_URL, {
+            method: "GET",
+            credentials: "same-origin",
+          });
+          if (!res.ok) throw new Error("API returned error " + res.status);
+          const data = await res.json();
+          // Basic validation
+          if (
+            !data ||
+            typeof data.numDesks !== "number" ||
+            typeof data.desks !== "object"
+          ) {
+            throw new Error("Invalid data from API");
+          }
+          cachedDeskSettings = data;
+          // also persist a local cache for offline fallback
+          try {
+            localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(data));
+          } catch (e) {
+            /* ignore storage errors */
+          }
+          return cachedDeskSettings;
+        } catch (err) {
+          console.warn(
+            "Failed to load desk settings from API, falling back to local cache or defaults:",
+            err
+          );
+          // Try localStorage cache
+          try {
+            const raw = localStorage.getItem(STORAGE_KEY_SETTINGS);
+            if (raw) {
+              const parsed = JSON.parse(raw);
+              cachedDeskSettings = parsed;
+              return cachedDeskSettings;
+            }
+          } catch (e) {
+            console.warn("localStorage parse failed", e);
+          }
+          // Final fallback to DEFAULT_DESK_SETTINGS
+          cachedDeskSettings = JSON.parse(
+            JSON.stringify(DEFAULT_DESK_SETTINGS)
+          );
+          // persist fallback so UI shows something
+          try {
+            localStorage.setItem(
+              STORAGE_KEY_SETTINGS,
+              JSON.stringify(cachedDeskSettings)
+            );
+          } catch (e) {}
+          return cachedDeskSettings;
+        }
+      }
+
+      // Save desk settings via API (POST /api/desks). Also update cache & localStorage.
+      async function saveDeskSettings(obj) {
+        // Update local cache immediately
+        cachedDeskSettings = obj;
+        try {
+          localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(obj));
+        } catch (e) {
+          console.warn("Failed to persist to localStorage", e);
+        }
+
+        // Try to save to API
+        try {
+          const res = await fetch(API_DESKS_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj),
+            credentials: "same-origin",
+          });
+          if (!res.ok) {
+            const text = await res.text().catch(() => "");
+            throw new Error("API save failed: " + res.status + " " + text);
+          }
+          const serverData = await res.json().catch(() => null);
+          // If API returned updated object, replace cache
+          if (serverData && typeof serverData === "object") {
+            cachedDeskSettings = serverData;
+            try {
+              localStorage.setItem(
+                STORAGE_KEY_SETTINGS,
+                JSON.stringify(serverData)
+              );
+            } catch (e) {}
+          }
+          return cachedDeskSettings;
+        } catch (err) {
+          console.error(
+            "Error saving desk settings to API, settings saved locally as fallback:",
+            err
+          );
+          // We already saved to localStorage above; return the local obj so UI continues.
+          return cachedDeskSettings;
+        }
+      }
+
+      // ===== Routing helpers =====
+      function getDeskIdFromRoute() {
+        // path /deskN
+        const path = window.location.pathname || "";
+        let m = path.match(/^\/desk(\d+)$/i);
+        if (m) return parseInt(m[1], 10);
+
+        // hash #deskN
+        const hash = window.location.hash || "";
+        m = hash.match(/^#desk(\d+)$/i);
+        if (m) return parseInt(m[1], 10);
+
+        // query ?desk=N (legacy)
+        const urlParams = new URLSearchParams(window.location.search);
+        const q = parseInt(urlParams.get("desk") || "", 10);
+        if (!isNaN(q) && q > 0) return q;
+
+        return 1;
+      }
+
+      function isSettingsRoute() {
+        const path = window.location.pathname || "";
+        if (/^\/settings$/i.test(path)) return true;
+        const hash = window.location.hash || "";
+        return /^#settings$/i.test(hash);
+      }
+
+      function navigateToDesk(n) {
+        try {
+          history.pushState({}, "", `/desk${n}`);
+        } catch {
+          location.hash = `desk${n}`;
+        }
+        router(); // fire router synchronously
+      }
+
+      function navigateToSettings() {
+        try {
+          history.pushState({}, "", `/settings`);
+        } catch {
+          location.hash = `settings`;
+        }
+        router();
+      }
+
+      // ===== ORIGINAL + ENHANCED APPLICATION CONFIG =====
+      const companyConfigs = {
+        "original-tea": {
+          name: "قائمة المشروبات | Drinks Menu",
+          theme: "original-tea",
+          logo: null, // Uses default SVG
+          webhook: "https://hook.eu2.make.com/65yk86m3f2693ntya30ecusmxu7fuvfl",
+          orderFlow: "telegram",
+          teaBoys: {
+            TB001: {
+              name: "Ahmed",
+              location: "Building A - Floor 2",
+              desks: [1, 2, 3, 4, 5],
+              telegram: "@ahmed_teaboy",
+            },
+            TB002: {
+              name: "Mohammed",
+              location: "Building B - Floor 1",
+              desks: [6, 7, 8, 9, 10],
+              telegram: "@mohammed_teaboy",
+            },
+          },
+          menu: {
+            coffee: {
+              name: "القهوة | Coffee",
+              desc: "Premium coffee selections",
+              items: [
+                // {
+                //   id: "blackCoffee",
+                //   name: "Black Coffee",
+                //   value: "Black Coffee",
+                // },
+                // {
+                //   id: "iceBlackCoffee",
+                //   name: "Iced Black Coffee",
+                //   value: "Iced Black Coffee",
+                // },
+                // { id: "latte", name: "Latte", value: "Latte" },
+                // { id: "cappuccino", name: "Cappuccino", value: "Cappuccino" },
+
+                {
+                  id: "espresso",
+                  name: "إسبريسو | Espresso",
+                  value: "Espresso",
+                },
+                {
+                  id: "doubleEspresso",
+                  name: "دبل إسبريسو | Double Espresso",
+                  value: "Double Espresso",
+                },
+                {
+                  id: "americano",
+                  name: "أمريكانو | Americano",
+                  value: "Americano",
+                },
+                {
+                  id: "cappuccino",
+                  name: "كابتشينو | Cappuccino",
+                  value: "Cappuccino",
+                },
+                {
+                  id: "latte",
+                  name: "لاتيه | Latte",
+                  value: "Latte",
+                },
+                {
+                  id: "flatWhite",
+                  name: "فلات وايت | Flat White",
+                  value: "Flat White",
+                },
+                {
+                  id: "blackCoffee",
+                  name: "قهوة سوداء | Black Coffee",
+                  value: "Black Coffee",
+                },
+                {
+                  id: "saudiCoffee",
+                  name: "قهوة سعودية | Saudi Coffee",
+                  value: "Saudi Coffee",
+                },
+              ],
+            },
+            tea: {
+              name: "الشاي | Tea",
+              desc: "Fine tea selections",
+              items: [
+                // {
+                //   id: "khadeerBlack",
+                //   name: "Khadeer Black",
+                //   value: "Khadeer Black",
+                // },
+                // {
+                //   id: "khadeerEnglish",
+                //   name: "Khadeer English",
+                //   value: "Khadeer English",
+                // },
+                // {
+                //   id: "khadeerGreen",
+                //   name: "Khadeer Green",
+                //   value: "Khadeer Green",
+                // },
+                // {
+                //   id: "liptonBlack",
+                //   name: "Lipton Black",
+                //   value: "Lipton Black",
+                // },
+                {
+                  id: "redTea",
+                  name: "شاي أحمر | Red Tea",
+                  value: "Red Tea",
+                },
+                {
+                  id: "greenTea",
+                  name: "شاي أخضر | Green Tea",
+                  value: "Green Tea",
+                },
+                {
+                  id: "mintTea",
+                  name: "شاي بالنعناع | Mint Tea",
+                  value: "Mint Tea",
+                },
+                {
+                  id: "milkTea",
+                  name: "شاي بالحليب | Milk Tea",
+                  value: "Milk Tea",
+                },
+                {
+                  id: "lemonGingerTea",
+                  name: "شاي ليمون وزنجبيل | Lemon Ginger Tea",
+                  value: "Lemon Ginger Tea",
+                },
+              ],
+            },
+          },
+        },
+        "dashboard-company": {
+          name: "Corporate Beverage Solutions",
+          theme: "dashboard-company",
+          logo: null,
+          webhook: null,
+          orderFlow: "dashboard",
+          apiEndpoint: "/api/orders",
+          staffAreas: {
+            SA001: {
+              name: "Reception Team",
+              location: "Ground Floor - Reception",
+              desks: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
+            SA002: {
+              name: "Office Staff",
+              location: "Floor 2 - Main Office",
+              desks: [11, 12, 13, 14, 15, 16, 17, 18, 19, 20],
+            },
+          },
+          menu: {
+            coffee: {
+              name: "Coffee",
+              desc: "Corporate coffee selections",
+              items: [
+                { id: "espresso", name: "Espresso", value: "Espresso" },
+                { id: "americano", name: "Americano", value: "Americano" },
+                { id: "cappuccino", name: "Cappuccino", value: "Cappuccino" },
+                { id: "latte", name: "Latte", value: "Latte" },
+                { id: "mocha", name: "Mocha", value: "Mocha" },
+              ],
+            },
+            tea: {
+              name: "Tea & Beverages",
+              desc: "Premium tea and beverages",
+              items: [
+                {
+                  id: "englishTea",
+                  name: "English Breakfast Tea",
+                  value: "English Breakfast Tea",
+                },
+                { id: "greenTea", name: "Green Tea", value: "Green Tea" },
+                {
+                  id: "chamomile",
+                  name: "Chamomile Tea",
+                  value: "Chamomile Tea",
+                },
+                {
+                  id: "hotChocolate",
+                  name: "Hot Chocolate",
+                  value: "Hot Chocolate",
+                },
+              ],
+            },
+            coldDrinks: {
+              name: "Cold Beverages",
+              desc: "Refreshing cold drinks",
+              items: [
+                { id: "icedCoffee", name: "Iced Coffee", value: "Iced Coffee" },
+                { id: "icedTea", name: "Iced Tea", value: "Iced Tea" },
+                {
+                  id: "mineralWater",
+                  name: "Mineral Water",
+                  value: "Mineral Water",
+                },
+                {
+                  id: "sparklingWater",
+                  name: "Sparkling Water",
+                  value: "Sparkling Water",
+                },
+              ],
+            },
+          },
+        },
+      };
+
+      // ===== UI bindings & state =====
+      const beverageSection = document.getElementById("beverageSection");
+      const form = document.getElementById("orderForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const messageEl = document.getElementById("message");
+      const settingsPage = document.getElementById("settingsPage");
+      const orderPage = document.getElementById("orderPage");
+      const numDesksInput = document.getElementById("numDesksInput");
+      const deskGrid = document.getElementById("deskGrid");
+      const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+      const backToOrderBtn = document.getElementById("backToOrderBtn");
+      const routesList = document.getElementById("routesList");
+      const note = document.getElementById("orderNote").value.trim();
+
+      // Quantity map
+      const quantities = {}; // { [itemId]: number }
+
+      // These will be set during initialization
+      let deskId = 1;
+      let companyId = "original-tea";
+      let config = companyConfigs[companyId];
+      let serviceProvider = null;
+      let serviceProviderId = null;
+
+      // ===== Small UI helpers =====
+      function showMessage(text, type) {
+        if (!messageEl) return;
+        messageEl.textContent = text;
+        messageEl.className = `message ${type} show`;
+        setTimeout(() => {
+          messageEl.classList.remove("show");
+        }, 4000);
+      }
+
+      function resetFormUI() {
+        if (form) form.reset();
+        Object.keys(quantities).forEach((k) => (quantities[k] = 0));
+        document.querySelectorAll(".qty-input").forEach((i) => (i.value = 0));
+        document
+          .querySelectorAll(".option-item")
+          .forEach((item) => item.classList.remove("selected"));
+        document
+          .querySelectorAll(".beverage-category")
+          .forEach((cat) => cat.classList.remove("active"));
+        updateOrderSummary();
+      }
+
+      // ===== Service provider resolution (uses desk settings from API) =====
+      async function resolveServiceProvider(currentDeskId) {
+        // Prefer dynamic desk overrides from API/settings
+        try {
+          const settings = await loadDeskSettings();
+          const dynamic = settings.desks?.[currentDeskId];
+          if (dynamic) {
+            serviceProviderId = `DESK${currentDeskId}`;
+            serviceProvider = {
+              name: dynamic.teaBoy || "Ahmed",
+              location: `${dynamic.building || "Zone A"} - ${
+                dynamic.floor || "1"
+              }`.trim(),
+              desks: [currentDeskId],
+              telegram: dynamic.telegram || "",
+            };
+            return;
+          }
+        } catch (err) {
+          console.warn("Could not read dynamic desk overrides:", err);
+        }
+
+        // Fallbacks based on company config
+        serviceProvider = null;
+        serviceProviderId = null;
+
+        if (config.orderFlow === "telegram" && config.teaBoys) {
+          for (const [id, info] of Object.entries(config.teaBoys)) {
+            if (info.desks && info.desks.includes(currentDeskId)) {
+              serviceProviderId = id;
+              serviceProvider = info;
+              break;
+            }
+          }
+        } else if (config.staffAreas) {
+          for (const [id, info] of Object.entries(config.staffAreas)) {
+            if (info.desks && info.desks.includes(currentDeskId)) {
+              serviceProviderId = id;
+              serviceProvider = info;
+              break;
+            }
+          }
+        }
+      }
+
+      // ===== Header & location UI =====
+      function updateHeaderAndLocation(currentDeskId) {
+        const deskTitleEl = document.getElementById("deskTitle");
+        const locationInfoEl = document.getElementById("locationInfo");
+        if (deskTitleEl)
+          deskTitleEl.textContent = `Desk #${currentDeskId} – Order Beverages`;
+
+        if (serviceProvider) {
+          const serviceText =
+            config.orderFlow === "telegram"
+              ? `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`
+              : `${serviceProvider.location} • Service: ${serviceProvider.name}`;
+          if (locationInfoEl) locationInfoEl.textContent = serviceText;
+        } else {
+          if (locationInfoEl)
+            locationInfoEl.textContent = "Service area not configured";
+        }
+
+        // company brand updates
+        const companyNameEl = document.getElementById("companyName");
+        if (companyNameEl) companyNameEl.textContent = config.name || "";
+        const logoEl = document.getElementById("companyLogo");
+        if (logoEl) {
+          if (config.logo) {
+            logoEl.innerHTML = `<img src="${config.logo}" alt="${config.name} Logo">`;
+          } else {
+            // keep existing markup or default SVG
+          }
+        }
+        // theme
+        if (config.theme) {
+          document.body.className = config.theme;
+        }
+      }
+
+      // ===== Beverage UI generation =====
+      function generateBeverageCategories() {
+        if (!beverageSection) return;
+        beverageSection.innerHTML = "";
+
+        const categoryIcons = {
+          coffee: `<path d="M18.5,3H6C4.9,3,4,3.9,4,5v5.71c0,3.83,2.95,7.18,6.78,7.29c3.96,0.12,7.22-3.06,7.22-7v-1h0.5c1.93,0,3.5-1.57,3.5-3.5S20.43,3,18.5,3z M16,5v3H6V5H16z M16,10v1c0,2.76-2.24,5-5,5s-5-2.24-5-5v-1H16z M18.5,8H18V5h0.5C19.33,5,20,5.67,20,6.5S19.33,8,18.5,8z M4,19h16v2H4V19z"/>`,
+          tea: `<path d="M20,8h-1V5c0-1.1-0.9-2-2-2H5C3.9,3,3,3.9,3,5v9c0,2.21,1.79,4,4,4h6c2.21,0,4-1.79,4-4v-1h1c1.66,0,3-1.34,3-3S21.66,8,20,8z M5,5h10c0,0,0,0.01,0,0.01V8H5V5z M15,14c0,1.1-0.9,2-2,2H7c-1.1,0-2-0.9-2-2v-4h10V14z M20,11h-3v-1h3c0.55,0,1,0.45,1,1S20.55,11,20,11z M3,19h16v2H3V19z"/>`,
+          coldDrinks: `<path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5A1.5,1.5 0 0,1 17,15.5A1.5,1.5 0 0,1 15.5,17H14.5A1.5,1.5 0 0,1 13,15.5A1.5,1.5 0 0,1 14.5,14H14.71L14.44,13.73C13.59,12.59 13,11.11 13,9.5A3.5,3.5 0 0,0 9.5,6A3.5,3.5 0 0,0 6,9.5C6,11.11 6.59,12.59 7.56,13.73L7.29,14H6.5A1.5,1.5 0 0,0 5,15.5A1.5,1.5 0 0,0 6.5,17H7.5A1.5,1.5 0 0,0 9,15.5A1.5,1.5 0 0,0 7.5,14H7.29L7.56,13.73C8.41,12.59 9,11.11 9,9.5A0.5,0.5 0 0,1 9.5,9A0.5,0.5 0 0,1 10,9.5C10,10.61 9.61,11.62 8.95,12.39L9.22,13H9.5A1.5,1.5 0 0,1 11,14.5A1.5,1.5 0 0,1 9.5,16H8.5A1.5,1.5 0 0,1 7,14.5A1.5,1.5 0 0,1 8.5,13H9.22L8.95,12.39C9.61,11.62 10,10.61 10,9.5A0.5,0.5 0 0,0 9.5,9Z"/>`,
+        };
+
+        Object.entries(config.menu).forEach(([categoryKey, category]) => {
+          const categoryDiv = document.createElement("div");
+          categoryDiv.className = "beverage-category";
+          categoryDiv.id = `${categoryKey}Category`;
+
+          categoryDiv.innerHTML = `
+        <div class="category-header" id="${categoryKey}Header">
+          <div class="category-icon">
+            <svg viewBox="0 0 24 24">
+              ${categoryIcons[categoryKey] || categoryIcons.coffee}
+            </svg>
+          </div>
+          <div class="category-info">
+            <div class="category-name">${category.name}</div>
+            <div class="category-desc">${category.desc}</div>
+          </div>
+          <div class="category-toggle">
+            <svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+          </div>
+        </div>
+        <div class="options-container">
+          ${category.items
+            .map(
+              (item) => `
+            <label class="option-item" data-item-id="${
+              item.id
+            }" data-category="${categoryKey}">
+              <div class="option-name">${item.name}</div>
+              <div class="qty-control">
+                <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
+                <input type="text" class="qty-input" value="${
+                  quantities[item.id] || 0
+                }" inputmode="numeric" pattern="[0-9]*" />
+                <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
+              </div>
+            </label>
+          `
+            )
+            .join("")}
+        </div>
+      `;
+
+          beverageSection.appendChild(categoryDiv);
+
+          // Add event listener for category toggle
+          const headerEl = document.getElementById(`${categoryKey}Header`);
+          if (headerEl) {
+            headerEl.addEventListener("click", function (e) {
+              e.preventDefault();
+              const c = document.getElementById(`${categoryKey}Category`);
+              if (c) c.classList.toggle("active");
+            });
+          }
+        });
+
+        // Mark selected items (qty > 0)
+        document.querySelectorAll(".option-item").forEach((el) => {
+          const id = el.getAttribute("data-item-id");
+          if ((quantities[id] || 0) > 0) el.classList.add("selected");
+        });
+      }
+
+      // ===== Quantity controls (delegated) =====
+      document.addEventListener("click", function (e) {
+        const minus = e.target.closest(".qty-btn.minus");
+        const plus = e.target.closest(".qty-btn.plus");
+        if (!minus && !plus) return;
+
+        const control = (minus || plus).closest(".qty-control");
+        const itemEl = (minus || plus).closest(".option-item");
+        const input = control.querySelector(".qty-input");
+        const itemId = itemEl.getAttribute("data-item-id");
+
+        let val = parseInt(input.value || "0", 10);
+        if (isNaN(val)) val = 0;
+        if (minus) val = Math.max(0, val - 1);
+        if (plus) val = Math.min(99, val + 1);
+
+        input.value = val;
+        quantities[itemId] = val;
+
+        if (val > 0) itemEl.classList.add("selected");
+        else itemEl.classList.remove("selected");
+
+        updateOrderSummary();
+      });
+
+      document.addEventListener("input", function (e) {
+        const input = e.target.closest(".qty-input");
+        if (!input) return;
+        const itemEl = input.closest(".option-item");
+        const itemId = itemEl.getAttribute("data-item-id");
+        let val = parseInt(input.value.replace(/\D/g, "") || "0", 10);
+        if (isNaN(val)) val = 0;
+        val = Math.max(0, Math.min(99, val));
+        input.value = val;
+        quantities[itemId] = val;
+
+        if (val > 0) itemEl.classList.add("selected");
+        else itemEl.classList.remove("selected");
+
+        updateOrderSummary();
+      });
+
+      // ===== Order summary update =====
+      function updateOrderSummary() {
+        const selectedItems = [];
+        Object.keys(config.menu).forEach((categoryKey) => {
+          const items = config.menu[categoryKey].items;
+          const picked = items
+            .map((it) => ({ ...it, qty: quantities[it.id] || 0 }))
+            .filter((it) => it.qty > 0);
+          if (picked.length > 0) {
+            const list = picked.map((p) => `${p.value} x${p.qty}`);
+            selectedItems.push(
+              `${config.menu[categoryKey].name}: ${list.join(", ")}`
+            );
+          }
+        });
+
+        const summaryEl = document.getElementById("orderSummary");
+        const summaryContent = document.getElementById("summaryContent");
+
+        if (selectedItems.length > 0) {
+          if (summaryEl) summaryEl.classList.add("show");
+          if (summaryContent)
+            summaryContent.innerHTML = selectedItems
+              .map((item) => `<div class="summary-item">• ${item}</div>`)
+              .join("");
+        } else {
+          if (summaryEl) summaryEl.classList.remove("show");
+          if (summaryContent) summaryContent.innerHTML = "";
+        }
+      }
+
+      // ===== Order submission logic =====
+      form &&
+        form.addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const orderItems = {};
+          const allItems = [];
+          const itemsDetailed = [];
+
+          Object.keys(config.menu).forEach((categoryKey) => {
+            const items = config.menu[categoryKey].items;
+            const selected = items
+              .map((it) => ({ ...it, qty: quantities[it.id] || 0 }))
+              .filter((it) => it.qty > 0);
+
+            orderItems[categoryKey] = selected.map(
+              (s) => `${s.value} (${s.qty})`
+            );
+
+            selected.forEach((s) => {
+              for (let i = 0; i < s.qty; i++) allItems.push(s.value);
+              itemsDetailed.push({ id: s.id, name: s.value, quantity: s.qty });
+            });
+          });
+
+          if (allItems.length === 0) {
+            showMessage("Please select at least one beverage", "error");
+            return;
+          }
+
+          // Show loading state
+          if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML =
+              'Submitting Order<span class="loading"></span>';
+          }
+          // Capture note
+          const note = document.getElementById("orderNote")?.value.trim() || "";
+
+          try {
+            // if (config.orderFlow === "telegram" && config.webhook) {
+            //   await submitTelegramOrder(orderItems, allItems);
+            // } else {
+            await submitDashboardOrder(
+              orderItems,
+              allItems,
+              itemsDetailed,
+              note
+            );
+            // }
+            showMessage("Order sent successfully! ✓", "success");
+            resetFormUI();
+          } catch (error) {
+            console.error("Order submission error:", error);
+            showMessage("Error: Could not submit order", "error");
+          } finally {
+            if (submitBtn) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Submit Order";
+            }
+          }
+        });
+
+      async function submitTelegramOrder(orderItems, allItems) {
+        const orderData = {
+          desk: deskId,
+          items: allItems,
+          ...orderItems,
+          teaboy: serviceProviderId,
+          teaboy_name: serviceProvider?.name || "",
+          teaboy_telegram: serviceProvider?.telegram || "",
+          location: serviceProvider?.location || "",
+          company: config.name,
+          timestamp: new Date().toISOString(),
+          order_time: new Date().toLocaleTimeString(),
+          order_date: new Date().toLocaleDateString(),
+        };
+
+        // Use config.webhook as-is (it can be a third-party automation endpoint)
+        const response = await fetch(config.webhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to submit order via webhook");
+        }
+      }
+
+      async function submitDashboardOrder(
+        orderItems,
+        allItems,
+        itemsDetailed,
+        orderNote
+      ) {
+        const orderData = {
+          id: `ORD-${Date.now()}-${deskId}`,
+          desk: deskId,
+          items: allItems,
+          itemsDetailed,
+          itemsByCategory: orderItems,
+          serviceArea: serviceProviderId,
+          serviceAreaName: serviceProvider?.name || "",
+          location: serviceProvider?.location || "",
+          company: config.name,
+          companyId: companyId,
+          status: "pending",
+          timestamp: new Date().toISOString(),
+          orderTime: new Date().toLocaleTimeString(),
+          orderDate: new Date().toLocaleDateString(),
+          orderNote,
+        };
+
+        // Primary API (uses config.apiEndpoint if provided)
+        const apiUrl = config.apiEndpoint || "/api/orders";
+
+        try {
+          const response = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(orderData),
+            credentials: "same-origin",
+          });
+          if (!response.ok)
+            throw new Error("API server responded with " + response.status);
+          console.log("Order submitted to API");
+        } catch (err) {
+          console.warn(
+            "API server not available, storing order locally as fallback",
+            err
+          );
+          const existingOrders = JSON.parse(
+            localStorage.getItem("dashboardOrders") || "[]"
+          );
+          existingOrders.push(orderData);
+          localStorage.setItem(
+            "dashboardOrders",
+            JSON.stringify(existingOrders)
+          );
+          // Re-throw only if you want the UI to show error; here we continue as success (since order preserved)
+        }
+      }
+
+      // ===== Settings page logic (API-backed) =====
+      async function renderSettings() {
+        const s = await loadDeskSettings();
+        if (numDesksInput) numDesksInput.value = s.numDesks || 0;
+
+        // routes list
+        if (routesList) {
+          routesList.innerHTML = "";
+          const frag = document.createDocumentFragment();
+          for (let i = 1; i <= (s.numDesks || 0); i++) {
+            const a = document.createElement("a");
+            a.href = `/desk${i}`;
+            a.textContent = `/desk${i}`;
+            a.addEventListener("click", function (e) {
+              e.preventDefault();
+              navigateToDesk(i);
+            });
+            frag.appendChild(a);
+          }
+          routesList.appendChild(frag);
+        }
+
+        // desk grid
+        if (deskGrid) {
+          deskGrid.innerHTML = "";
+          for (let i = 1; i <= s.numDesks; i++) {
+            const data = s.desks?.[i] || {
+              building: "",
+              floor: "",
+              teaBoy: "",
+            };
+            const card = document.createElement("div");
+            card.className = "desk-card";
+            card.innerHTML = `
+          <h4>Desk ${i}</h4>
+          <div class="row">
+            <div>
+              <label>Building</label>
+              <input type="text" data-field="building" data-desk="${i}" value="${
+              data.building || ""
+            }" placeholder="e.g., Building A" />
+            </div>
+            <div>
+              <label>Room</label>
+              <input type="text" data-field="floor" data-desk="${i}" value="${
+              data.floor || ""
+            }" placeholder="e.g., 2" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Tea Boy Name</label>
+              <input type="text" data-field="teaBoy" data-desk="${i}" value="${
+              data.teaBoy || ""
+            }" placeholder="e.g., Ahmed" />
+            </div>
+            <div>
+              <label>Quick Link</label>
+              <input type="text" value="/desk${i}" readonly />
+            </div>
+          </div>
+        `;
+            deskGrid.appendChild(card);
+          }
+        }
+      }
+
+      // When number of desks changed
+      numDesksInput &&
+        numDesksInput.addEventListener("change", async () => {
+          const s = await loadDeskSettings();
+          const newCount = Math.max(
+            1,
+            parseInt(numDesksInput.value || "1", 10)
+          );
+          s.numDesks = newCount;
+          for (let i = 1; i <= newCount; i++) {
+            if (!s.desks[i])
+              s.desks[i] = { building: "", floor: "", teaBoy: "" };
+          }
+          Object.keys(s.desks).forEach((k) => {
+            const n = parseInt(k, 10);
+            if (n > newCount) delete s.desks[n];
+          });
+          await saveDeskSettings(s);
+          await renderSettings();
+        });
+
+      // Save button (persist edited fields)
+      saveSettingsBtn &&
+        saveSettingsBtn.addEventListener("click", async () => {
+          const s = await loadDeskSettings();
+          deskGrid &&
+            deskGrid.querySelectorAll("input[data-field]").forEach((inp) => {
+              const desk = parseInt(inp.getAttribute("data-desk"), 10);
+              const field = inp.getAttribute("data-field");
+              s.desks[desk] = s.desks[desk] || {};
+              s.desks[desk][field] = inp.value;
+            });
+          await saveDeskSettings(s);
+          showMessage("Desk settings saved", "success");
+        });
+
+      backToOrderBtn &&
+        backToOrderBtn.addEventListener("click", () => {
+          navigateToDesk(deskId || 1);
+        });
+
+      const deskSettingsBtn = document.getElementById("deskSettingsBtn");
+      deskSettingsBtn &&
+        deskSettingsBtn.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToSettings();
+        });
+
+      const goToDesk1Btn = document.getElementById("goToDesk1Btn");
+      goToDesk1Btn &&
+        goToDesk1Btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToDesk(1);
+        });
+
+      // ===== Router =====
+      const SETTINGS_PASSWORD = "Secret@123#";
+      async function router() {
+        if (isSettingsRoute()) {
+          // Password protection
+          if (!sessionStorage.getItem("settingsAuth")) {
+            const pwd = prompt("Enter settings password:");
+            if (pwd !== SETTINGS_PASSWORD) {
+              alert("Wrong password! Redirecting to first desk.");
+              navigateToDesk(1); // redirect to default desk
+              return; // stop rendering /settings
+            }
+            sessionStorage.setItem("settingsAuth", "true"); // remember for session
+          }
+
+          // Show settings page
+          orderPage && orderPage.classList.add("hidden");
+          settingsPage && settingsPage.classList.remove("hidden");
+          await renderSettings();
+          return;
+        }
+
+        const routeDeskId = getDeskIdFromRoute();
+        if (routeDeskId && routeDeskId !== deskId) {
+          deskId = routeDeskId;
+        }
+
+        settingsPage && settingsPage.classList.add("hidden");
+        orderPage && orderPage.classList.remove("hidden");
+
+        await resolveServiceProvider(deskId);
+        updateHeaderAndLocation(deskId);
+
+        // regenerate beverage UI (keeps quantities map)
+        generateBeverageCategories();
+        updateOrderSummary();
+      }
+
+      window.addEventListener("popstate", router);
+      window.addEventListener("hashchange", router);
+
+      // ===== Initialization IIFE =====
+      (async function init() {
+        // Parse URL params
+        try {
+          const initialUrlParams = new URLSearchParams(window.location.search);
+          deskId =
+            parseInt(initialUrlParams.get("desk")) || getDeskIdFromRoute() || 1;
+          companyId = initialUrlParams.get("company") || "original-tea";
+          config = companyConfigs[companyId] || companyConfigs["original-tea"];
+        } catch (err) {
+          console.warn("Failed to parse URL params", err);
+          deskId = getDeskIdFromRoute() || 1;
+          companyId = "original-tea";
+          config = companyConfigs[companyId];
+        }
+
+        // Apply theme & branding early (will be updated in updateHeaderAndLocation)
+        if (config.theme) document.body.className = config.theme;
+        const companyNameEl = document.getElementById("companyName");
+        if (companyNameEl) companyNameEl.textContent = config.name || "";
+        const logoEl = document.getElementById("companyLogo");
+        if (logoEl && config.logo)
+          logoEl.innerHTML = `<img src="${config.logo}" alt="${config.name} Logo">`;
+
+        // Load desk settings (so provider resolution can use overrides)
+        await loadDeskSettings();
+
+        await resolveServiceProvider(deskId);
+        updateHeaderAndLocation(deskId);
+
+        // Render the beverage categories and summary
+        generateBeverageCategories();
+        updateOrderSummary();
+
+        // Run initial router to show appropriate view
+        router();
+      })();
+    </script>
+  </body>
+</html>
