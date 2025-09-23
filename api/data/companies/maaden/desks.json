@@ -1,0 +1,20 @@
+{
+  "numDesks": 3,
+  "desks": {
+    "1": {
+      "building": "A",
+      "floor": "1",
+      "teaBoy": "Ali"
+    },
+    "2": {
+      "building": "B",
+      "floor": "2",
+      "teaBoy": "Ali"
+    },
+    "3": {
+      "building": "C",
+      "floor": "3",
+      "teaBoy": "Ali"
+    }
+  }
+}

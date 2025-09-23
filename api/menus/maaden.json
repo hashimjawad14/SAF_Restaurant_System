@@ -1,0 +1,28 @@
+{
+  "coffee": {
+    "name": "Coffee",
+    "desc": "Corporate coffee selections",
+    "items": [
+      {
+        "id": "espresso",
+        "name": "Espresso",
+        "value": "Espresso"
+      },
+      {
+        "id": "americano",
+        "name": "Americano",
+        "value": "Americano"
+      },
+      {
+        "id": "cappuccino",
+        "name": "Cappuccino",
+        "value": "Cappuccino"
+      },
+      {
+        "id": "latte",
+        "name": "Latte",
+        "value": "Latte"
+      }
+    ]
+  }
+}

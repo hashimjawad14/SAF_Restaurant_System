@@ -1,0 +1,55 @@
+{
+  "numDesks": 10,
+  "desks": {
+    "1": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "2": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "3": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "4": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "5": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "6": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "7": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "8": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "9": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    },
+    "10": {
+      "building": "",
+      "floor": "",
+      "teaBoy": ""
+    }
+  }
+}

@@ -1,0 +1,2023 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Office Beverage Order</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          Oxygen, Ubuntu, Cantarell, sans-serif;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        transition: all 0.3s ease;
+      }
+
+      /* Theme Variables */
+      body.original-tea {
+        background-color: #f8f9fa;
+        color: #1a1a1a;
+      }
+
+      body.dashboard-company {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: #1a1a1a;
+      }
+
+      .container {
+        background: linear-gradient(135deg, #00785c4f 0%, #a574014a 100%);
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 48px 40px;
+        width: 100%;
+        max-width: 480px;
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        position: relative;
+      }
+
+      body.dashboard-company .container {
+        box-shadow: 0 20px 40px rgba(102, 126, 234, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        width: 100px;
+        height: 100px;
+        border-radius: 20px;
+        margin: 0 auto 32px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .menu-item-img {
+        width: 40px;
+        height: 40px;
+        object-fit: cover;
+        border-radius: 8px;
+        flex-shrink: 0;
+        border: 1px solid #e5e7eb;
+      }
+
+      body.original-tea .logo {
+        background: white;
+      }
+
+      body.dashboard-company .logo {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .logo svg {
+        width: 36px;
+        height: 36px;
+      }
+
+      .logo img {
+        width: 100px;
+        height: 100px;
+      }
+
+      h1 {
+        font-size: 28px;
+        font-weight: 800;
+        text-align: center;
+        margin-bottom: 12px;
+        color: #1a1a1a;
+        letter-spacing: -0.5px;
+      }
+
+      .subtitle {
+        text-align: center;
+        color: #1a1a1a;
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+
+      .company-name {
+        text-align: center;
+        font-size: 11px;
+        font-weight: 600;
+        margin-bottom: 8px;
+        padding: 6px 16px;
+        border-radius: 20px;
+        display: inline-block;
+        margin-left: 50%;
+        transform: translateX(-50%);
+      }
+
+      body.original-tea .company-name {
+        background: #1a1a1a;
+        color: white;
+      }
+
+      body.dashboard-company .company-name {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+      }
+
+      /* small top-right actions */
+      .top-actions {
+        position: absolute;
+        right: 16px;
+        top: 16px;
+        display: flex;
+        gap: 8px;
+      }
+      .tiny-btn {
+        padding: 8px 12px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 1px solid #e5e7eb;
+        background: #ffffff;
+        color: #111827;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .tiny-btn:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      body.dashboard-company .tiny-btn {
+        border-color: #e0e7ff;
+        background: #f8f9ff;
+        color: #111827;
+      }
+
+      .location-info {
+        text-align: center;
+        background: linear-gradient(135deg, #f5f5f5 0%, #f0f0f0 100%);
+        padding: 14px 20px;
+        border-radius: 12px;
+        margin-bottom: 36px;
+        font-size: 14px;
+        color: #4a4a4a;
+        border: 1px solid #e5e5e5;
+        font-weight: 500;
+      }
+
+      body.dashboard-company .location-info {
+        background: linear-gradient(135deg, #f8f9ff 0%, #f0f4ff 100%);
+        border-color: #e0e7ff;
+      }
+
+      .beverage-section {
+        margin-bottom: 32px;
+      }
+
+      .beverage-category {
+        background: #fafafa;
+        border-radius: 16px;
+        padding: 24px;
+        margin-bottom: 20px;
+        border: 2px solid #f0f0f0;
+        transition: all 0.3s ease;
+      }
+
+      body.dashboard-company .beverage-category {
+        background: #f8f9ff;
+        border-color: #e0e7ff;
+      }
+
+      .beverage-category.active {
+        border-color: #1a1a1a;
+        background: #f5f5f5;
+      }
+
+      body.dashboard-company .beverage-category.active {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      .category-header {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        user-select: none;
+      }
+
+      .category-icon {
+        width: 56px;
+        height: 56px;
+        background: white;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-right: 18px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+      }
+
+      .beverage-category.active .category-icon {
+        transform: scale(1.05);
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      body.original-tea .beverage-category.active .category-icon {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .beverage-category.active .category-icon {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .category-icon svg {
+        width: 30px;
+        height: 30px;
+        transition: all 0.3s ease;
+        fill: #1a1a1a;
+      }
+
+      .beverage-category.active .category-icon svg {
+        fill: white;
+      }
+
+      .category-info {
+        flex: 1;
+      }
+
+      .category-name {
+        font-weight: 700;
+        font-size: 18px;
+        margin-bottom: 4px;
+        color: #1a1a1a;
+      }
+
+      .category-desc {
+        font-size: 14px;
+        color: #6b7280;
+      }
+
+      .category-toggle {
+        width: 28px;
+        height: 28px;
+        border: 2px solid #d1d5db;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .beverage-category.active .category-toggle {
+        border-color: #1a1a1a;
+        transform: rotate(180deg);
+      }
+
+      body.original-tea .beverage-category.active .category-toggle {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .beverage-category.active .category-toggle {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+      }
+
+      .category-toggle svg {
+        width: 16px;
+        height: 16px;
+        transition: all 0.3s ease;
+        fill: #6b7280;
+      }
+
+      .beverage-category.active .category-toggle svg {
+        fill: white;
+      }
+
+      .options-container {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        margin-top: 20px;
+      }
+
+      .beverage-category.active .options-container {
+        max-height: 2000px;
+      }
+
+      .option-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding: 12px 16px;
+        background: white;
+        border-radius: 10px;
+        margin-bottom: 10px;
+        cursor: default;
+        transition: all 0.2s ease;
+        border: 2px solid transparent;
+        position: relative;
+      }
+
+      .option-item:last-child {
+        margin-bottom: 0;
+      }
+
+      .option-item:hover {
+        background: #fafafa;
+        transform: translateX(4px);
+      }
+
+      .option-item.selected {
+        background: #f0f0f0;
+        border-color: #1a1a1a;
+      }
+
+      body.dashboard-company .option-item.selected {
+        border-color: #667eea;
+        background: #f0f4ff;
+      }
+
+      /* (kept for compatibility with original styles; no checkbox now) */
+      .option-item input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      .option-checkbox {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #d1d5db;
+        border-radius: 6px;
+        margin-right: 14px;
+        display: none; /* hidden because we now use quantity controls */
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+        flex-shrink: 0;
+      }
+
+      .option-item.selected .option-checkbox {
+        border-color: #1a1a1a;
+      }
+
+      body.original-tea .option-item.selected .option-checkbox {
+        background: #1a1a1a;
+      }
+
+      body.dashboard-company .option-item.selected .option-checkbox {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-color: #667eea;
+      }
+
+      .option-checkbox::after {
+        content: "✓";
+        color: white;
+        font-size: 12px;
+        font-weight: bold;
+        opacity: 0;
+        transform: scale(0);
+        transition: all 0.2s ease;
+      }
+
+      .option-item.selected .option-checkbox::after {
+        opacity: 1;
+        transform: scale(1);
+      }
+
+      .option-name {
+        font-size: 15px;
+        font-weight: 500;
+        color: #1a1a1a;
+        flex: 1;
+        min-width: 0; /* allows flex child to shrink */
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal; /* ensures wrapping */
+      }
+
+      @media (max-width: 520px) {
+        .option-item {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+        .qty-control {
+          margin-top: 8px;
+          align-self: flex-end;
+        }
+      }
+
+      /* Quantity controls */
+      .qty-control {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #ffffff;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 6px;
+      }
+      .qty-btn {
+        width: 32px;
+        height: 32px;
+        border: none;
+        border-radius: 8px;
+        font-size: 18px;
+        font-weight: 800;
+        line-height: 1;
+        cursor: pointer;
+        background: #f3f4f6;
+        color: #111827;
+        transition: transform 0.1s ease, background 0.2s ease;
+      }
+      .qty-btn:active {
+        transform: scale(0.97);
+      }
+      .qty-input {
+        width: 40px;
+        text-align: center;
+        border: none;
+        font-weight: 700;
+        font-size: 14px;
+        outline: none;
+        background: transparent;
+        color: #111827;
+      }
+      body.dashboard-company .qty-control {
+        border-color: #e0e7ff;
+        background: #f8f9ff;
+      }
+      body.dashboard-company .qty-btn {
+        background: #eef2ff;
+      }
+
+      .submit-btn {
+        width: 100%;
+        padding: 20px;
+        color: white;
+        border: none;
+        border-radius: 14px;
+        font-size: 17px;
+        background-color: black;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        letter-spacing: 0.3px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      body.original-tea .submit-btn {
+        background: linear-gradient(135deg, #1a1a1a 0%, #333333 100%);
+      }
+
+      body.dashboard-company .submit-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+      }
+
+      body.dashboard-company .submit-btn:hover {
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+      }
+
+      .submit-btn:active {
+        transform: translateY(0);
+      }
+
+      .submit-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+      }
+
+      .message {
+        position: fixed;
+        top: 30px;
+        left: 50%;
+        transform: translateX(-50%) translateY(-100px);
+        padding: 18px 28px;
+        border-radius: 14px;
+        font-weight: 600;
+        transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        z-index: 1000;
+        min-width: 240px;
+        text-align: center;
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      }
+
+      .message.show {
+        transform: translateX(-50%) translateY(0);
+      }
+
+      .message.success {
+        background: #10b981;
+        color: white;
+      }
+
+      .message.error {
+        background: #ef4444;
+        color: white;
+      }
+
+      .loading {
+        display: inline-block;
+        width: 18px;
+        height: 18px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        vertical-align: middle;
+        margin-left: 10px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .order-summary {
+        background: #fafafa;
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+        font-size: 14px;
+        display: none;
+        border: 1px solid #e5e5e5;
+      }
+
+      body.dashboard-company .order-summary {
+        background: #f8f9ff;
+        border-color: #e0e7ff;
+      }
+
+      .order-summary.show {
+        display: block;
+        animation: fadeIn 0.3s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .summary-title {
+        font-weight: 600;
+        margin-bottom: 8px;
+        color: #1a1a1a;
+      }
+
+      .summary-item {
+        color: #6b7280;
+        margin-left: 16px;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 520px) {
+        .container {
+          padding: 36px 24px;
+        }
+
+        h1 {
+          font-size: 24px;
+        }
+
+        .category-icon {
+          width: 48px;
+          height: 48px;
+        }
+
+        .category-icon svg {
+          width: 26px;
+          height: 26px;
+        }
+
+        .category-name {
+          font-size: 16px;
+        }
+      }
+
+      /* ===== Settings Page Styles (added) ===== */
+      .hidden {
+        display: none !important;
+      }
+      .settings-wrap {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        padding: 28px 24px;
+        width: 100%;
+        max-width: 960px;
+        animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      .settings-head {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 18px;
+      }
+      .settings-title {
+        font-size: 22px;
+        font-weight: 800;
+        color: #111827;
+      }
+      .settings-controls {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .settings-input {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 8px 10px;
+        background: #ffffff;
+      }
+      .settings-input input[type="number"] {
+        width: 80px;
+        border: none;
+        outline: none;
+        font-weight: 700;
+      }
+      .save-btn,
+      .back-btn {
+        padding: 10px 14px;
+        border-radius: 10px;
+        border: none;
+        font-weight: 800;
+        cursor: pointer;
+        color: #fff;
+      }
+      .save-btn {
+        background: #10b981;
+      }
+      .back-btn {
+        background: #111827;
+      }
+      .desk-grid {
+        display: grid;
+        grid-template-columns: repeat(1, minmax(0, 1fr));
+        gap: 14px;
+        margin-top: 14px;
+      }
+      @media (min-width: 720px) {
+        .desk-grid {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+      }
+
+      @media (max-width: 800px) {
+        .container {
+          width: 100vw;
+          margin: 0;
+          border-radius: 0px;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+        }
+      }
+      .desk-card {
+        border: 1.5px solid #e5e7eb;
+        border-radius: 14px;
+        padding: 14px;
+        background: #fafafa;
+      }
+      .desk-card h4 {
+        margin-bottom: 10px;
+        font-size: 14px;
+        font-weight: 800;
+        color: #111827;
+      }
+      .desk-card .row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        margin-bottom: 8px;
+      }
+      .desk-card label {
+        display: block;
+        font-size: 12px;
+        color: #4b5563;
+        margin-bottom: 6px;
+        font-weight: 700;
+      }
+      .desk-card input {
+        width: 100%;
+        border: 1.5px solid #e5e7eb;
+        border-radius: 10px;
+        padding: 10px;
+        outline: none;
+        font-weight: 600;
+        background: #fff;
+      }
+      .route-hint {
+        margin-top: 6px;
+        font-size: 12px;
+        color: #6b7280;
+      }
+      .routes-list {
+        margin-top: 12px;
+        background: #f9fafb;
+        border: 1px dashed #e5e7eb;
+        border-radius: 12px;
+        padding: 10px 12px;
+        font-size: 12px;
+        color: #374151;
+      }
+      .routes-list a {
+        display: inline-block;
+        margin-right: 8px;
+        margin-bottom: 6px;
+        text-decoration: none;
+        padding: 6px 10px;
+        border-radius: 10px;
+        border: 1px solid #e5e7eb;
+        color: #111827;
+        background: #fff;
+      }
+
+      .order-note {
+        margin-bottom: 20px;
+      }
+
+      .copyright {
+        margin-top: 30px;
+        font-size: 17px;
+        color: black;
+        text-align: center;
+        font-style: italic;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="orderPage">
+      <div class="top-actions">
+        <!-- Optional action buttons can be enabled -->
+      </div>
+
+      <div class="logo" id="companyLogo">
+        <img src="logo_ai.png" alt="Logo" />
+      </div>
+      <div class="company-name" id="companyName"></div>
+      <h1 id="deskTitle">Order Beverages</h1>
+      <p class="subtitle">Select your drinks for delivery</p>
+      <div class="location-info" id="locationInfo">Loading location...</div>
+
+      <form id="orderForm">
+        <div class="beverage-section" id="beverageSection">
+          <!-- Categories will be dynamically generated -->
+        </div>
+
+        <div class="order-summary" id="orderSummary">
+          <div class="summary-title">Your Order:</div>
+          <div id="summaryContent"></div>
+        </div>
+
+        <div class="order-note">
+          <label
+            for="orderNote"
+            style="display: block; font-weight: 600; margin-bottom: 6px"
+          >
+            Order Note (optional)
+          </label>
+          <textarea
+            id="orderNote"
+            name="orderNote"
+            placeholder="Add any special instructions..."
+            style="
+              width: 100%;
+              padding: 12px;
+              border-radius: 10px;
+              border: 1.5px solid #e5e7eb;
+              resize: vertical;
+              min-height: 60px;
+              font-size: 14px;
+            "
+          ></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          Submit Order
+        </button>
+      </form>
+
+      <div class="copyright">Powered by SAF</div>
+    </div>
+
+    <!-- Settings Page (hidden by default) -->
+    <div id="settingsPage" class="settings-wrap hidden">
+      <div style="margin-top: 12px; display: flex; gap: 8px">
+        <button
+          id="settingsTabDesks"
+          class="save-btn"
+          style="background: #111827"
+        >
+          Desks
+        </button>
+        <button
+          id="settingsTabMenu"
+          class="save-btn"
+          style="background: #10b981"
+        >
+          Menu
+        </button>
+      </div>
+
+      <div id="menuSettings" style="margin-top: 16px; display: none">
+        <div
+          style="
+            margin-bottom: 10px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+          "
+        >
+          <button id="addCategoryBtn" class="tiny-btn">Add Category</button>
+          <button id="saveMenuBtn" class="save-btn">Save Menu</button>
+          <div style="flex: 1"></div>
+          <div style="font-size: 12px; color: #6b7280">
+            Menu is saved per-company to the server
+          </div>
+        </div>
+        <div id="menuGrid"></div>
+      </div>
+
+      <div class="settings-head">
+        <div class="settings-title">Desk Settings</div>
+        <div class="settings-controls">
+          <div class="settings-input">
+            <label
+              for="numDesksInput"
+              style="font-size: 12px; color: #6b7280; font-weight: 700"
+              >Number of desks</label
+            >
+            <input id="numDesksInput" type="number" min="1" value="10" />
+          </div>
+          <button id="saveSettingsBtn" class="save-btn">Save</button>
+          <button id="backToOrderBtn" class="back-btn">Back</button>
+        </div>
+      </div>
+
+      <div class="route-hint">
+        Routes will work like <strong id="routeHint">/company/id-1</strong>
+      </div>
+      <div class="routes-list" id="routesList"></div>
+
+      <div id="deskGrid" class="desk-grid">
+        <!-- Desk cards generated dynamically -->
+      </div>
+    </div>
+
+    <div class="message" id="message"></div>
+
+    <script>
+      const COMPANY_CODE = "maaden"; // 👈 set manually per company
+      const DEFAULT_COMPANY = "maaden"; // fallback if route/company missing
+
+      /* ===========================
+                   Full client JS — company-aware index page
+                   =========================== */
+
+      /* ---------- CONFIG ---------- */
+      const API_DESKS_URL = "/api/desks"; // global desks fallback
+      const STORAGE_KEY_SETTINGS = `deskSettings_cache_${COMPANY_CODE}`;
+      const SETTINGS_PASSWORD = "Secret@123#";
+
+      /* ---------- DOM REFS ---------- */
+      const beverageSection = document.getElementById("beverageSection");
+      const form = document.getElementById("orderForm");
+      const submitBtn = document.getElementById("submitBtn");
+      const messageEl = document.getElementById("message");
+      const settingsPage = document.getElementById("settingsPage");
+      const orderPage = document.getElementById("orderPage");
+      const numDesksInput = document.getElementById("numDesksInput");
+      const deskGrid = document.getElementById("deskGrid");
+      const saveSettingsBtn = document.getElementById("saveSettingsBtn");
+      const backToOrderBtn = document.getElementById("backToOrderBtn");
+      const routesList = document.getElementById("routesList");
+      const menuSettingsDiv = document.getElementById("menuSettings");
+      const deskSettingsTab = document.getElementById("settingsTabDesks");
+      const menuSettingsTab = document.getElementById("settingsTabMenu");
+      const menuGrid = document.getElementById("menuGrid");
+      const routeHintEl = document.getElementById("routeHint");
+
+      /* ---------- APP STATE ---------- */
+      let cachedDeskSettings = null;
+      let quantities = {}; // itemId -> qty
+      let deskId = 1;
+      let companyId = getCompanyIdFromRoute() || DEFAULT_COMPANY;
+      let config = {}; // company config (branding + menu fallback)
+      let serviceProvider = null;
+      let serviceProviderId = null;
+
+      /* ---------- FALLBACK COMPANY CONFIGS (kept as fallback if server doesn't expose company listing) ---------- */
+      const companyConfigs = {
+        "original-tea": {
+          name: "قائمة المشروبات | Drinks Menu",
+          theme: "original-tea",
+          logo: null,
+          webhook: "https://hook.eu2.make.com/65yk86m3f2693ntya30ecusmxu7fuvfl",
+          orderFlow: "telegram",
+          teaBoys: {
+            TB001: {
+              name: "Ahmed",
+              location: "Building A - Floor 2",
+              desks: [1, 2, 3, 4, 5],
+              telegram: "@ahmed_teaboy",
+            },
+            TB002: {
+              name: "Mohammed",
+              location: "Building B - Floor 1",
+              desks: [6, 7, 8, 9, 10],
+              telegram: "@mohammed_teaboy",
+            },
+          },
+          menu: {
+            coffee: {
+              name: "القهوة | Coffee",
+              desc: "Premium coffee selections",
+              items: [
+                {
+                  id: "espresso",
+                  name: "إسبريسو | Espresso",
+                  value: "Espresso",
+                },
+                {
+                  id: "americano",
+                  name: "أمريكانو | Americano",
+                  value: "Americano",
+                },
+                {
+                  id: "cappuccino",
+                  name: "كابتشينو | Cappuccino",
+                  value: "Cappuccino",
+                },
+              ],
+            },
+            tea: {
+              name: "الشاي | Tea",
+              desc: "Fine tea selections",
+              items: [
+                { id: "redTea", name: "شاي أحمر | Red Tea", value: "Red Tea" },
+                {
+                  id: "greenTea",
+                  name: "شاي أخضر | Green Tea",
+                  value: "Green Tea",
+                },
+              ],
+            },
+          },
+        },
+        "dashboard-company": {
+          name: "Corporate Beverage Solutions",
+          theme: "dashboard-company",
+          apiEndpoint: "/api/orders",
+          orderFlow: "dashboard",
+          menu: {
+            coffee: {
+              name: "Coffee",
+              desc: "Corporate coffee selections",
+              items: [
+                { id: "espresso", name: "Espresso", value: "Espresso" },
+                { id: "americano", name: "Americano", value: "Americano" },
+              ],
+            },
+            tea: {
+              name: "Tea & Beverages",
+              desc: "Premium tea",
+              items: [
+                {
+                  id: "englishTea",
+                  name: "English Breakfast Tea",
+                  value: "English Breakfast Tea",
+                },
+              ],
+            },
+          },
+        },
+      };
+
+      /* ---------- ROUTING HELPERS ---------- */
+      function parseRoute() {
+        const hash = window.location.hash || "";
+
+        // #id-3
+        let m = hash.match(/^#id-(\d+)$/i);
+        if (m)
+          return {
+            company: COMPANY_CODE,
+            desk: parseInt(m[1], 10),
+            isSettings: false,
+          };
+
+        // #settings
+        if (/^#settings$/i.test(hash))
+          return { company: COMPANY_CODE, desk: null, isSettings: true };
+
+        // default → desk 1
+        return { company: COMPANY_CODE, desk: 1, isSettings: false };
+      }
+
+      function getDeskIdFromRoute() {
+        return parseRoute().desk || 1;
+      }
+      function getCompanyIdFromRoute() {
+        return parseRoute().company || null;
+      }
+      function isSettingsRoute() {
+        const p = window.location.pathname || "";
+        if (/^\/settings$/i.test(p)) return true;
+        if (/\/[^\/]+\/settings$/i.test(p)) return true; // /company/settings
+        const h = window.location.hash || "";
+        return /^#settings$/i.test(h);
+      }
+      function navigateToDesk(n) {
+        try {
+          history.pushState(
+            {},
+            "",
+            `/company_list/${COMPANY_CODE}/order_menu.html#id-${n}`
+          );
+        } catch {
+          location.hash = `id-${n}`;
+        }
+        router();
+      }
+
+      function navigateToSettings() {
+        try {
+          history.pushState(
+            {},
+            "",
+            `/company_list/${COMPANY_CODE}/order_menu.html#settings`
+          );
+        } catch {
+          location.hash = "settings";
+        }
+        router();
+      }
+
+      /* ---------- FETCH / API HELPERS ---------- */
+      async function tryFetchJson(url, options = {}) {
+        try {
+          const res = await fetch(url, options);
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return await res.json();
+        } catch (err) {
+          console.warn("fetch failed", url, err);
+          return null;
+        }
+      }
+
+      // Fetch menu for a company (server supports ?company=)
+      async function loadCompanyMenu(companyIdLocal) {
+        // cached in memory?
+        if (window.cachedMenus && window.cachedMenus[companyIdLocal]) {
+          return window.cachedMenus[companyIdLocal];
+        }
+        if (!window.cachedMenus) window.cachedMenus = {};
+
+        // try API first
+        if (companyIdLocal) {
+          try {
+            const res = await fetch(`/api/menu?company=${companyIdLocal}`);
+            if (res.ok) {
+              const menu = await res.json();
+              window.cachedMenus[companyIdLocal] = menu;
+              try {
+                localStorage.setItem(
+                  `menu_cache_${companyIdLocal}`,
+                  JSON.stringify(menu)
+                );
+              } catch {}
+              return menu;
+            }
+          } catch (err) {
+            console.warn(`menu fetch failed for ${companyIdLocal}`, err);
+          }
+        }
+
+        // try localStorage fallback
+        try {
+          const raw = localStorage.getItem(`menu_cache_${companyIdLocal}`);
+          if (raw) {
+            const menu = JSON.parse(raw);
+            window.cachedMenus[companyIdLocal] = menu;
+            return menu;
+          }
+        } catch {}
+
+        // default empty menu
+        const fallback = {};
+        window.cachedMenus[companyIdLocal] = fallback;
+        return fallback;
+      }
+
+      async function saveCompanyMenu(companyIdLocal, menu) {
+        window.cachedMenus = window.cachedMenus || {};
+        window.cachedMenus[companyIdLocal] = menu;
+
+        try {
+          localStorage.setItem(
+            `menu_cache_${companyIdLocal}`,
+            JSON.stringify(menu)
+          );
+        } catch {}
+
+        if (companyIdLocal) {
+          try {
+            const res = await fetch(`/api/menu?company=${companyIdLocal}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(menu),
+            });
+            if (res.ok) return await res.json();
+          } catch (err) {
+            console.warn(`save menu failed for ${companyIdLocal}`, err);
+          }
+        }
+        return menu;
+      }
+
+      // Load desks (per-company if supported)
+      async function loadDeskSettings() {
+        if (cachedDeskSettings) return cachedDeskSettings;
+
+        if (companyId) {
+          const r1 = await tryFetchJson(`/api/desks?company=${companyId}`);
+          if (r1) {
+            cachedDeskSettings = r1;
+            try {
+              localStorage.setItem(
+                `deskSettings_cache_${companyId}`,
+                JSON.stringify(r1)
+              );
+            } catch {}
+            return r1;
+          }
+        }
+
+        const r2 = await tryFetchJson(API_DESKS_URL);
+        if (r2) {
+          cachedDeskSettings = r2;
+          try {
+            localStorage.setItem(
+              `deskSettings_cache_${companyId}`,
+              JSON.stringify(r2)
+            );
+          } catch {}
+          return r2;
+        }
+
+        // localStorage fallback
+        try {
+          const raw = localStorage.getItem(`deskSettings_cache_${companyId}`);
+          if (raw) {
+            cachedDeskSettings = JSON.parse(raw);
+            return cachedDeskSettings;
+          }
+        } catch {}
+
+        // default fallback
+        const fallback = { numDesks: 10, desks: {} };
+        for (let i = 1; i <= 10; i++) {
+          fallback.desks[i] = { building: "", floor: "", teaBoy: "" };
+        }
+        cachedDeskSettings = fallback;
+        try {
+          localStorage.setItem(
+            `deskSettings_cache_${companyId}`,
+            JSON.stringify(fallback)
+          );
+        } catch {}
+        return fallback;
+      }
+
+      // Save desks per-company if possible
+      async function saveDeskSettings(obj) {
+        cachedDeskSettings = obj;
+        try {
+          localStorage.setItem(
+            `deskSettings_cache_${companyId}`,
+            JSON.stringify(obj)
+          );
+        } catch {}
+
+        if (companyId) {
+          try {
+            const res = await fetch(`/api/desks?company=${companyId}`, {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(obj),
+            });
+            if (res.ok) return await res.json();
+          } catch (err) {
+            console.warn("save desks (company) failed", err);
+          }
+        }
+
+        try {
+          const res = await fetch(API_DESKS_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(obj),
+          });
+          if (res.ok) return await res.json();
+        } catch (err) {
+          console.warn("save desks (global) failed", err);
+        }
+        return obj;
+      }
+
+      /* ---------- UTILS ---------- */
+      function showMessage(text, type = "info") {
+        if (!messageEl) return;
+        messageEl.textContent = text;
+        messageEl.className = `message ${type} show`;
+        setTimeout(() => messageEl.classList.remove("show"), 3500);
+      }
+      function safeGet(obj, path, def) {
+        try {
+          return path.split(".").reduce((s, p) => s && s[p], obj) || def;
+        } catch {
+          return def;
+        }
+      }
+
+      /* ---------- SERVICE PROVIDER RESOLUTION ---------- */
+      async function resolveServiceProvider(currentDeskId) {
+        try {
+          const settings = await loadDeskSettings();
+          const dynamic =
+            settings.desks?.[currentDeskId] ||
+            settings.desks?.[String(currentDeskId)];
+          if (dynamic) {
+            serviceProviderId = `DESK${currentDeskId}`;
+            serviceProvider = {
+              name: dynamic.teaBoy || "Ahmed",
+              location: `${dynamic.building || "Zone A"} - ${
+                dynamic.floor || "1"
+              }`,
+              telegram: dynamic.telegram || "",
+            };
+            return;
+          }
+        } catch (err) {
+          console.warn("reading desk overrides failed", err);
+        }
+
+        serviceProvider = null;
+        serviceProviderId = null;
+        if (config.orderFlow === "telegram" && config.teaBoys) {
+          for (const [id, info] of Object.entries(config.teaBoys)) {
+            if (info.desks && info.desks.includes(currentDeskId)) {
+              serviceProviderId = id;
+              serviceProvider = info;
+              break;
+            }
+          }
+        } else if (config.staffAreas) {
+          for (const [id, info] of Object.entries(config.staffAreas)) {
+            if (info.desks && info.desks.includes(currentDeskId)) {
+              serviceProviderId = id;
+              serviceProvider = info;
+              break;
+            }
+          }
+        }
+      }
+
+      /* ---------- HEADER & THEME ---------- */
+      function updateHeaderAndLocation(currentDeskId) {
+        const deskTitleEl = document.getElementById("deskTitle");
+        const locationInfoEl = document.getElementById("locationInfo");
+        if (deskTitleEl)
+          deskTitleEl.textContent = `Desk #${currentDeskId} – Order Beverages`;
+        if (locationInfoEl) {
+          if (serviceProvider) {
+            const serviceText =
+              config.orderFlow === "telegram"
+                ? `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`
+                : `${serviceProvider.location} • Service: ${serviceProvider.name}`;
+            locationInfoEl.textContent = serviceText;
+          } else {
+            locationInfoEl.textContent = "Service area not configured";
+          }
+        }
+        const companyNameEl = document.getElementById("companyName");
+        if (companyNameEl) companyNameEl.textContent = config.name || "";
+        const logoEl = document.getElementById("companyLogo");
+        if (logoEl) {
+          if (config.logo)
+            logoEl.innerHTML = `<img src="${config.logo}" alt="${config.name} Logo"/>`;
+        }
+        if (config.theme) document.body.className = config.theme;
+      }
+
+      /* ---------- BEVERAGE UI ---------- */
+      function generateBeverageCategories() {
+        if (!beverageSection) return;
+        beverageSection.innerHTML = "";
+        const catIcons = {
+          coffee: `<path d="M18.5,3H6C4.9,3,4,3.9,4,5v5.71c0,3.83,2.95,7.18,6.78,7.29c3.96,0.12,7.22-3.06,7.22-7v-1h0.5c1.93,0,3.5-1.57,3.5-3.5S20.43,3,18.5,3z M16,5v3H6V5H16z M16,10v1c0,2.76-2.24,5-5,5s-5-2.24-5-5v-1H16z M18.5,8H18V5h0.5C19.33,5,20,5.67,20,6.5S19.33,8,18.5,8z"/>`,
+          tea: `<path d="M20,8h-1V5c0-1.1-0.9-2-2-2H5C3.9,3,3,3.9,3,5v9c0,2.21,1.79,4,4,4h6c2.21,0,4-1.79,4-4v-1h1c1.66,0,3-1.34,3-3S21.66,8,20,8z"/>`,
+          coldDrinks: `<path d="M9.5,3A6.5,6.5 0 0,1 16,9.5C16,11.11 15.41,12.59 14.44,13.73L14.71,14H15.5A1.5,1.5 0 0,1 17,15.5A1.5,1.5 0 0,1 15.5,17H14.5A1.5,1.5 0 0,1 13,15.5A1.5,1.5 0 0,1 14.5,14H14.71L14.44,13.73C13.59,12.59 13,11.11 13,9.5A3.5,3.5 0 0,0 9.5,6A3.5,3.5 0 0,0 6,9.5C6,11.11 6.59,12.59 7.56,13.73L7.29,14H6.5A1.5,1.5 0 0,0 5,15.5A1.5,1.5 0 0,0 6.5,17H7.5A1.5,1.5 0 0,0 9,15.5A1.5,1.5 0 0,0 7.5,14H7.29L7.56,13.73C8.41,12.59 9,11.11 9,9.5A0.5,0.5 0 0,1 9.5,9A0.5,0.5 0 0,1 10,9.5C10,10.61 9.61,11.62 8.95,12.39L9.22,13H9.5A1.5,1.5 0 0,1 11,14.5A1.5,1.5 0 0,1 9.5,16H8.5A1.5,1.5 0 0,1 7,14.5A1.5,1.5 0 0,1 8.5,13H9.22L8.95,12.39C9.61,11.62 10,10.61 10,9.5A0.5,0.5 0 0,0 9.5,9Z"/>`,
+        };
+
+        const menu = config.menu || {};
+        Object.keys(menu).forEach((k) => {
+          if (!Array.isArray(menu[k].items)) menu[k].items = [];
+        });
+
+        Object.entries(menu).forEach(([categoryKey, category]) => {
+          const categoryDiv = document.createElement("div");
+          categoryDiv.className = "beverage-category";
+          categoryDiv.id = `${categoryKey}Category`;
+
+          const itemsHtml = (category.items || [])
+            .map((item) => {
+              const imgHtml = item.image
+                ? `<img class="menu-item-img" src="${item.image}" alt="${item.name}">`
+                : `<div style="width:40px;height:40px;border-radius:8px;background:#f0f0f0;"></div>`;
+              return `
+              <label class="option-item" data-item-id="${
+                item.id
+              }" data-category="${categoryKey}">
+                <div style="display:flex; gap:10px; align-items:center;">
+                  ${imgHtml}
+                  <div class="option-name">${item.name}</div>
+                </div>
+                <div class="qty-control">
+                  <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
+                  <input type="text" class="qty-input" value="${
+                    quantities[item.id] || 0
+                  }" inputmode="numeric" pattern="[0-9]*" />
+                  <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
+                </div>
+              </label>
+            `;
+            })
+            .join("");
+
+          categoryDiv.innerHTML = `
+              <div class="category-header" id="${categoryKey}Header">
+                <div class="category-icon"><svg viewBox="0 0 24 24">${
+                  catIcons[categoryKey] || catIcons.coffee
+                }</svg></div>
+                <div class="category-info"><div class="category-name">${
+                  category.name || categoryKey
+                }</div><div class="category-desc">${
+            category.desc || ""
+          }</div></div>
+                <div class="category-toggle"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+              </div>
+              <div class="options-container">${itemsHtml}</div>
+            `;
+
+          beverageSection.appendChild(categoryDiv);
+
+          // toggle open/close
+          const headerEl = document.getElementById(`${categoryKey}Header`);
+          headerEl?.addEventListener("click", (e) => {
+            e.preventDefault();
+            const c = document.getElementById(`${categoryKey}Category`);
+            if (c) c.classList.toggle("active");
+          });
+        });
+
+        // mark selected elements
+        document.querySelectorAll(".option-item").forEach((el) => {
+          const id = el.getAttribute("data-item-id");
+          if ((quantities[id] || 0) > 0) el.classList.add("selected");
+          else el.classList.remove("selected");
+        });
+      }
+
+      /* ---------- Quantity controls (delegation) ---------- */
+      document.addEventListener("click", (e) => {
+        const minus = e.target.closest(".qty-btn.minus");
+        const plus = e.target.closest(".qty-btn.plus");
+        if (!minus && !plus) return;
+        const control = (minus || plus).closest(".qty-control");
+        const itemEl = (minus || plus).closest(".option-item");
+        const input = control.querySelector(".qty-input");
+        const itemId = itemEl.getAttribute("data-item-id");
+        let val = parseInt(input.value || "0", 10);
+        if (isNaN(val)) val = 0;
+        if (minus) val = Math.max(0, val - 1);
+        if (plus) val = Math.min(99, val + 1);
+        input.value = val;
+        quantities[itemId] = val;
+        if (val > 0) itemEl.classList.add("selected");
+        else itemEl.classList.remove("selected");
+        updateOrderSummary();
+      });
+
+      document.addEventListener("input", (e) => {
+        const input = e.target.closest(".qty-input");
+        if (!input) return;
+        const itemEl = input.closest(".option-item");
+        const itemId = itemEl.getAttribute("data-item-id");
+        let val = parseInt(input.value.replace(/\D/g, "") || "0", 10);
+        if (isNaN(val)) val = 0;
+        val = Math.max(0, Math.min(99, val));
+        input.value = val;
+        quantities[itemId] = val;
+        if (val > 0) itemEl.classList.add("selected");
+        else itemEl.classList.remove("selected");
+        updateOrderSummary();
+      });
+
+      /* ---------- Order summary ---------- */
+      function updateOrderSummary() {
+        const selectedItems = [];
+        const summaryContent = document.getElementById("summaryContent");
+        Object.keys(config.menu || {}).forEach((categoryKey) => {
+          const items = config.menu[categoryKey]?.items || [];
+          const picked = items
+            .map((it) => ({ ...it, qty: quantities[it.id] || 0 }))
+            .filter((it) => it.qty > 0);
+          if (picked.length) {
+            const list = picked.map((p) => `${p.value} x${p.qty}`);
+            selectedItems.push(
+              `${config.menu[categoryKey].name}: ${list.join(", ")}`
+            );
+          }
+        });
+        if (selectedItems.length > 0) {
+          document.getElementById("orderSummary").classList.add("show");
+          summaryContent.innerHTML = selectedItems
+            .map((i) => `<div class="summary-item">• ${i}</div>`)
+            .join("");
+        } else {
+          document.getElementById("orderSummary").classList.remove("show");
+          summaryContent.innerHTML = "";
+        }
+      }
+
+      /* ---------- Submit handlers ---------- */
+      async function submitTelegramOrder(orderItems, allItems) {
+        const orderData = {
+          desk: deskId,
+          items: allItems,
+          itemsByCategory: orderItems,
+          teaboy: serviceProviderId,
+          teaboy_name: serviceProvider?.name || "",
+          teaboy_telegram: serviceProvider?.telegram || "",
+          location: serviceProvider?.location || "",
+          company: config.name,
+          timestamp: new Date().toISOString(),
+          companyId,
+        };
+        const res = await fetch(config.webhook, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData),
+        });
+        if (!res.ok) throw new Error("Webhook failed " + res.status);
+      }
+
+      async function submitDashboardOrder(orderData) {
+        try {
+          // Build API URL
+          const apiUrl = `http://localhost:4000/api/orders?company=${encodeURIComponent(
+            COMPANY_CODE
+          )}`;
+
+          // Ensure the order has all required fields
+          const order = {
+            id: orderData.id || Date.now().toString(), // unique ID
+            desk: orderData.desk || "", // desk number or label
+            serviceArea: orderData.serviceArea || "", // optional
+            serviceAreaName: orderData.serviceAreaName || "", // optional
+            items: orderData.items || [], // required array
+            status: "pending", // always start as pending
+            timestamp: orderData.timestamp || new Date().toISOString(),
+            location: orderData.location || "", // optional
+            orderNote: orderData.orderNote || "", // optional
+          };
+
+          // Send POST request
+          const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(order),
+          });
+
+          if (!res.ok) {
+            throw new Error(`Order submission failed: ${res.status}`);
+          }
+
+          const result = await res.json();
+          console.log("Order submitted successfully:", result);
+          return result;
+        } catch (err) {
+          console.error("submitDashboardOrder error:", err);
+          alert("Failed to submit order. See console for details.");
+          return null;
+        }
+      }
+
+      /* ---------- Form submit ---------- */
+      form?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const orderItems = {};
+        const allItems = [];
+        const itemsDetailed = [];
+        Object.keys(config.menu || {}).forEach((categoryKey) => {
+          const items = config.menu[categoryKey].items || [];
+          const selected = items
+            .map((it) => ({ ...it, qty: quantities[it.id] || 0 }))
+            .filter((it) => it.qty > 0);
+          orderItems[categoryKey] = selected.map(
+            (s) => `${s.value} (${s.qty})`
+          );
+          selected.forEach((s) => {
+            for (let i = 0; i < s.qty; i++) allItems.push(s.value);
+            itemsDetailed.push({ id: s.id, name: s.value, quantity: s.qty });
+          });
+        });
+        if (allItems.length === 0) {
+          showMessage("Please select at least one beverage", "error");
+          return;
+        }
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = 'Submitting Order<span class="loading"></span>';
+        const note = document.getElementById("orderNote")?.value.trim() || "";
+        try {
+          if (config.orderFlow === "telegram" && config.webhook) {
+            await submitTelegramOrder(orderItems, allItems);
+          } else {
+            await submitDashboardOrder({
+              desk: deskId,
+              serviceArea: serviceProviderId || "",
+              serviceAreaName: serviceProvider?.name || "",
+              items: allItems,
+              itemsDetailed: itemsDetailed,
+              status: "pending",
+              timestamp: new Date().toISOString(),
+              location: serviceProvider?.location || "",
+              orderNote: note,
+            });
+          }
+          showMessage("Order sent successfully! ✓", "success");
+          // reset UI
+          Object.keys(quantities).forEach((k) => (quantities[k] = 0));
+          document.querySelectorAll(".qty-input").forEach((i) => (i.value = 0));
+          document
+            .querySelectorAll(".option-item")
+            .forEach((it) => it.classList.remove("selected"));
+          updateOrderSummary();
+        } catch (err) {
+          console.error("submit error", err);
+          showMessage("Error: Could not submit order", "error");
+        } finally {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Submit Order";
+        }
+      });
+
+      /* ---------- SETTINGS UI ---------- */
+      // Accept optional company id so settings can be rendered for the right company from router
+      async function renderSettings(cid) {
+        if (cid) companyId = cid;
+        const s = await loadDeskSettings();
+        if (numDesksInput) numDesksInput.value = s.numDesks || 0;
+
+        // update route hint to reflect company
+        if (routeHintEl) routeHintEl.textContent = `/${companyId}/id-1`;
+        // routes list
+        if (routesList) {
+          routesList.innerHTML = "";
+          const frag = document.createDocumentFragment();
+          for (let i = 1; i <= (s.numDesks || 0); i++) {
+            const a = document.createElement("a");
+            a.href = `/${companyId}/id-${i}`;
+            a.textContent = `/${companyId}/id-${i}`;
+            a.addEventListener("click", (ev) => {
+              ev.preventDefault();
+              navigateToDesk(i);
+            });
+            frag.appendChild(a);
+          }
+          routesList.appendChild(frag);
+        }
+
+        // desk grid
+        if (deskGrid) {
+          deskGrid.innerHTML = "";
+          for (let i = 1; i <= (s.numDesks || 0); i++) {
+            const data = s.desks?.[i] || {
+              building: "",
+              floor: "",
+              teaBoy: "",
+            };
+            const card = document.createElement("div");
+            card.className = "desk-card";
+            card.innerHTML = `
+                    <h4>Desk ${i}</h4>
+                    <div class="row">
+                      <div><label>Building</label><input type="text" data-field="building" data-desk="${i}" value="${
+              data.building || ""
+            }" placeholder="e.g., Building A" /></div>
+                      <div><label>Room</label><input type="text" data-field="floor" data-desk="${i}" value="${
+              data.floor || ""
+            }" placeholder="e.g., 2" /></div>
+                    </div>
+                    <div class="row">
+                      <div><label>Tea Boy Name</label><input type="text" data-field="teaBoy" data-desk="${i}" value="${
+              data.teaBoy || ""
+            }" placeholder="e.g., Ahmed" /></div>
+                      <div><label>Quick Link</label><input type="text" value="/${COMPANY_CODE}/id-${i}" readonly /></div>
+                    </div>
+                  `;
+            deskGrid.appendChild(card);
+          }
+        }
+      }
+
+      /* ---------- MENU EDITOR ---------- */
+      async function renderMenuSettings(existingMenu) {
+        if (!menuGrid) return;
+        menuGrid.innerHTML = "<p>Loading menu...</p>";
+
+        let menu;
+        if (existingMenu) {
+          menu = existingMenu;
+        } else {
+          menu = await loadCompanyMenu(companyId);
+        }
+
+        if (typeof menu !== "object" || Array.isArray(menu)) {
+          menuGrid.innerHTML = "<p>Invalid menu structure</p>";
+          return;
+        }
+
+        menuGrid.innerHTML = "";
+        const menuObj = menu; // mutated in-place while editing
+
+        // for each category
+        for (const [catKey, cat] of Object.entries(menuObj)) {
+          const catDiv = document.createElement("div");
+          catDiv.className = "beverage-category";
+          catDiv.style.marginBottom = "12px";
+          catDiv.innerHTML = `
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <input class="cat-key" value="${catKey}" placeholder="category key" />
+            <input class="cat-name" value="${
+              cat.name || ""
+            }" placeholder="Category display name" />
+            <input class="cat-desc" value="${
+              cat.desc || ""
+            }" placeholder="Category description" />
+            <button class="add-item tiny-btn">Add Item</button>
+            <button class="remove-cat tiny-btn" title="Remove category">Delete</button>
+          </div>
+          <div class="cat-items" style="margin-top:8px;"></div>
+        `;
+          menuGrid.appendChild(catDiv);
+
+          const itemsWrap = catDiv.querySelector(".cat-items");
+
+          function renderItems() {
+            itemsWrap.innerHTML = "";
+            (cat.items || []).forEach((item, idx) => {
+              const itemDiv = document.createElement("div");
+              itemDiv.style.display = "flex";
+              itemDiv.style.gap = "8px";
+              itemDiv.style.alignItems = "center";
+              itemDiv.style.marginBottom = "8px";
+              itemDiv.innerHTML = `
+              <input class="item-id" value="${
+                item.id || ""
+              }" placeholder="id" style="width:120px"/>
+              <input class="item-name" value="${
+                item.name || ""
+              }" placeholder="name" style="width:220px"/>
+              <input class="item-val" value="${
+                item.value || ""
+              }" placeholder="value" style="width:160px"/>
+              <input type="file" class="item-image-file" accept="image/*" />
+              <button class="remove-item tiny-btn">Remove</button>
+              ${
+                item.image
+                  ? `<img src="${item.image}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
+                  : ""
+              }
+            `;
+              itemsWrap.appendChild(itemDiv);
+
+              // remove item
+              itemDiv
+                .querySelector(".remove-item")
+                .addEventListener("click", () => {
+                  cat.items.splice(idx, 1);
+                  renderItems();
+                });
+
+              // file input -> dataURL
+              const fileInput = itemDiv.querySelector(".item-image-file");
+              fileInput.addEventListener("change", (ev) => {
+                const f = ev.target.files[0];
+                if (!f) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                  item.imageData = reader.result; // to save in backend
+                  item.image = reader.result; // for preview
+                  renderItems();
+                };
+                reader.readAsDataURL(f);
+              });
+
+              // inline edits
+              itemDiv
+                .querySelector(".item-id")
+                .addEventListener("input", (e) => (item.id = e.target.value));
+              itemDiv
+                .querySelector(".item-name")
+                .addEventListener("input", (e) => (item.name = e.target.value));
+              itemDiv
+                .querySelector(".item-val")
+                .addEventListener(
+                  "input",
+                  (e) => (item.value = e.target.value)
+                );
+            });
+          }
+          renderItems();
+
+          // add item
+          catDiv.querySelector(".add-item").addEventListener("click", () => {
+            cat.items = cat.items || [];
+            const newId = `item${Date.now()}`;
+            cat.items.push({ id: newId, name: "New item", value: "" });
+            renderItems();
+          });
+
+          // remove category
+          catDiv.querySelector(".remove-cat").addEventListener("click", () => {
+            delete menuObj[catKey];
+            renderMenuSettings(menuObj); // re-render with current menu
+          });
+
+          // cat-level edits
+          catDiv
+            .querySelector(".cat-name")
+            .addEventListener("input", (e) => (cat.name = e.target.value));
+          catDiv
+            .querySelector(".cat-desc")
+            .addEventListener("input", (e) => (cat.desc = e.target.value));
+          // note: cat-key renaming skipped (complex)
+        }
+
+        // add category button
+        document.getElementById("addCategoryBtn").onclick = () => {
+          const newKey = `cat${Date.now()}`;
+          menuObj[newKey] = { name: "New Category", desc: "", items: [] };
+          renderMenuSettings(menuObj); // pass current menu so changes persist
+        };
+
+        // save button
+        document.getElementById("saveMenuBtn").onclick = async () => {
+          showMessage("Saving menu...", "info");
+          try {
+            // Save locally and remote (company-scoped)
+            await saveCompanyMenu(companyId, menuObj);
+            // attempt server save as well
+            try {
+              const res = await fetch(`/api/menu?company=${companyId}`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(menuObj),
+              });
+              if (res.ok) {
+                const saved = await res.json();
+                config.menu = saved;
+                showMessage("Menu saved", "success");
+                return;
+              }
+            } catch (err) {
+              console.warn("save menu remote failed", err);
+            }
+            // fallback: update config
+            config.menu = menuObj;
+            showMessage("Menu saved locally", "success");
+          } catch (err) {
+            console.error("save menu failed", err);
+            showMessage("Failed to save menu", "error");
+          }
+        };
+      }
+
+      /* ---------- Event wiring for Settings tabs & buttons ---------- */
+      deskSettingsTab?.addEventListener("click", () => {
+        if (menuSettingsDiv) menuSettingsDiv.style.display = "none";
+        if (deskGrid) deskGrid.style.display = "";
+      });
+      menuSettingsTab?.addEventListener("click", async () => {
+        if (deskGrid) deskGrid.style.display = "none";
+        if (menuSettingsDiv) menuSettingsDiv.style.display = "";
+        await renderMenuSettings();
+      });
+
+      /* ---------- Other settings handlers ---------- */
+      numDesksInput?.addEventListener("change", async () => {
+        const s = await loadDeskSettings();
+        const newCount = Math.max(1, parseInt(numDesksInput.value || "1", 10));
+        s.numDesks = newCount;
+        for (let i = 1; i <= newCount; i++)
+          if (!s.desks[i]) s.desks[i] = { building: "", floor: "", teaBoy: "" };
+        Object.keys(s.desks).forEach((k) => {
+          const n = parseInt(k, 10);
+          if (n > newCount) delete s.desks[n];
+        });
+        await saveDeskSettings(s);
+        await renderSettings();
+      });
+
+      saveSettingsBtn?.addEventListener("click", async () => {
+        const s = await loadDeskSettings();
+        deskGrid?.querySelectorAll("input[data-field]").forEach((inp) => {
+          const desk = parseInt(inp.getAttribute("data-desk"), 10);
+          const field = inp.getAttribute("data-field");
+          s.desks[desk] = s.desks[desk] || {};
+          s.desks[desk][field] = inp.value;
+        });
+        await saveDeskSettings(s);
+        showMessage("Desk settings saved", "success");
+      });
+
+      backToOrderBtn?.addEventListener("click", () => navigateToDesk(deskId));
+      document
+        .getElementById("deskSettingsBtn")
+        ?.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToSettings();
+        });
+      document
+        .getElementById("goToDesk1Btn")
+        ?.addEventListener("click", (e) => {
+          e.preventDefault();
+          navigateToDesk(1);
+        });
+
+      /* -----------------------------
+           Storage helpers (company-aware)
+           ----------------------------- */
+      function getCompanyKey(baseKey) {
+        return `${baseKey}_${COMPANY_CODE}`;
+      }
+
+      function getCompanyStorageItem(baseKey) {
+        return localStorage.getItem(getCompanyKey(baseKey));
+      }
+
+      function setCompanyStorageItem(baseKey, value) {
+        localStorage.setItem(getCompanyKey(baseKey), value);
+      }
+
+      function removeCompanyStorageItem(baseKey) {
+        localStorage.removeItem(getCompanyKey(baseKey));
+      }
+
+      /* ---------- Router ---------- */
+      window.addEventListener("popstate", router);
+      window.addEventListener("hashchange", router);
+
+      async function router() {
+        const hash = window.location.hash.replace(/^#/, "");
+        const path = window.location.pathname || "";
+
+        // 1. SETTINGS route (use File1's company-scoped auth key behavior)
+        // Match either /<company>/settings or #settings or /settings
+        if (
+          isSettingsRoute() ||
+          hash === "settings" ||
+          /\/[^\/]+\/settings$/.test(path) ||
+          /^\/settings$/.test(path)
+        ) {
+          // lock settings per company: use session key unique to company file
+          const authKey = `settingsAuth_${COMPANY_CODE}`;
+          if (!sessionStorage.getItem(authKey)) {
+            const pwd = prompt("Enter settings password:");
+            if (pwd !== SETTINGS_PASSWORD) {
+              alert("Wrong password");
+              navigateToDesk(1);
+              return;
+            }
+            sessionStorage.setItem(authKey, "true");
+          }
+
+          // Make sure settings view uses companyId from file (COMPANY_CODE)
+          companyId = COMPANY_CODE;
+
+          orderPage.classList.add("hidden");
+          settingsPage.classList.remove("hidden");
+
+          // Render settings scoped to this company
+          await renderSettings(COMPANY_CODE);
+          return;
+        }
+
+        // 2. Desk route (default)
+        // parse route (desk can come from path or hash)
+        const route = parseRoute();
+        deskId = route.desk || deskId || 1;
+        companyId = COMPANY_CODE; // keep file-level company
+
+        // update config and menu when company changes (try remote menu)
+        config =
+          companyConfigs[COMPANY_CODE] || companyConfigs[DEFAULT_COMPANY] || {};
+        try {
+          config.menu = await loadCompanyMenu(COMPANY_CODE);
+        } catch (e) {
+          console.warn("menu fetch failed", e);
+        }
+
+        orderPage.classList.remove("hidden");
+        settingsPage.classList.add("hidden");
+
+        await resolveServiceProvider(deskId);
+        updateHeaderAndLocation(deskId);
+        generateBeverageCategories();
+        updateOrderSummary();
+      }
+
+      /* ---------- INIT ---------- */
+      (async function init() {
+        const r = parseRoute();
+        deskId = r.desk || 1;
+        companyId = COMPANY_CODE; // force to global code
+
+        config =
+          companyConfigs[COMPANY_CODE] || companyConfigs[DEFAULT_COMPANY] || {};
+        config.menu = await loadCompanyMenu(companyId);
+
+        // apply theme & branding early
+        if (config.theme) document.body.className = config.theme;
+        document.getElementById("companyName") &&
+          (document.getElementById("companyName").textContent =
+            config.name || "");
+        if (config.logo)
+          document.getElementById(
+            "companyLogo"
+          ).innerHTML = `<img src="${config.logo}" alt="${config.name} Logo"/>`;
+
+        await loadDeskSettings();
+        await resolveServiceProvider(deskId);
+        updateHeaderAndLocation(deskId);
+        generateBeverageCategories();
+        updateOrderSummary();
+
+        // initial route handling
+        router();
+      })();
+
+      /* ---------- Small CSS for menu images (injected) ---------- */
+      (function ensureImageCss() {
+        const id = "__menu_item_img_css";
+        if (document.getElementById(id)) return;
+        const style = document.createElement("style");
+        style.id = id;
+        style.textContent = `
+          .menu-item-img{ width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #eee;margin-right:8px;}
+          .option-name{display:flex;align-items:center;gap:8px;}
+          .beverage-category .options-container{display:flex;flex-wrap:wrap;gap:8px;}
+          .option-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:#fff;border:1px solid #eee;min-width:260px;max-width:420px;}
+          .qty-input{width:48px;text-align:center;border-radius:6px;border:1px solid #ddd;padding:6px}
+        `;
+        document.head.appendChild(style);
+      })();
+    </script>
+  </body>
+</html>

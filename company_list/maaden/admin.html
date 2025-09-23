@@ -11,16 +11,6 @@
         box-sizing: border-box;
       }
 
-      .order-note-display {
-        background: #f9fafb;
-        border-left: 3px solid #667eea;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 13px;
-        color: #374151;
-        margin: 10px 0;
-      }
-
       body {
         font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
           Oxygen, Ubuntu, Cantarell, sans-serif;
@@ -414,18 +404,19 @@
       .notification {
         position: fixed;
         top: 20px;
-        right: -400px;
+        right: 20px;
         background: white;
         border-radius: 12px;
         padding: 16px 20px;
         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        transition: right 0.3s ease;
+        transform: translateX(400px);
+        transition: transform 0.3s ease;
         z-index: 1000;
         border-left: 4px solid #10b981;
       }
 
       .notification.show {
-        right: 20px;
+        transform: translateX(0);
       }
 
       .notification-title {
@@ -509,36 +500,40 @@
         background: #f8f9ff;
         color: #111827;
       }
+
+      .order-note-display {
+        background: #f9fafb;
+        border-left: 3px solid #667eea;
+        padding: 8px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        color: #374151;
+        margin: 10px 0;
+      }
     </style>
   </head>
   <body>
     <div class="dashboard-container">
       <div class="header">
         <div class="header-left">
-          <h1 class="dashboard-title">TeaBoy Beverage Orders Dashboard # 2</h1>
+          <h1 class="dashboard-title">Admin Dashboard</h1>
           <p class="dashboard-subtitle">Corporate Beverage Solutions</p>
         </div>
         <div class="header-right">
-          <!-- <button
+          <button
             id="deskSettingsBtn"
             class="tiny-btn"
             title="Configure desks"
             onclick="goToSettings()"
           >
             Desk Settings
-          </button> -->
+          </button>
           <div class="status-indicator">
             <span class="status-dot"></span>
             <span>Live Updates</span>
           </div>
         </div>
       </div>
-
-      <!-- Add this before closing </body> -->
-      <audio id="notificationSound" preload="auto">
-        <source src="ding.mp3" type="audio/mpeg" />
-        <!-- <source src="noti_saf.mp3" type="audio/mpeg" /> -->
-      </audio>
 
       <div class="controls">
         <div class="controls-row">
@@ -564,10 +559,29 @@
             <label>&nbsp;</label>
             <button class="refresh-btn" id="refreshBtn">Refresh Orders</button>
           </div>
-          <!-- <div class="control-group">
+          <div class="control-group">
             <label>&nbsp;</label>
             <button class="clear-btn" id="clearBtn">Clear All Orders</button>
-          </div> -->
+          </div>
+        </div>
+      </div>
+
+      <div class="stats" id="statsContainer">
+        <div class="stat-card">
+          <div class="stat-number" id="totalOrders">0</div>
+          <div class="stat-label">Total Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="pendingOrders">0</div>
+          <div class="stat-label">Pending Orders</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="inProgressOrders">0</div>
+          <div class="stat-label">In Progress</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number" id="completedOrders">0</div>
+          <div class="stat-label">Completed Today</div>
         </div>
       </div>
 
@@ -598,68 +612,43 @@
     </div>
 
     <script>
+      const COMPANY_CODE = "maaden"; // 👈 set manually per company
+
       function goToSettings() {
-        window.location.href = "/settings";
+        // Build the URL with the current company’s order_menu.html and #settings
+        const newUrl = `/company_list/${COMPANY_CODE}/order_menu.html#settings`;
+        window.location.href = newUrl;
       }
-
-      function unlockAudio() {
-        const sound = document.getElementById("notificationSound");
-        if (!sound) return;
-        sound.volume = 1.0;
-        sound
-          .play()
-          .then(() => {
-            sound.pause();
-            sound.currentTime = 0;
-            console.log("🔔 Audio unlocked and ready");
-          })
-          .catch((err) => console.warn("Unlock failed:", err));
-      }
-
-      window.addEventListener("click", unlockAudio, { once: true });
-      window.addEventListener("keydown", unlockAudio, { once: true });
 
       class DashboardApp {
         constructor() {
           this.orders = [];
           this.filteredOrders = [];
-          // this.apiEndpoint = "https://ordersystembysaflink.online/api/orders";
-          this.apiEndpoint = "http://localhost:4000/api/orders";
 
-          // === Define your desk range here ===
-          this.startDesk = 26;
-          this.endDesk = 77;
+          // === Detect companyId from URL ===
+          const urlParams = new URLSearchParams(window.location.search);
+          this.companyId = COMPANY_CODE; // 👈 always use manual code
+          this.apiBase = "http://localhost:4000/api/orders";
+          this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
+
+          // Desk range (can be customized)
+          this.startDesk = 1;
+          this.endDesk = 160;
+
           this.firstLoad = true;
-          // === Define custom desk numbers here ===
-          this.customDesks = [
-            108, 109, 110, 111, 112, 113, 139, 140, 141, 142, 143, 144, 145,
-            146, 147, 148,
-          ];
-
-          // Precompute allowed set
           this.allowedDesks = this.buildAllowedDeskSet();
-
           this.pollInterval = null;
+
           this.init();
         }
 
         buildAllowedDeskSet() {
           const set = new Set();
-
-          // Add range desks
           for (let i = this.startDesk; i <= this.endDesk; i++) {
             set.add(String(i));
             set.add(`DESK${i}`);
             set.add(`desk${i}`);
           }
-
-          // Add custom desks
-          for (const d of this.customDesks) {
-            set.add(String(d));
-            set.add(`DESK${d}`);
-            set.add(`desk${d}`);
-          }
-
           return set;
         }
 
@@ -677,14 +666,8 @@
 
         isDeskInAllowedRange(order) {
           const n = this.getDeskNumber(order);
-          if (n != null) {
-            return (
-              (n >= this.startDesk && n <= this.endDesk) ||
-              this.customDesks.includes(n)
-            );
-          }
+          if (n != null) return n >= this.startDesk && n <= this.endDesk;
 
-          // fallback string check
           const d = order?.desk != null ? String(order.desk).trim() : "";
           const sa =
             order?.serviceArea != null ? String(order.serviceArea).trim() : "";
@@ -705,33 +688,35 @@
         attachEventListeners() {
           document
             .getElementById("statusFilter")
-            .addEventListener("change", () => this.filterOrders());
+            ?.addEventListener("change", () => this.filterOrders());
           document
             .getElementById("deskFilter")
-            .addEventListener("input", () => this.filterOrders());
+            ?.addEventListener("input", () => this.filterOrders());
           document
             .getElementById("refreshBtn")
-            .addEventListener("click", () => this.loadOrders());
+            ?.addEventListener("click", () => this.loadOrders());
           document
             .getElementById("clearBtn")
-            .addEventListener("click", () => this.clearAllOrders());
+            ?.addEventListener("click", () => this.clearAllOrders());
         }
 
         startPolling() {
           this.pollInterval = setInterval(() => {
-            this.loadOrders(false);
+            this.loadOrders(true);
           }, 3000);
         }
 
         async loadOrders(silent = false) {
           try {
             const res = await fetch(this.apiEndpoint);
-            if (!res.ok)
-              throw new Error(`GET /api/orders failed: ${res.status}`);
+            if (!res.ok) throw new Error(`GET failed: ${res.status}`);
             const newOrders = await res.json();
             this.handleOrdersUpdate(newOrders, silent);
           } catch (error) {
-            console.warn("API not available, loading from localStorage", error);
+            console.warn(
+              "API not available, using localStorage fallback",
+              error
+            );
             const localOrders = JSON.parse(
               localStorage.getItem("dashboardOrders") || "[]"
             );
@@ -743,7 +728,6 @@
           const prevIds = new Set(this.orders.map((o) => String(o.id)));
 
           if (!this.firstLoad) {
-            // only skip first load
             const newlyAddedInRange = [...newOrders]
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
               .find(
@@ -772,28 +756,21 @@
           this.filterOrders();
           this.updateStats();
 
-          this.firstLoad = false; // 👈 mark first load done
+          this.firstLoad = false;
         }
 
         filterOrders() {
           const statusFilter = document.getElementById("statusFilter").value;
           const deskFilter = document.getElementById("deskFilter").value;
 
-          // Always start from in-range orders
           const base = this.getOrdersInRange();
-
           this.filteredOrders = base.filter((order) => {
-            // ✅ Skip completed orders entirely
-            if (order.status === "completed") return false;
-
             const statusMatch =
               statusFilter === "all" || order.status === statusFilter;
-
             const deskMatchInput =
               !deskFilter ||
               String(this.getDeskNumber(order) ?? order.desk) ===
                 String(deskFilter);
-
             return statusMatch && deskMatchInput;
           });
 
@@ -806,13 +783,13 @@
 
           if (this.filteredOrders.length === 0) {
             ordersList.innerHTML = `
-                <div class="empty-state">
-                  <svg viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1ZM10 6a2 2 0 0 1 4 0v1h-4V6Zm8 13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V9h2v1a1 1 0 0 0 2 0V9h4v1a1 1 0 0 0 2 0V9h2v10Z"/>
-                  </svg>
-                  <h3>No orders found</h3>
-                  <p>Try adjusting your filters or wait for new orders</p>
-                </div>`;
+          <div class="empty-state">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Z"/>
+            </svg>
+            <h3>No orders found</h3>
+            <p>Try adjusting filters or wait for new orders</p>
+          </div>`;
             ordersCount.textContent = "0 orders";
             return;
           }
@@ -820,11 +797,9 @@
           ordersCount.textContent = `${this.filteredOrders.length} order${
             this.filteredOrders.length !== 1 ? "s" : ""
           }`;
-
           ordersList.innerHTML = this.filteredOrders
             .map((order) => this.renderOrderCard(order))
             .join("");
-
           this.attachOrderActions();
         }
 
@@ -836,11 +811,8 @@
               ? `Desk #${deskNum}`
               : order.desk
               ? `Desk #${order.desk}`
-              : order.serviceArea
-              ? order.serviceArea
-              : "Desk";
+              : order.serviceArea || "Desk";
 
-          // 🔹 Group duplicate items
           const itemCounts = {};
           (order.items || []).forEach((item) => {
             itemCounts[item] = (itemCounts[item] || 0) + 1;
@@ -856,52 +828,46 @@
             .join("");
 
           return `
-          <div class="order-card ${order.status}" data-order-id="${String(
+        <div class="order-card ${order.status}" data-order-id="${String(
             order.id
           )}">
-            <div class="order-header">
-              <div class="order-info">
-                <div class="order-id">${deskLabel}</div>
-                <div class="order-meta">
-                  <span>📍 ${order.location ?? "-"}</span>
-                  <span>🕐 ${formattedTime}</span>
-                  <span>👥 ${order.serviceAreaName ?? "-"}</span>
-                </div>
-              </div>
-              <div class="order-status ${order.status}">
-                ${order.status.replace("-", " ")}
+          <div class="order-header">
+            <div class="order-info">
+              <div class="order-id">${deskLabel}</div>
+              <div class="order-meta">
+                <span>📍 ${order.location ?? "-"}</span>
+                <span>🕐 ${formattedTime}</span>
+                <span>👥 ${order.serviceAreaName ?? "-"}</span>
               </div>
             </div>
-            <div class="order-items">
-              <div class="items-title">Items Ordered:</div>
-              <div class="items-list">
-                ${itemsHtml}
-              </div>
-            </div>
+            <div class="order-status ${order.status}">${order.status.replace(
+            "-",
+            " "
+          )}</div>
+          </div>
+          <div class="order-items">
+            <div class="items-title">Items Ordered:</div>
+            <div class="items-list">${itemsHtml}</div>
+          </div>
+          ${
+            order.orderNote
+              ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+              : ""
+          }
+          <div class="order-actions">
             ${
-              order.orderNote
-                ? `
-              <div class="order-note-display">
-                <strong>Note:</strong> ${order.orderNote}
-              </div>
-            `
+              order.status === "pending"
+                ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
                 : ""
             }
-            <div class="order-actions">
-              ${
-                order.status === "pending"
-                  ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
-                  : ""
-              }
-              ${
-                order.status === "in-progress"
-                  ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
-                  : ""
-              }
-              <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
-            </div>
+            ${
+              order.status === "in-progress"
+                ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+                : ""
+            }
+            <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
           </div>
-        `;
+        </div>`;
         }
 
         attachOrderActions() {
@@ -922,40 +888,27 @@
           const order = this.orders.find(
             (o) => String(o.id) === String(orderId)
           );
-          if (!order || !this.isDeskInAllowedRange(order)) return; // safety
+          if (!order || !this.isDeskInAllowedRange(order)) return;
 
           try {
-            if (action === "start") {
-              order.status = "in-progress";
+            let res;
+            if (action === "start" || action === "complete") {
+              order.status = action === "start" ? "in-progress" : "completed";
               this.filterOrders();
               this.updateStats();
 
-              const res = await fetch(
-                `${this.apiEndpoint}/${encodeURIComponent(orderId)}`,
+              res = await fetch(
+                `${this.apiBase}/${encodeURIComponent(
+                  orderId
+                )}?company=${encodeURIComponent(this.companyId)}`,
                 {
                   method: "PUT",
                   headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ status: "in-progress" }),
+                  body: JSON.stringify({ status: order.status }),
                 }
               );
-              if (!res.ok) throw new Error(`PUT failed: ${res.status}`);
-            } else if (action === "complete") {
-              order.status = "completed";
-              this.filterOrders();
-              this.updateStats();
-
-              const res = await fetch(
-                `${this.apiEndpoint}/${encodeURIComponent(orderId)}`,
-                {
-                  method: "PUT",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ status: "completed" }),
-                }
-              );
-              if (!res.ok) throw new Error(`PUT failed: ${res.status}`);
             } else if (action === "delete") {
-              if (!confirm("Are you sure you want to delete this order?"))
-                return;
+              if (!confirm("Delete this order?")) return;
 
               this.orders = this.orders.filter(
                 (o) => String(o.id) !== String(orderId)
@@ -963,32 +916,36 @@
               this.filterOrders();
               this.updateStats();
 
-              const res = await fetch(
-                `${this.apiEndpoint}/${encodeURIComponent(orderId)}`,
-                { method: "DELETE" }
+              res = await fetch(
+                `${this.apiBase}/${encodeURIComponent(
+                  orderId
+                )}?company=${encodeURIComponent(this.companyId)}`,
+                {
+                  method: "DELETE",
+                }
               );
-              if (!res.ok) throw new Error(`DELETE failed: ${res.status}`);
             }
-
+            if (res && !res.ok)
+              throw new Error(`${action} failed: ${res.status}`);
             await this.loadOrders(true);
           } catch (err) {
             console.error("Action failed:", err);
-            // this.showNotification(
-            //   "Error",
-            //   "Failed to update order. Check console."
-            // );
             this.loadOrders(true);
           }
         }
 
-        // Keep bulk save for other uses (unchanged)
         async saveOrders() {
           try {
-            const response = await fetch(`${this.apiEndpoint}/bulk`, {
-              method: "PUT",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(this.orders),
-            });
+            const response = await fetch(
+              `${this.apiBase}/bulk?company=${encodeURIComponent(
+                this.companyId
+              )}`,
+              {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(this.orders),
+              }
+            );
             if (!response.ok) throw new Error("API bulk save failed");
           } catch (error) {
             console.warn("API not available, saving to localStorage");
@@ -1006,7 +963,6 @@
           const inProgress = inRange.filter(
             (o) => o.status === "in-progress"
           ).length;
-
           const today = new Date().toDateString();
           const completedToday = inRange.filter(
             (o) =>
@@ -1014,58 +970,50 @@
               new Date(o.timestamp).toDateString() === today
           ).length;
 
-          // document.getElementById("totalOrders").textContent = total;
-          // document.getElementById("pendingOrders").textContent = pending;
-          // document.getElementById("inProgressOrders").textContent = inProgress;
-          // document.getElementById("completedOrders").textContent =
-          //   completedToday;
+          document.getElementById("totalOrders").textContent = total;
+          document.getElementById("pendingOrders").textContent = pending;
+          document.getElementById("inProgressOrders").textContent = inProgress;
+          document.getElementById("completedOrders").textContent =
+            completedToday;
         }
 
-        // Now clears ONLY the orders within the allowed desk range
         async clearAllOrders() {
           if (
             !confirm(
-              `Delete all orders for desks ${this.startDesk}-${this.endDesk}? This cannot be undone.`
+              `Delete all orders for desks ${this.startDesk}-${this.endDesk}?`
             )
-          ) {
+          )
             return;
-          }
-
           try {
             const inRange = this.getOrdersInRange();
             const ids = inRange.map((o) => o.id);
-
-            // Optimistic local removal
             const idSet = new Set(ids.map(String));
             this.orders = this.orders.filter((o) => !idSet.has(String(o.id)));
             this.filterOrders();
             this.updateStats();
 
-            // Persist each deletion
             const results = await Promise.allSettled(
               ids.map((id) =>
-                fetch(`${this.apiEndpoint}/${encodeURIComponent(id)}`, {
-                  method: "DELETE",
-                })
+                fetch(
+                  `${this.apiBase}/${encodeURIComponent(
+                    id
+                  )}?company=${encodeURIComponent(this.companyId)}`,
+                  {
+                    method: "DELETE",
+                  }
+                )
               )
             );
-
             const allOk = results.every(
               (r) => r.status === "fulfilled" && r.value?.ok
             );
-
-            if (!allOk) throw new Error("One or more deletes failed");
-
+            if (!allOk) throw new Error("Some deletes failed");
             this.showNotification(
               "Success",
               `Cleared orders for desks ${this.startDesk}-${this.endDesk}`
             );
           } catch (error) {
             console.error(error);
-            // this.showNotification(
-            //   "Error",
-            //   "Failed to clear orders. See console."
-            // );
             this.loadOrders(true);
           }
         }
@@ -1075,16 +1023,6 @@
           document.getElementById("notificationTitle").textContent = title;
           document.getElementById("notificationMessage").textContent = message;
           el.classList.add("show");
-
-          const sound = document.getElementById("notificationSound");
-          if (sound) {
-            sound.pause();
-            sound.currentTime = 0;
-            sound
-              .play()
-              .catch((err) => console.warn("Autoplay prevented:", err));
-          }
-
           setTimeout(() => el.classList.remove("show"), 4000);
         }
 
