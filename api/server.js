@@ -480,6 +480,42 @@ app.put("/api/orders/:id", async (req, res) => {
   }
 });
 
+// POST /api/orders/:id/rating?company=... - add rating & review
+app.post("/api/orders/:id/rating", async (req, res) => {
+  const companyId = req.query.company || null;
+  const id = String(req.params.id);
+  const { rating, review } = req.body;
+
+  if (!rating || rating < 1 || rating > 5) {
+    return res.status(400).json({ error: "Rating must be between 1 and 5" });
+  }
+
+  try {
+    const orders = await readOrders(companyId);
+    const idx = orders.findIndex((o) => String(o.id) === id);
+    if (idx === -1) return res.status(404).json({ error: "Order not found" });
+
+    orders[idx].rating = {
+      stars: rating,
+      review: review || "",
+      timestamp: new Date().toISOString(),
+    };
+
+    await writeOrders(orders, companyId);
+
+    console.log(
+      `Rating saved for order ${id} (${rating}★${
+        review ? `: "${review}"` : ""
+      }) ${companyId ? `company=${companyId}` : ""}`
+    );
+
+    res.json({ success: true, rating: orders[idx].rating });
+  } catch (err) {
+    console.error("Error saving rating:", err);
+    res.status(500).json({ error: "Failed to save rating" });
+  }
+});
+
 // PUT /api/orders/bulk?company=... - replace all orders for company or global
 app.put("/api/orders/bulk", async (req, res) => {
   const companyId = req.query.company || null;

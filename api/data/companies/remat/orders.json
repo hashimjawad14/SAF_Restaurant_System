@@ -24,5 +24,68 @@
     "timestamp": "2025-09-24T21:10:30.993Z",
     "location": "B - 22",
     "orderNote": ""
+  },
+  {
+    "id": "1758750328367",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Cappuccino"
+    ],
+    "status": "pending",
+    "timestamp": "2025-09-24T21:45:28.367Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758750566829",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso",
+      "Espresso"
+    ],
+    "status": "pending",
+    "timestamp": "2025-09-24T21:49:26.829Z",
+    "location": "A - 12",
+    "orderNote": "",
+    "rating": {
+      "stars": 5,
+      "review": "Perfect",
+      "timestamp": "2025-09-24T21:49:50.489Z"
+    }
+  },
+  {
+    "id": "1758751211804",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso"
+    ],
+    "status": "pending",
+    "timestamp": "2025-09-24T22:00:11.804Z",
+    "location": "A - 12",
+    "orderNote": "No sugar"
+  },
+  {
+    "id": "1758751239406",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso"
+    ],
+    "status": "pending",
+    "timestamp": "2025-09-24T22:00:39.406Z",
+    "location": "A - 12",
+    "orderNote": "No sugar",
+    "rating": {
+      "stars": 5,
+      "review": "Perfect Delivery",
+      "timestamp": "2025-09-24T22:00:58.056Z"
+    }
   }
 ]
