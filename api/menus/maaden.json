@@ -6,22 +6,26 @@
       {
         "id": "espresso",
         "name": "Espresso",
-        "value": "Espresso"
+        "value": "Espresso",
+        "image": "/uploads/menus/maaden/espresso.jpeg"
       },
       {
         "id": "americano",
         "name": "Americano",
-        "value": "Americano"
+        "value": "Americano",
+        "image": "/uploads/menus/maaden/americano.jpeg"
       },
       {
         "id": "cappuccino",
         "name": "Cappuccino",
-        "value": "Cappuccino"
+        "value": "Cappuccino",
+        "image": "/uploads/menus/maaden/cappuccino.jpeg"
       },
       {
         "id": "latte",
         "name": "Latte",
-        "value": "Latte"
+        "value": "Latte",
+        "image": "/uploads/menus/maaden/latte.jpeg"
       }
     ]
   }
