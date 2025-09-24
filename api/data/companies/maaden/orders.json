@@ -26,5 +26,23 @@
     "timestamp": "2025-09-23T22:49:34.094Z",
     "location": "B - 2",
     "orderNote": ""
+  },
+  {
+    "id": "1758749851719",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ali",
+    "items": [
+      "Espresso",
+      "Espresso",
+      "Americano",
+      "Americano",
+      "Latte",
+      "Latte"
+    ],
+    "status": "pending",
+    "timestamp": "2025-09-24T21:37:31.719Z",
+    "location": "A - 1",
+    "orderNote": ""
   }
 ]

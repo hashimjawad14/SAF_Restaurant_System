@@ -308,11 +308,11 @@
         width: 16px;
         height: 16px;
         transition: all 0.3s ease;
-        fill: black;
+        fill: black; /* default gray */
       }
 
       .beverage-category.active .category-toggle svg {
-        fill: black;
+        fill: black; /* keep gray instead of turning white */
       }
 
       .options-container {
@@ -801,11 +801,7 @@
       </div>
 
       <div class="logo" id="companyLogo">
-        <img
-          src="/company_list/maaden/images/maaden_logo.png"
-          alt="Logo"
-          id="c_logo"
-        />
+        <img src="/logo_ai.png" alt="Logo" id="c_logo" />
       </div>
       <div class="company-name" id="companyName"></div>
       <h1 id="deskTitle">Order Beverages</h1>
@@ -920,8 +916,8 @@
     <div class="message" id="message"></div>
 
     <script>
-      const COMPANY_CODE = "maaden"; // 👈 set manually per company
-      const DEFAULT_COMPANY = "maaden"; // fallback if route/company missing
+      const COMPANY_CODE = "remat"; // 👈 set manually per company
+      const DEFAULT_COMPANY = "remat"; // fallback if route/company missing
 
       /* ===========================
                    Full client JS — company-aware index page
