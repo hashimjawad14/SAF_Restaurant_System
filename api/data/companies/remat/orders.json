@@ -1,45 +1,6 @@
 [
   {
-    "id": "1758748096408",
-    "desk": "2",
-    "serviceArea": "DESK2",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T21:08:16.408Z",
-    "location": "Zone A - 1",
-    "orderNote": ""
-  },
-  {
-    "id": "1758748230994",
-    "desk": "2",
-    "serviceArea": "DESK2",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Americano"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T21:10:30.993Z",
-    "location": "B - 22",
-    "orderNote": ""
-  },
-  {
-    "id": "1758750328367",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T21:45:28.367Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758750566829",
+    "id": "1758753081627",
     "desk": "1",
     "serviceArea": "DESK1",
     "serviceAreaName": "Ahmed",
@@ -47,45 +8,107 @@
       "Espresso",
       "Espresso"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-24T21:49:26.829Z",
+    "status": "completed",
+    "timestamp": "2025-09-24T22:31:21.627Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758753237460",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:33:57.460Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754155295",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso",
+      "Espresso"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:49:15.295Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754157312",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Americano"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:49:17.312Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754160239",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Cappuccino"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:49:20.239Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754283125",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Americano"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:51:23.125Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754338334",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Espresso",
+      "Espresso"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:52:18.334Z",
+    "location": "A - 12",
+    "orderNote": ""
+  },
+  {
+    "id": "1758754475230",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Ahmed",
+    "items": [
+      "Cappuccino"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-24T22:54:35.229Z",
     "location": "A - 12",
     "orderNote": "",
     "rating": {
       "stars": 5,
-      "review": "Perfect",
-      "timestamp": "2025-09-24T21:49:50.489Z"
-    }
-  },
-  {
-    "id": "1758751211804",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Espresso"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T22:00:11.804Z",
-    "location": "A - 12",
-    "orderNote": "No sugar"
-  },
-  {
-    "id": "1758751239406",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Espresso"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T22:00:39.406Z",
-    "location": "A - 12",
-    "orderNote": "No sugar",
-    "rating": {
-      "stars": 5,
-      "review": "Perfect Delivery",
-      "timestamp": "2025-09-24T22:00:58.056Z"
+      "review": "",
+      "timestamp": "2025-09-24T22:54:53.953Z"
     }
   }
 ]

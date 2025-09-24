@@ -711,6 +711,17 @@
         init() {
           this.loadOrders();
           this.attachEventListeners();
+          const list = document.getElementById("ordersList");
+          list.addEventListener("click", (e) => {
+            const btn = e.target.closest(".action-btn");
+            if (!btn) return;
+            const card = e.target.closest(".order-card");
+            if (!card) return;
+            const orderId = card.dataset.orderId;
+            const action = btn.dataset.action;
+            this.handleOrderAction(orderId, action);
+          });
+
           this.startPolling();
           this.updateStats();
         }
@@ -830,7 +841,7 @@
           ordersList.innerHTML = this.filteredOrders
             .map((order) => this.renderOrderCard(order))
             .join("");
-          this.attachOrderActions();
+          // this.attachOrderActions();
         }
 
         renderOrderCard(order) {
@@ -937,10 +948,20 @@
         }
 
         async handleOrderAction(orderId, action) {
+          // prevent multiple rapid calls
+          if (this._actionInProgress) {
+            console.warn("Action already in progress, ignoring:", action);
+            return;
+          }
+          this._actionInProgress = true;
+
           const order = this.orders.find(
             (o) => String(o.id) === String(orderId)
           );
-          if (!order || !this.isDeskInAllowedRange(order)) return;
+          if (!order || !this.isDeskInAllowedRange(order)) {
+            this._actionInProgress = false;
+            return;
+          }
 
           try {
             let res;
@@ -948,6 +969,8 @@
               order.status = action === "start" ? "in-progress" : "completed";
               this.filterOrders();
               this.updateStats();
+
+              console.log(`Updating order ${orderId} → ${order.status}`);
 
               res = await fetch(
                 `${this.apiBase}/${encodeURIComponent(
@@ -960,13 +983,18 @@
                 }
               );
             } else if (action === "delete") {
-              if (!confirm("Delete this order?")) return;
+              if (!confirm("Delete this order?")) {
+                this._actionInProgress = false;
+                return;
+              }
 
               this.orders = this.orders.filter(
                 (o) => String(o.id) !== String(orderId)
               );
               this.filterOrders();
               this.updateStats();
+
+              console.log(`Deleting order ${orderId}`);
 
               res = await fetch(
                 `${this.apiBase}/${encodeURIComponent(
@@ -977,12 +1005,17 @@
                 }
               );
             }
-            if (res && !res.ok)
-              throw new Error(`${action} failed: ${res.status}`);
+
+            if (res && !res.ok) {
+              console.error(`${action} failed: ${res.status}`);
+              return; // ❌ don’t overwrite orders if failed
+            }
+
             await this.loadOrders(true);
           } catch (err) {
             console.error("Action failed:", err);
-            this.loadOrders(true);
+          } finally {
+            this._actionInProgress = false; // ✅ unlock
           }
         }
 

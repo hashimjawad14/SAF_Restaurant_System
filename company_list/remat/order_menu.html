@@ -1416,6 +1416,25 @@
         }
       }
 
+      async function markOrderComplete(orderId) {
+        try {
+          const res = await fetch(
+            `/api/orders/${orderId}?company=${COMPANY_CODE}`,
+            {
+              method: "PUT",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ status: "completed" }),
+            }
+          );
+          if (!res.ok) throw new Error("Failed to complete order");
+
+          // ✅ Show rating popup only when completed
+          showRatingPopup(orderId);
+        } catch (err) {
+          console.error("Error completing order:", err);
+        }
+      }
+
       /* ---------- UTILS ---------- */
       function showMessage(text, type = "info") {
         if (!messageEl) return;

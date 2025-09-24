@@ -1708,6 +1708,11 @@
 
           const result = await res.json();
           console.log("Order submitted successfully:", result);
+
+          // After order submission success
+          setTimeout(() => {
+            showRatingPopup(order.id);
+          }, 10000); // 10 seconds
           return result;
         } catch (err) {
           console.error("submitDashboardOrder error:", err);

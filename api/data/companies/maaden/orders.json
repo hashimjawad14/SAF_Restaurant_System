@@ -1,47 +1,14 @@
 [
   {
-    "id": "1758667283702",
+    "id": "1758754599140",
     "desk": "1",
     "serviceArea": "DESK1",
     "serviceAreaName": "Ali",
     "items": [
-      "Latte",
-      "Latte",
-      "Latte"
+      "Americano"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-23T22:41:23.702Z",
-    "location": "A - 1",
-    "orderNote": ""
-  },
-  {
-    "id": "1758667774095",
-    "desk": "2",
-    "serviceArea": "DESK2",
-    "serviceAreaName": "Ali",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-23T22:49:34.094Z",
-    "location": "B - 2",
-    "orderNote": ""
-  },
-  {
-    "id": "1758749851719",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ali",
-    "items": [
-      "Espresso",
-      "Espresso",
-      "Americano",
-      "Americano",
-      "Latte",
-      "Latte"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-24T21:37:31.719Z",
+    "status": "completed",
+    "timestamp": "2025-09-24T22:56:39.140Z",
     "location": "A - 1",
     "orderNote": ""
   }
