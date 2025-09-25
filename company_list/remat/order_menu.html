@@ -1012,6 +1012,17 @@
       const COMPANY_CODE = "remat"; // 👈 set manually per company
       const DEFAULT_COMPANY = "remat"; // fallback if route/company missing
 
+      // Set mode here manually per deployment
+      // or dynamically if you embed this page inside QR vs tablet launcher
+      window.ORDER_MODE = "qr"; // or "tablet"
+
+      // Register session with backend
+      fetch("/api/session/start", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ mode: window.ORDER_MODE }),
+      }).catch(console.error);
+
       /* ===========================
                    Full client JS — company-aware index page
                    =========================== */

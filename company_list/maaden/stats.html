@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>📊 Order Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, sans-serif;
+        background: #f4f6f9;
+        margin: 0;
+        padding: 20px;
+        color: #333;
+      }
+      h1 {
+        text-align: center;
+        margin-bottom: 30px;
+        color: #222;
+        font-size: 28px;
+      }
+      .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 20px;
+        margin-bottom: 40px;
+      }
+      .stat-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.2s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-4px);
+      }
+      .stat-card h2 {
+        margin: 10px 0;
+        color: #007bff;
+        font-size: 28px;
+      }
+      .stat-card p {
+        margin: 0;
+        font-size: 14px;
+        color: #666;
+      }
+      .charts-container {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+      }
+      canvas {
+        background: #fff;
+        padding: 20px;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+      .stars {
+        color: gold;
+        font-size: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>📊 Order Statistics Dashboard</h1>
+
+    <div class="stats-container">
+      <div class="stat-card">
+        <h2 id="totalOrders">0</h2>
+        <p>Total Orders</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="completedOrders">0</h2>
+        <p>Completed Orders</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="avgPrepTime">0 min</h2>
+        <p>Average Preparation Time</p>
+      </div>
+      <div class="stat-card">
+        <h2 id="avgRating">0 ★</h2>
+        <div id="avgStars" class="stars"></div>
+        <p>Average Rating</p>
+      </div>
+    </div>
+
+    <div class="charts-container">
+      <canvas id="ordersByDate"></canvas>
+      <canvas id="ordersByTeaboy"></canvas>
+    </div>
+
+    <script>
+      async function loadStats() {
+        const res = await fetch(
+          "http://localhost:4000/api/stats?company=maaden"
+        );
+        const data = await res.json();
+
+        // Update cards
+        document.getElementById("totalOrders").textContent =
+          data.totalOrders || 0;
+        document.getElementById("completedOrders").textContent =
+          data.completedOrders || 0;
+        document.getElementById("avgPrepTime").textContent =
+          (data.avgPrepTime || 0).toFixed(1) + " min";
+        document.getElementById("avgRating").textContent =
+          (data.avgRating || 0).toFixed(1) + " ★";
+
+        // Draw stars
+        const stars = Math.round(data.avgRating || 0);
+        document.getElementById("avgStars").textContent =
+          "★".repeat(stars) + "☆".repeat(5 - stars);
+
+        // Charts
+        const ordersByDate = data.ordersByDate || {};
+        const ordersByTeaboy = data.ordersByTeaboy || {};
+
+        // Orders by Date (Line Chart)
+        new Chart(document.getElementById("ordersByDate"), {
+          type: "line",
+          data: {
+            labels: Object.keys(ordersByDate),
+            datasets: [
+              {
+                label: "Orders per Day",
+                data: Object.values(ordersByDate),
+                borderColor: "#007bff",
+                backgroundColor: "rgba(0,123,255,0.2)",
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: true } },
+          },
+        });
+
+        // Orders by Teaboy (Bar Chart)
+        new Chart(document.getElementById("ordersByTeaboy"), {
+          type: "bar",
+          data: {
+            labels: Object.keys(ordersByTeaboy),
+            datasets: [
+              {
+                label: "Orders Served",
+                data: Object.values(ordersByTeaboy),
+                backgroundColor: "#28a745",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+          },
+        });
+      }
+
+      loadStats();
+    </script>
+  </body>
+</html>

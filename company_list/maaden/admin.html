@@ -593,6 +593,7 @@
             <label>&nbsp;</label>
             <button class="clear-btn" id="clearBtn">Clear All Orders</button>
           </div>
+          <button id="statsBtn" class="action-btn">📊 Statistics</button>
         </div>
       </div>
 
@@ -649,6 +650,10 @@
         const newUrl = `/company_list/${COMPANY_CODE}/order_menu.html#settings`;
         window.location.href = newUrl;
       }
+
+      document.getElementById("statsBtn").addEventListener("click", () => {
+        window.location.href = `/company_list/${COMPANY_CODE}/stats.html`;
+      });
 
       class DashboardApp {
         constructor() {
@@ -824,13 +829,13 @@
 
           if (this.filteredOrders.length === 0) {
             ordersList.innerHTML = `
-          <div class="empty-state">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Z"/>
-            </svg>
-            <h3>No orders found</h3>
-            <p>Try adjusting filters or wait for new orders</p>
-          </div>`;
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Z"/>
+              </svg>
+              <h3>No orders found</h3>
+              <p>Try adjusting filters or wait for new orders</p>
+            </div>`;
             ordersCount.textContent = "0 orders";
             return;
           }
@@ -875,62 +880,66 @@
               i < order.rating.stars ? "★" : "☆"
             ).join("");
             ratingHtml = `
-    <div class="order-rating">
-      <div>
-        <h4>Rating:</h4>
-        <div class="stars">${stars}</div>
-      </div>
-      ${
-        order.rating.review
-          ? `<div>
-               <h4>Review:</h4>
-               <div class="review">${order.rating.review}</div>
-             </div>`
-          : ""
-      }
-    </div>`;
+      <div class="order-rating">
+        <div>
+          <h4>Rating:</h4>
+          <div class="stars">${stars}</div>
+        </div>
+        ${
+          order.rating.review
+            ? `<div>
+                 <h4>Review:</h4>
+                 <div class="review">${order.rating.review}</div>
+               </div>`
+            : ""
+        }
+      </div>`;
           }
 
           return `
-    <div class="order-card ${order.status}" data-order-id="${String(order.id)}">
-      <div class="order-header">
-        <div class="order-info">
-          <div class="order-id">${deskLabel}</div>
-          <div class="order-meta">
-            <span>📍 ${order.location ?? "-"}</span>
-            <span>🕐 ${formattedTime}</span>
-            <span>👥 ${order.serviceAreaName ?? "-"}</span>
+      <div class="order-card ${order.status}" data-order-id="${String(
+            order.id
+          )}">
+        <div class="order-header">
+          <div class="order-info">
+            <div class="order-id">${deskLabel}</div>
+            <div class="order-meta">
+              <span>📍 ${order.location ?? "-"}</span>
+              <span>🕐 ${formattedTime}</span>
+              <span>👥 ${
+                (order.teaboyName || order.serviceAreaName) ?? "-"
+              }</span>
+            </div>
           </div>
-        </div>
-        <div class="order-status ${order.status}">${order.status.replace(
+          <div class="order-status ${order.status}">${order.status.replace(
             "-",
             " "
           )}</div>
-      </div>
-      <div class="order-items">
-        <div class="items-title">Items Ordered:</div>
-        <div class="items-list">${itemsHtml}</div>
-      </div>
-      ${
-        order.orderNote
-          ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
-          : ""
-      }
-      ${ratingHtml}
-      <div class="order-actions">
+        </div>
+        <div class="order-items">
+          <div class="items-title">Items Ordered:</div>
+          <div class="items-list">${itemsHtml}</div>
+        </div>
         ${
-          order.status === "pending"
-            ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
+          order.orderNote
+            ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
             : ""
         }
-        ${
-          order.status === "in-progress"
-            ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
-            : ""
-        }
-        <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
-      </div>
-    </div>`;
+        ${ratingHtml}
+        <div class="order-actions">
+          ${
+            order.status === "pending"
+              ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
+              : ""
+          }
+          ${
+            order.status === "in-progress"
+              ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+              : ""
+          }
+          <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
+        </div>
+      </div>`;
         }
 
         attachOrderActions() {

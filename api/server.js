@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json({ limit: "10mb" })); // increase a bit to allow base64 menu images
 
 // Legacy global file paths (kept for backward compatibility)
-const ORDERS_FILE = path.join(__dirname, "orders.json");
+// const ORDERS_FILE = path.join(__dirname, "orders.json");
 const ORDERS_FILE_TMP = path.join(__dirname, "orders.json.tmp");
 const DESKS_FILE = path.join(__dirname, "desks.json");
 const DESKS_FILE_TMP = path.join(__dirname, "desks.json.tmp");
@@ -54,6 +54,191 @@ function companyMenuPath(companyId) {
   // We'll still write menu files under the MENUS_DIR for backwards compatibility of earlier helper functions,
   // but also ensure a copy exists in data/companies if desired.
   return path.join(MENUS_DIR, `${companyId || "default"}.json`);
+}
+
+const { google } = require("googleapis");
+
+// Path to downloaded service account JSON (place credentials.json in project root)
+const GOOGLE_CREDS = path.join(__dirname, "credentials.json");
+// Put your sheet ID here (the long id from sheet URL)
+const SPREADSHEET_ID =
+  process.env.SPREADSHEET_ID || "1Ibcl0fUwWAde3mJsUJndRqAG6Y3Uq5AJnSxDmcb0Vy4";
+
+// Initialize auth client lazily
+let sheetsAuthClient = null;
+async function getSheetsClient() {
+  if (sheetsAuthClient) return sheetsAuthClient;
+  try {
+    const auth = new google.auth.GoogleAuth({
+      keyFile: GOOGLE_CREDS,
+      scopes: ["https://www.googleapis.com/auth/spreadsheets"],
+    });
+    sheetsAuthClient = await auth.getClient();
+    return sheetsAuthClient;
+  } catch (err) {
+    console.error("Google auth init error:", err);
+    throw err;
+  }
+}
+
+async function appendToSheetRow(order, action = "upsert") {
+  if (!SPREADSHEET_ID) {
+    console.warn("SPREADSHEET_ID not set - skipping sheet append");
+    return;
+  }
+  try {
+    const client = await getSheetsClient();
+    const sheetsApi = google.sheets({ version: "v4", auth: client });
+
+    const values = [
+      [
+        order.id || "",
+        new Date().toISOString(),
+        action,
+        order.timestamp || "",
+        order.status || "",
+        order.desk || order.serviceArea || "",
+        order.teaboyName || "",
+        Array.isArray(order.items) ? order.items.join(" | ") : "",
+        order.orderNote || "",
+        order.rating?.stars ?? "",
+        order.rating?.review ?? "",
+      ],
+    ];
+
+    await sheetsApi.spreadsheets.values.append({
+      spreadsheetId: SPREADSHEET_ID,
+      range: "Orders!A1", // ensure you created a sheet/tab named "Orders"
+      valueInputOption: "RAW",
+      resource: { values },
+    });
+    console.log("Sheet append OK for order", order.id);
+  } catch (err) {
+    console.error(
+      "Failed to append to Google Sheet:",
+      err && err.message ? err.message : err
+    );
+    // don't throw - we don't want the API call to fail the order flow
+  }
+}
+
+// =========================
+// 📊 Stats Endpoint (company-aware)
+// =========================
+app.get("/api/stats", async (req, res) => {
+  try {
+    const company = req.query.company || "default";
+
+    // Use the per-company JSON file
+    const filePath = companyOrdersPath(company);
+    let orders = [];
+    try {
+      const raw = await fs.readFile(filePath, "utf-8");
+      orders = JSON.parse(raw) || [];
+    } catch (err) {
+      console.warn(
+        `No orders file found for company=${company}, returning empty stats`
+      );
+      return res.json({
+        totalOrders: 0,
+        completedOrders: 0,
+        avgPrepTime: 0,
+        avgRating: 0,
+        ordersByDate: {},
+        ordersByTeaboy: {},
+      });
+    }
+
+    const totalOrders = orders.length;
+    const completedOrders = orders.filter(
+      (o) => o.status === "completed"
+    ).length;
+
+    // Average preparation time
+    const prepTimes = orders
+      .filter((o) => o.startedAt && o.completedAt)
+      .map((o) => (new Date(o.completedAt) - new Date(o.startedAt)) / 60000);
+    const avgPrepTime = prepTimes.length
+      ? prepTimes.reduce((a, b) => a + b, 0) / prepTimes.length
+      : 0;
+
+    // Average rating
+    const ratings = orders
+      .filter((o) => o.rating && o.rating.stars)
+      .map((o) => o.rating.stars);
+    const avgRating = ratings.length
+      ? ratings.reduce((a, b) => a + b, 0) / ratings.length
+      : 0;
+
+    // Orders by date
+    const ordersByDate = {};
+    orders.forEach((o) => {
+      const d = new Date(o.timestamp).toLocaleDateString();
+      ordersByDate[d] = (ordersByDate[d] || 0) + 1;
+    });
+
+    // Orders by teaboy
+    const ordersByTeaboy = {};
+    orders.forEach((o) => {
+      const name = o.teaboyName || o.serviceAreaName || "Unknown";
+      ordersByTeaboy[name] = (ordersByTeaboy[name] || 0) + 1;
+    });
+
+    res.json({
+      totalOrders,
+      completedOrders,
+      avgPrepTime,
+      avgRating,
+      ordersByDate,
+      ordersByTeaboy,
+    });
+  } catch (err) {
+    console.error("Stats endpoint error:", err);
+    res.status(500).json({ error: "Failed to calculate stats" });
+  }
+});
+
+// --- Safe read/write helpers for orders.json (per-company) ---
+const ORDERS_FILE = path.join(__dirname, "orders.json");
+let _ordersWriteLock = false;
+
+async function safeReadOrdersFile() {
+  try {
+    const raw = await fs.readFile(ORDERS_FILE, "utf8");
+    return JSON.parse(raw || "{}");
+  } catch (err) {
+    if (err.code === "ENOENT") return {}; // file missing -> empty container
+    console.error("safeReadOrdersFile error:", err);
+    throw err;
+  }
+}
+
+async function safeWriteOrdersFile(obj) {
+  // wait for existing write to complete
+  while (_ordersWriteLock) await new Promise((r) => setTimeout(r, 8));
+  _ordersWriteLock = true;
+  const tmp = ORDERS_FILE + ".tmp";
+  try {
+    await fs.writeFile(tmp, JSON.stringify(obj, null, 2), "utf8");
+    await fs.rename(tmp, ORDERS_FILE); // atomic on most OSes
+  } finally {
+    _ordersWriteLock = false;
+  }
+}
+
+// Per-company convenience
+async function readOrders(companyId = null) {
+  const container = await safeReadOrdersFile();
+  if (!companyId) return container["_default"] || [];
+  return container[companyId] || [];
+}
+
+async function writeOrders(ordersArray, companyId = null) {
+  // keep other companies intact
+  const container = await safeReadOrdersFile();
+  const key = companyId || "_default";
+  container[key] = ordersArray;
+  await safeWriteOrdersFile(container);
 }
 
 // --- Generic JSON read / write (atomic) ---
@@ -426,6 +611,14 @@ app.post("/api/orders", async (req, res) => {
     if (!newOrder.status) newOrder.status = "pending";
 
     newOrder.id = idStr;
+    // Normalize teaboyName from serviceAreaName if needed
+    if (
+      (!newOrder.teaboyName || newOrder.teaboyName === "") &&
+      newOrder.serviceAreaName
+    ) {
+      newOrder.teaboyName = newOrder.serviceAreaName;
+    }
+    if (newOrder.serviceAreaName) delete newOrder.serviceAreaName;
     orders.push(newOrder);
 
     await writeOrders(orders, companyId);
@@ -447,6 +640,12 @@ app.post("/api/orders", async (req, res) => {
       }`
     );
     res.status(201).json(newOrder);
+    // after writeOrders(...) resolved
+    try {
+      appendToSheetRow(newOrder, "create");
+    } catch (e) {
+      console.error("appendToSheetRow create error:", e);
+    }
   } catch (error) {
     console.error("Error creating order:", error);
     res.status(500).json({ error: "Failed to create order" });
@@ -467,6 +666,15 @@ app.put("/api/orders/:id", async (req, res) => {
     if (updated.desk !== undefined && updated.desk !== null)
       updated.desk = String(updated.desk);
 
+    // Normalize teaboyName
+    if (
+      (!updated.teaboyName || updated.teaboyName === "") &&
+      updated.serviceAreaName
+    ) {
+      updated.teaboyName = updated.serviceAreaName;
+    }
+    if (updated.serviceAreaName) delete updated.serviceAreaName;
+
     orders[idx] = updated;
     await writeOrders(orders, companyId);
 
@@ -474,6 +682,11 @@ app.put("/api/orders/:id", async (req, res) => {
       `Order updated: ${id} ${companyId ? `company=${companyId}` : ""}`
     );
     res.json(updated);
+    try {
+      appendToSheetRow(updated, "update");
+    } catch (e) {
+      console.error("appendToSheetRow update error:", e);
+    }
   } catch (error) {
     console.error("Error updating order:", error);
     res.status(500).json({ error: "Failed to update order" });
@@ -565,6 +778,14 @@ app.put("/api/orders/bulk", async (req, res) => {
       message: "Orders updated successfully",
       count: normalized.length,
     });
+    // after writeOrders(...) resolved
+    try {
+      for (const order of normalized) {
+        appendToSheetRow(order, "create");
+      }
+    } catch (e) {
+      console.error("appendToSheetRow create error:", e);
+    }
   } catch (error) {
     console.error("Error bulk updating orders:", error);
     res.status(500).json({ error: "Failed to update orders" });
@@ -600,6 +821,7 @@ app.delete("/api/orders", async (req, res) => {
       `All orders deleted ${companyId ? `company=${companyId}` : "global"}`
     );
     res.json({ message: "All orders deleted successfully" });
+    await appendToSheet(order);
   } catch (error) {
     console.error("Error deleting all orders:", error);
     res.status(500).json({ error: "Failed to delete all orders" });
@@ -698,40 +920,6 @@ app.post("/api/menu", async (req, res) => {
   } catch (err) {
     console.error("Error saving menu:", err);
     res.status(500).json({ error: "Failed to save menu" });
-  }
-});
-
-// --- STATS (if desired keep company-agnostic for now) ---
-app.get("/api/stats", async (req, res) => {
-  try {
-    // For backward compatibility compute stats across legacy global orders file
-    // If you want per-company stats, call /api/orders?company=... and calculate on client/server.
-    const orders = await readOrders(null);
-    const today = new Date().toDateString();
-    const stats = {
-      total: orders.length,
-      pending: orders.filter((o) => o.status === "pending").length,
-      inProgress: orders.filter((o) => o.status === "in-progress").length,
-      completed: orders.filter((o) => o.status === "completed").length,
-      completedToday: orders.filter(
-        (o) =>
-          o.status === "completed" &&
-          o.timestamp &&
-          new Date(o.timestamp).toDateString() === today
-      ).length,
-      byCompany: {},
-      byDesk: {},
-    };
-    for (const order of orders) {
-      const company = order.companyId || order.company || "unknown";
-      stats.byCompany[company] = (stats.byCompany[company] || 0) + 1;
-      const desk = String(order.desk || "unknown");
-      stats.byDesk[desk] = (stats.byDesk[desk] || 0) + 1;
-    }
-    res.json(stats);
-  } catch (error) {
-    console.error("Error getting stats:", error);
-    res.status(500).json({ error: "Failed to get statistics" });
   }
 });
 

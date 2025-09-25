@@ -1,0 +1,9 @@
+{
+  "ignore": [
+    "*.json",
+    "orders.json",
+    "orders-*.json"
+  ],
+  "watch": ["server.js", "routes", "lib"],
+  "ext": "js,json"
+}
