@@ -56,6 +56,43 @@ function companyMenuPath(companyId) {
   return path.join(MENUS_DIR, `${companyId || "default"}.json`);
 }
 
+const session = require("express-session");
+
+app.use(
+  session({
+    secret: "super-secret-key",
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // default 1 day
+  })
+);
+
+// Start session
+app.post("/api/session/start", (req, res) => {
+  const { mode } = req.body || {};
+  if (!mode) return res.status(400).json({ error: "Mode is required" });
+
+  req.session.mode = mode;
+  if (mode === "qr") {
+    req.session.qrStart = Date.now();
+    req.session.qrTTL = 30 * 1000; // 30s for testing
+  }
+
+  console.log(`Session started in ${mode} mode`);
+  res.json({ success: true, mode });
+});
+
+// Check session
+app.get("/api/session/check", (req, res) => {
+  if (req.session.mode === "qr") {
+    const now = Date.now();
+    if (req.session.qrStart && now - req.session.qrStart > req.session.qrTTL) {
+      return res.json({ expired: true });
+    }
+  }
+  res.json({ expired: false, mode: req.session.mode || "tablet" });
+});
+
 const { google } = require("googleapis");
 
 // Path to downloaded service account JSON (place credentials.json in project root)

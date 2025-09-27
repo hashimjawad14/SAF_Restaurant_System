@@ -1012,20 +1012,57 @@
       const COMPANY_CODE = "remat"; // 👈 set manually per company
       const DEFAULT_COMPANY = "remat"; // fallback if route/company missing
 
-      // Set mode here manually per deployment
-      // or dynamically if you embed this page inside QR vs tablet launcher
-      window.ORDER_MODE = "qr"; // or "tablet"
+      async function startSessionFromHash() {
+        const hash = window.location.hash; // e.g. "#id-1" or "#id-1&mode=qr"
+        let mode = "tablet"; // default
 
-      // Register session with backend
-      fetch("/api/session/start", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ mode: window.ORDER_MODE }),
-      }).catch(console.error);
+        if (hash && hash.includes("mode=qr")) {
+          mode = "qr";
+        }
+
+        // Call backend to start session
+        try {
+          const res = await fetch("/api/session/start", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include", // IMPORTANT: send session cookie
+            body: JSON.stringify({ mode }),
+          });
+          const data = await res.json();
+          console.log("Session started:", data);
+        } catch (err) {
+          console.error("Failed to start session:", err);
+        }
+      }
+
+      // check expiry every few seconds
+      async function checkSession() {
+        try {
+          const res = await fetch("/api/session/check", {
+            credentials: "include",
+          });
+          const data = await res.json();
+          if (data.expired) {
+            document.body.innerHTML = `
+        <div style="text-align:center;margin-top:50px;font-family:sans-serif;">
+          <h2>⚠️ Session expired!</h2>
+          <p>Please scan the QR code again.</p>
+        </div>
+      `;
+          }
+        } catch (err) {
+          console.error("Session check failed:", err);
+        }
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        startSessionFromHash();
+        setInterval(checkSession, 5000); // poll every 5s
+      });
 
       /* ===========================
-                   Full client JS — company-aware index page
-                   =========================== */
+                               Full client JS — company-aware index page
+                               =========================== */
 
       /* ---------- CONFIG ---------- */
       const API_DESKS_URL = "/api/desks"; // global desks fallback
@@ -1557,46 +1594,46 @@
                 ? `<img class="menu-item-img" src="${item.image}" alt="${item.name}">`
                 : `<div style="width:40px;height:40px;border-radius:8px;background:#f0f0f0;"></div>`;
               return `
-              <label class="option-item" data-item-id="${
-                item.id
-              }" data-category="${categoryKey}">
-                <div style="display:flex; gap:10px; align-items:center;">
-                  ${imgHtml}
-                  <div class="option-name">${item.name}</div>
-                </div>
-                <div class="qty-control">
-                  <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
-                  <input type="text" class="qty-input" value="${
-                    quantities[item.id] || 0
-                  }" inputmode="numeric" pattern="[0-9]*" />
-                  <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
-                </div>
-              </label>
-            `;
+                          <label class="option-item" data-item-id="${
+                            item.id
+                          }" data-category="${categoryKey}">
+                            <div style="display:flex; gap:10px; align-items:center;">
+                              ${imgHtml}
+                              <div class="option-name">${item.name}</div>
+                            </div>
+                            <div class="qty-control">
+                              <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
+                              <input type="text" class="qty-input" value="${
+                                quantities[item.id] || 0
+                              }" inputmode="numeric" pattern="[0-9]*" />
+                              <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
+                            </div>
+                          </label>
+                        `;
             })
             .join("");
 
           categoryDiv.innerHTML = `
-              <div class="category-header" id="${categoryKey}Header">
-                <div class="category-icon">${
-                  category.icon
-                    ? category.icon.startsWith("<")
-                      ? category.icon
-                      : `<span style="font-size:24px">${category.icon}</span>`
-                    : `<svg viewBox="0 0 24 24">${
-                        catIcons[categoryKey] || catIcons.coffee
-                      }</svg>`
-                }
-</div>
-                <div class="category-info"><div class="category-name">${
-                  category.name || categoryKey
-                }</div><div class="category-desc">${
+                          <div class="category-header" id="${categoryKey}Header">
+                            <div class="category-icon">${
+                              category.icon
+                                ? category.icon.startsWith("<")
+                                  ? category.icon
+                                  : `<span style="font-size:24px">${category.icon}</span>`
+                                : `<svg viewBox="0 0 24 24">${
+                                    catIcons[categoryKey] || catIcons.coffee
+                                  }</svg>`
+                            }
+            </div>
+                            <div class="category-info"><div class="category-name">${
+                              category.name || categoryKey
+                            }</div><div class="category-desc">${
             category.desc || ""
           }</div></div>
-                <div class="category-toggle"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
-              </div>
-              <div class="options-container">${itemsHtml}</div>
-            `;
+                            <div class="category-toggle"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+                          </div>
+                          <div class="options-container">${itemsHtml}</div>
+                        `;
 
           beverageSection.appendChild(categoryDiv);
 
@@ -1844,22 +1881,22 @@
             const card = document.createElement("div");
             card.className = "desk-card";
             card.innerHTML = `
-                    <h4>Desk ${i}</h4>
-                    <div class="row">
-                      <div><label>Building</label><input type="text" data-field="building" data-desk="${i}" value="${
+                                <h4>Desk ${i}</h4>
+                                <div class="row">
+                                  <div><label>Building</label><input type="text" data-field="building" data-desk="${i}" value="${
               data.building || ""
             }" placeholder="e.g., Building A" /></div>
-                      <div><label>Room</label><input type="text" data-field="floor" data-desk="${i}" value="${
+                                  <div><label>Room</label><input type="text" data-field="floor" data-desk="${i}" value="${
               data.floor || ""
             }" placeholder="e.g., 2" /></div>
-                    </div>
-                    <div class="row">
-                      <div><label>Tea Boy Name</label><input type="text" data-field="teaBoy" data-desk="${i}" value="${
+                                </div>
+                                <div class="row">
+                                  <div><label>Tea Boy Name</label><input type="text" data-field="teaBoy" data-desk="${i}" value="${
               data.teaBoy || ""
             }" placeholder="e.g., Ahmed" /></div>
-                      <div><label>Quick Link</label><input type="text" value="/${COMPANY_CODE}/id-${i}" readonly /></div>
-                    </div>
-                  `;
+                                  <div><label>Quick Link</label><input type="text" value="/${COMPANY_CODE}/id-${i}" readonly /></div>
+                                </div>
+                              `;
             deskGrid.appendChild(card);
           }
         }
@@ -1891,22 +1928,22 @@
           catDiv.className = "beverage-category";
           catDiv.style.marginBottom = "12px";
           catDiv.innerHTML = `
-  <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
-    <input class="cat-key" value="${catKey}" placeholder="category key" />
-    <input class="cat-name" value="${
-      cat.name || ""
-    }" placeholder="Category display name" />
-    <input class="cat-desc" value="${
-      cat.desc || ""
-    }" placeholder="Category description" />
-    <input class="cat-icon" value="${
-      cat.icon || ""
-    }" placeholder="SVG path or emoji" style="width:160px"/>
-    <button class="add-item tiny-btn">Add Item</button>
-    <button class="remove-cat tiny-btn" title="Remove category">Delete</button>
-  </div>
-  <div class="cat-items" style="margin-top:8px;"></div>
-`;
+              <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+                <input class="cat-key" value="${catKey}" placeholder="category key" />
+                <input class="cat-name" value="${
+                  cat.name || ""
+                }" placeholder="Category display name" />
+                <input class="cat-desc" value="${
+                  cat.desc || ""
+                }" placeholder="Category description" />
+                <input class="cat-icon" value="${
+                  cat.icon || ""
+                }" placeholder="SVG path or emoji" style="width:160px"/>
+                <button class="add-item tiny-btn">Add Item</button>
+                <button class="remove-cat tiny-btn" title="Remove category">Delete</button>
+              </div>
+              <div class="cat-items" style="margin-top:8px;"></div>
+            `;
 
           catDiv
             .querySelector(".cat-icon")
@@ -1925,23 +1962,23 @@
               itemDiv.style.alignItems = "center";
               itemDiv.style.marginBottom = "8px";
               itemDiv.innerHTML = `
-              <input class="item-id" value="${
-                item.id || ""
-              }" placeholder="id" style="width:120px"/>
-              <input class="item-name" value="${
-                item.name || ""
-              }" placeholder="name" style="width:220px"/>
-              <input class="item-val" value="${
-                item.value || ""
-              }" placeholder="value" style="width:160px"/>
-              <input type="file" class="item-image-file" accept="image/*" />
-              <button class="remove-item tiny-btn">Remove</button>
-              ${
-                item.image
-                  ? `<img src="${item.image}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
-                  : ""
-              }
-            `;
+                          <input class="item-id" value="${
+                            item.id || ""
+                          }" placeholder="id" style="width:120px"/>
+                          <input class="item-name" value="${
+                            item.name || ""
+                          }" placeholder="name" style="width:220px"/>
+                          <input class="item-val" value="${
+                            item.value || ""
+                          }" placeholder="value" style="width:160px"/>
+                          <input type="file" class="item-image-file" accept="image/*" />
+                          <button class="remove-item tiny-btn">Remove</button>
+                          ${
+                            item.image
+                              ? `<img src="${item.image}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
+                              : ""
+                          }
+                        `;
               itemsWrap.appendChild(itemDiv);
 
               // remove item
@@ -2102,8 +2139,8 @@
         });
 
       /* -----------------------------
-           Storage helpers (company-aware)
-           ----------------------------- */
+                       Storage helpers (company-aware)
+                       ----------------------------- */
       function getCompanyKey(baseKey) {
         return `${baseKey}_${COMPANY_CODE}`;
       }
@@ -2220,12 +2257,12 @@
         const style = document.createElement("style");
         style.id = id;
         style.textContent = `
-          .menu-item-img{ width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #eee;margin-right:8px;}
-          .option-name{display:flex;align-items:center;gap:8px;}
-          .beverage-category .options-container{display:flex;flex-wrap:wrap;gap:8px;}
-          .option-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:#fff;border:1px solid #eee;min-width:260px;max-width:420px;}
-          .qty-input{width:48px;text-align:center;border-radius:6px;border:1px solid #ddd;padding:6px}
-        `;
+                      .menu-item-img{ width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #eee;margin-right:8px;}
+                      .option-name{display:flex;align-items:center;gap:8px;}
+                      .beverage-category .options-container{display:flex;flex-wrap:wrap;gap:8px;}
+                      .option-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:#fff;border:1px solid #eee;min-width:260px;max-width:420px;}
+                      .qty-input{width:48px;text-align:center;border-radius:6px;border:1px solid #ddd;padding:6px}
+                    `;
         document.head.appendChild(style);
       })();
     </script>
