@@ -260,7 +260,7 @@
     "items": [
       "Cappuccino"
     ],
-    "status": "pending",
+    "status": "completed",
     "timestamp": "2025-09-27T16:48:01.964Z",
     "location": "A - 12",
     "orderNote": "",
@@ -270,5 +270,25 @@
       "review": "",
       "timestamp": "2025-09-27T16:48:23.338Z"
     }
+  },
+  {
+    "id": "1759097913841",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "items": [
+      "Cappuccino"
+    ],
+    "status": "completed",
+    "timestamp": "2025-09-28T22:18:33.839Z",
+    "location": "A - 12",
+    "orderNote": "",
+    "startedAt": "2025-09-28T22:18:33.839Z",
+    "teaboyName": "Ahmed",
+    "rating": {
+      "stars": 5,
+      "review": "perfect",
+      "timestamp": "2025-09-28T22:19:06.392Z"
+    },
+    "completedAt": "2025-09-28T22:22:08.485Z"
   }
 ]

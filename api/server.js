@@ -191,30 +191,37 @@ app.get("/api/stats", async (req, res) => {
       (o) => o.status === "completed"
     ).length;
 
-    // Average preparation time
+    // ✅ Average preparation time
     const prepTimes = orders
-      .filter((o) => o.startedAt && o.completedAt)
-      .map((o) => (new Date(o.completedAt) - new Date(o.startedAt)) / 60000);
+      .filter((o) => o.status === "completed" && o.startedAt && o.completedAt)
+      .map(
+        (o) =>
+          (new Date(o.completedAt).getTime() -
+            new Date(o.startedAt).getTime()) /
+          60000
+      );
+
     const avgPrepTime = prepTimes.length
       ? prepTimes.reduce((a, b) => a + b, 0) / prepTimes.length
       : 0;
 
-    // Average rating
+    // ✅ Average rating
     const ratings = orders
       .filter((o) => o.rating && o.rating.stars)
       .map((o) => o.rating.stars);
+
     const avgRating = ratings.length
       ? ratings.reduce((a, b) => a + b, 0) / ratings.length
       : 0;
 
-    // Orders by date
+    // ✅ Orders by date
     const ordersByDate = {};
     orders.forEach((o) => {
       const d = new Date(o.timestamp).toLocaleDateString();
       ordersByDate[d] = (ordersByDate[d] || 0) + 1;
     });
 
-    // Orders by teaboy
+    // ✅ Orders by teaboy
     const ordersByTeaboy = {};
     orders.forEach((o) => {
       const name = o.teaboyName || o.serviceAreaName || "Unknown";
@@ -583,6 +590,7 @@ app.get("/api/orders/:id", async (req, res) => {
 });
 
 // POST /api/orders?company=... - create new order for a company (or global if no company)
+// POST /api/orders?company=... - create new order for a company (or global if no company)
 app.post("/api/orders", async (req, res) => {
   const companyId = req.query.company || null;
   try {
@@ -647,7 +655,12 @@ app.post("/api/orders", async (req, res) => {
     if (!newOrder.timestamp) newOrder.timestamp = new Date().toISOString();
     if (!newOrder.status) newOrder.status = "pending";
 
-    newOrder.id = idStr;
+    // ensure prep time fields
+    if (!newOrder.startedAt) newOrder.startedAt = newOrder.timestamp;
+    if (newOrder.status === "completed" && !newOrder.completedAt) {
+      newOrder.completedAt = new Date().toISOString();
+    }
+
     // Normalize teaboyName from serviceAreaName if needed
     if (
       (!newOrder.teaboyName || newOrder.teaboyName === "") &&
@@ -656,6 +669,8 @@ app.post("/api/orders", async (req, res) => {
       newOrder.teaboyName = newOrder.serviceAreaName;
     }
     if (newOrder.serviceAreaName) delete newOrder.serviceAreaName;
+
+    newOrder.id = idStr;
     orders.push(newOrder);
 
     await writeOrders(orders, companyId);
@@ -677,7 +692,8 @@ app.post("/api/orders", async (req, res) => {
       }`
     );
     res.status(201).json(newOrder);
-    // after writeOrders(...) resolved
+
+    // Append to Google Sheet
     try {
       appendToSheetRow(newOrder, "create");
     } catch (e) {
@@ -689,6 +705,7 @@ app.post("/api/orders", async (req, res) => {
   }
 });
 
+// PUT /api/orders/:id?company=... - update an order (company-aware)
 // PUT /api/orders/:id?company=... - update an order (company-aware)
 app.put("/api/orders/:id", async (req, res) => {
   const companyId = req.query.company || null;
@@ -712,6 +729,14 @@ app.put("/api/orders/:id", async (req, res) => {
     }
     if (updated.serviceAreaName) delete updated.serviceAreaName;
 
+    // ensure prep time fields
+    if (updated.status === "completed" && !updated.completedAt) {
+      updated.completedAt = new Date().toISOString();
+    }
+    if (!updated.startedAt) {
+      updated.startedAt = updated.timestamp || new Date().toISOString();
+    }
+
     orders[idx] = updated;
     await writeOrders(orders, companyId);
 
@@ -719,6 +744,8 @@ app.put("/api/orders/:id", async (req, res) => {
       `Order updated: ${id} ${companyId ? `company=${companyId}` : ""}`
     );
     res.json(updated);
+
+    // Append update to Google Sheet
     try {
       appendToSheetRow(updated, "update");
     } catch (e) {
