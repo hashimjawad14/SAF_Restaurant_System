@@ -6,7 +6,8 @@
       {
         "id": "espresso",
         "name": "Espresso",
-        "value": "Espresso"
+        "value": "Espresso",
+        "image": "/uploads/menus/remat/espresso.jpeg"
       },
       {
         "id": "americano",

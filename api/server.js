@@ -75,7 +75,7 @@ app.post("/api/session/start", (req, res) => {
   req.session.mode = mode;
   if (mode === "qr") {
     req.session.qrStart = Date.now();
-    req.session.qrTTL = 30 * 1000; // 30s for testing
+    req.session.qrTTL = 5 * 60 * 1000; // 30s for testing
   }
 
   console.log(`Session started in ${mode} mode`);
@@ -118,44 +118,122 @@ async function getSheetsClient() {
   }
 }
 
-async function appendToSheetRow(order, action = "upsert") {
+async function appendToSheetRow(
+  order,
+  action = "upsert",
+  companyId = "default"
+) {
   if (!SPREADSHEET_ID) {
     console.warn("SPREADSHEET_ID not set - skipping sheet append");
     return;
   }
+
+  const headers = [
+    "Order ID",
+    "Created At",
+    "Last Updated",
+    "Status",
+    "Desk",
+    "Teaboy Name",
+    "Location",
+    "Items",
+    "Order Note",
+    "Stars",
+    "Review",
+  ];
+
   try {
     const client = await getSheetsClient();
     const sheetsApi = google.sheets({ version: "v4", auth: client });
+    const sheetName = companyId || "default";
 
-    const values = [
-      [
-        order.id || "",
-        new Date().toISOString(),
-        action,
-        order.timestamp || "",
-        order.status || "",
-        order.desk || order.serviceArea || "",
-        order.teaboyName || "",
-        Array.isArray(order.items) ? order.items.join(" | ") : "",
-        order.orderNote || "",
-        order.rating?.stars ?? "",
-        order.rating?.review ?? "",
-      ],
+    // 1. Ensure sheet/tab exists
+    try {
+      await sheetsApi.spreadsheets.get({
+        spreadsheetId: SPREADSHEET_ID,
+        ranges: [sheetName],
+      });
+    } catch (err) {
+      console.log(`Sheet "${sheetName}" not found, creating...`);
+      await sheetsApi.spreadsheets.batchUpdate({
+        spreadsheetId: SPREADSHEET_ID,
+        resource: {
+          requests: [{ addSheet: { properties: { title: sheetName } } }],
+        },
+      });
+    }
+
+    // 2. Ensure headers
+    const headerCheck = await sheetsApi.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${sheetName}!A1:L1`,
+    });
+    if (!headerCheck.data.values || headerCheck.data.values.length === 0) {
+      console.log(`Adding headers to sheet "${sheetName}"...`);
+      await sheetsApi.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${sheetName}!A1:L1`,
+        valueInputOption: "RAW",
+        resource: { values: [headers] },
+      });
+    }
+
+    // 3. Check if this order already exists (by ID in col A)
+    const existing = await sheetsApi.spreadsheets.values.get({
+      spreadsheetId: SPREADSHEET_ID,
+      range: `${sheetName}!A:A`,
+    });
+    const rows = existing.data.values || [];
+    let rowIndex = -1;
+    for (let i = 1; i < rows.length; i++) {
+      if (rows[i][0] === String(order.id)) {
+        rowIndex = i + 1; // convert to 1-based row index
+        break;
+      }
+    }
+
+    const rowData = [
+      order.id || "",
+      order.timestamp || "",
+      new Date().toISOString(), // last updated
+      order.status || "",
+      order.desk || order.serviceArea || "",
+      order.teaboyName || "",
+      order.location || "",
+      Array.isArray(order.items) ? order.items.join(" | ") : "",
+      order.orderNote || "",
+      order.rating?.stars ?? "",
+      order.rating?.review ?? "",
     ];
 
-    await sheetsApi.spreadsheets.values.append({
-      spreadsheetId: SPREADSHEET_ID,
-      range: "Orders!A1", // ensure you created a sheet/tab named "Orders"
-      valueInputOption: "RAW",
-      resource: { values },
-    });
-    console.log("Sheet append OK for order", order.id);
+    if (rowIndex > 0) {
+      // 4. Update existing row
+      await sheetsApi.spreadsheets.values.update({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${sheetName}!A${rowIndex}:L${rowIndex}`,
+        valueInputOption: "RAW",
+        resource: { values: [rowData] },
+      });
+      console.log(
+        `🔄 Updated row ${rowIndex} for order ${order.id} in "${sheetName}"`
+      );
+    } else {
+      // 5. Append as new row
+      await sheetsApi.spreadsheets.values.append({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${sheetName}!A:A`,
+        valueInputOption: "RAW",
+        resource: { values: [rowData] },
+      });
+      console.log(
+        `✅ Appended new row for order ${order.id} in "${sheetName}"`
+      );
+    }
   } catch (err) {
     console.error(
-      "Failed to append to Google Sheet:",
-      err && err.message ? err.message : err
+      "❌ Failed to append/update Google Sheet:",
+      err.message || err
     );
-    // don't throw - we don't want the API call to fail the order flow
   }
 }
 
@@ -695,7 +773,7 @@ app.post("/api/orders", async (req, res) => {
 
     // Append to Google Sheet
     try {
-      appendToSheetRow(newOrder, "create");
+      appendToSheetRow(newOrder, "create", companyId);
     } catch (e) {
       console.error("appendToSheetRow create error:", e);
     }
@@ -747,7 +825,7 @@ app.put("/api/orders/:id", async (req, res) => {
 
     // Append update to Google Sheet
     try {
-      appendToSheetRow(updated, "update");
+      appendToSheetRow(updated, "update", companyId);
     } catch (e) {
       console.error("appendToSheetRow update error:", e);
     }

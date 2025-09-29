@@ -1,20 +1,55 @@
 {
-  "numDesks": 3,
+  "numDesks": 10,
   "desks": {
     "1": {
-      "building": "A",
-      "floor": "1",
-      "teaBoy": "Ali"
+      "building": "Location",
+      "floor": "A-1",
+      "teaBoy": "Teaboyname"
     },
     "2": {
-      "building": "B",
-      "floor": "2",
-      "teaBoy": "Ali"
+      "building": "Location",
+      "floor": "A-2",
+      "teaBoy": "Teaboyname"
     },
     "3": {
-      "building": "C",
-      "floor": "3",
-      "teaBoy": "Ali"
+      "building": "Location",
+      "floor": "A-3",
+      "teaBoy": "Teaboyname"
+    },
+    "4": {
+      "building": "Location",
+      "floor": "A-4",
+      "teaBoy": "Teaboyname"
+    },
+    "5": {
+      "building": "Location",
+      "floor": "A-5",
+      "teaBoy": "Teaboyname"
+    },
+    "6": {
+      "building": "Location",
+      "floor": "A-6",
+      "teaBoy": "Teaboyname"
+    },
+    "7": {
+      "building": "Location",
+      "floor": "A-7",
+      "teaBoy": "Teaboyname"
+    },
+    "8": {
+      "building": "Location",
+      "floor": "A-8",
+      "teaBoy": "Teaboyname"
+    },
+    "9": {
+      "building": "Location",
+      "floor": "A-9",
+      "teaBoy": "Teaboyname"
+    },
+    "10": {
+      "building": "Location",
+      "floor": "A-10",
+      "teaBoy": "Teaboyname"
     }
   }
 }

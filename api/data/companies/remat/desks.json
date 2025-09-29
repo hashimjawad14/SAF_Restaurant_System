@@ -1,5 +1,5 @@
 {
-  "numDesks": 2,
+  "numDesks": 3,
   "desks": {
     "1": {
       "building": "A",
@@ -10,6 +10,11 @@
       "building": "B",
       "floor": "22",
       "teaBoy": "Ahmed"
+    },
+    "3": {
+      "building": "C",
+      "floor": "10",
+      "teaBoy": "Ali"
     }
   }
 }

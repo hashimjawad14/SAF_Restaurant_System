@@ -668,7 +668,7 @@
 
           // Desk range (can be customized)
           this.startDesk = 1;
-          this.endDesk = 160;
+          this.endDesk = 10;
 
           this.firstLoad = true;
           this.allowedDesks = this.buildAllowedDeskSet();
@@ -683,6 +683,7 @@
             set.add(String(i));
             set.add(`DESK${i}`);
             set.add(`desk${i}`);
+            set.add(`id-${i}`);
           }
           return set;
         }
