@@ -1741,6 +1741,13 @@
           // After order submission success
           setTimeout(() => {
             showRatingPopup(order.id);
+
+            // reset stars & textarea for fresh rating
+            currentRating = 0;
+            document.querySelectorAll(".rating-popup .star").forEach((s) => {
+              s.classList.remove("selected");
+            });
+            document.getElementById("ratingReview").value = "";
           }, 10000); // 10 seconds
           return result;
         } catch (err) {
@@ -1799,6 +1806,8 @@
           document
             .querySelectorAll(".option-item")
             .forEach((it) => it.classList.remove("selected"));
+          document.getElementById("orderNote").value = "";
+
           updateOrderSummary();
         } catch (err) {
           console.error("submit error", err);
