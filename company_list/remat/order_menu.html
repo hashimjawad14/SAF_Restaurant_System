@@ -1758,7 +1758,11 @@
       async function submitDashboardOrder(orderData) {
         try {
           // Build API URL
-          const apiUrl = `http://localhost:4000/api/orders?company=${encodeURIComponent(
+          // const apiUrl = `http://localhost:4000/api/orders?company=${encodeURIComponent(
+          //   COMPANY_CODE
+          // )}`;
+
+          const apiUrl = `/api/orders?company=${encodeURIComponent(
             COMPANY_CODE
           )}`;
 

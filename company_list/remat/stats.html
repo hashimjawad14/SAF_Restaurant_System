@@ -94,7 +94,8 @@
     <script>
       async function loadStats() {
         const res = await fetch(
-          "http://localhost:4000/api/stats?company=remat"
+          //   "http://localhost:4000/api/stats?company=remat"
+          "/api/stats?company=remat"
         );
         const data = await res.json();
 

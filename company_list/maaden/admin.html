@@ -665,7 +665,8 @@
           // === Detect companyId from URL ===
           const urlParams = new URLSearchParams(window.location.search);
           this.companyId = COMPANY_CODE; // 👈 always use manual code
-          this.apiBase = "http://localhost:4000/api/orders";
+          // this.apiBase = "http://localhost:4000/api/orders";
+          this.apiBase = "/api/orders";
           this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
 
           // Desk range (can be customized)

@@ -94,7 +94,8 @@
     <script>
       async function loadStats() {
         const res = await fetch(
-          "http://localhost:4000/api/stats?company=maaden"
+          //   "http://localhost:4000/api/stats?company=maaden"
+          "/api/stats?company=maaden"
         );
         const data = await res.json();
 
