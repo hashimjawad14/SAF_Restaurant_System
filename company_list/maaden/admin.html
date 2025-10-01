@@ -567,6 +567,12 @@
         </div>
       </div>
 
+      <!-- Add this before closing </body> -->
+      <audio id="notificationSound" preload="auto">
+        <source src="/ding.mp3" type="audio/mpeg" />
+        <!-- <source src="noti_saf.mp3" type="audio/mpeg" /> -->
+      </audio>
+
       <div class="controls">
         <div class="controls-row">
           <div class="control-group">
@@ -656,6 +662,23 @@
       document.getElementById("statsBtn").addEventListener("click", () => {
         window.location.href = `/company_list/${COMPANY_CODE}/stats.html`;
       });
+
+      function unlockAudio() {
+        const sound = document.getElementById("notificationSound");
+        if (!sound) return;
+        sound.volume = 1.0;
+        sound
+          .play()
+          .then(() => {
+            sound.pause();
+            sound.currentTime = 0;
+            console.log("🔔 Audio unlocked and ready");
+          })
+          .catch((err) => console.warn("Unlock failed:", err));
+      }
+
+      window.addEventListener("click", unlockAudio, { once: true });
+      window.addEventListener("keydown", unlockAudio, { once: true });
 
       class DashboardApp {
         constructor() {
@@ -1116,11 +1139,29 @@
           }
         }
 
+        // showNotification(title, message) {
+        //   const el = document.getElementById("notification");
+        //   document.getElementById("notificationTitle").textContent = title;
+        //   document.getElementById("notificationMessage").textContent = message;
+        //   el.classList.add("show");
+        //   setTimeout(() => el.classList.remove("show"), 4000);
+        // }
+
         showNotification(title, message) {
           const el = document.getElementById("notification");
           document.getElementById("notificationTitle").textContent = title;
           document.getElementById("notificationMessage").textContent = message;
           el.classList.add("show");
+
+          const sound = document.getElementById("notificationSound");
+          if (sound) {
+            sound.pause();
+            sound.currentTime = 0;
+            sound
+              .play()
+              .catch((err) => console.warn("Autoplay prevented:", err));
+          }
+
           setTimeout(() => el.classList.remove("show"), 4000);
         }
 
