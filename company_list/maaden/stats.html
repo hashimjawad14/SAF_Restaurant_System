@@ -61,6 +61,11 @@
         color: gold;
         font-size: 20px;
       }
+      #ordersByTeaboy {
+        max-width: 400px;
+        max-height: 400px;
+        margin: 0 auto;
+      }
     </style>
   </head>
   <body>
@@ -139,22 +144,45 @@
           },
         });
 
-        // Orders by Teaboy (Bar Chart)
+        // Orders by Teaboy (Pie Chart)
         new Chart(document.getElementById("ordersByTeaboy"), {
-          type: "bar",
+          type: "pie",
           data: {
             labels: Object.keys(ordersByTeaboy),
             datasets: [
               {
                 label: "Orders Served",
                 data: Object.values(ordersByTeaboy),
-                backgroundColor: "#28a745",
+                backgroundColor: [
+                  "#007bff",
+                  "#28a745",
+                  "#ffc107",
+                  "#dc3545",
+                  "#6f42c1",
+                  "#17a2b8",
+                  "#fd7e14",
+                  "#20c997",
+                ],
+                borderWidth: 1,
               },
             ],
           },
           options: {
             responsive: true,
-            plugins: { legend: { display: false } },
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  boxWidth: 15,
+                  color: "#333",
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => `${context.label}: ${context.raw} orders`,
+                },
+              },
+            },
           },
         });
       }
