@@ -96,7 +96,7 @@
       <canvas id="ordersByTeaboy"></canvas>
     </div>
 
-    <script>
+    <!-- <script>
       async function loadStats() {
         const res = await fetch(
           //   "http://localhost:4000/api/stats?company=maaden"
@@ -180,6 +180,145 @@
               tooltip: {
                 callbacks: {
                   label: (context) => `${context.label}: ${context.raw} orders`,
+                },
+              },
+            },
+          },
+        });
+      }
+
+      loadStats();
+    </script> -->
+
+    <script>
+      async function loadStats() {
+        const res = await fetch("/api/stats?company=maaden");
+        const data = await res.json();
+
+        // Update summary cards
+        document.getElementById("totalOrders").textContent =
+          data.totalOrders || 0;
+        document.getElementById("completedOrders").textContent =
+          data.completedOrders || 0;
+        document.getElementById("avgPrepTime").textContent =
+          (data.avgPrepTime || 0).toFixed(1) + " min";
+        document.getElementById("avgRating").textContent =
+          (data.avgRating || 0).toFixed(1) + " ★";
+
+        // Draw stars for average rating
+        const stars = Math.round(data.avgRating || 0);
+        document.getElementById("avgStars").textContent =
+          "★".repeat(stars) + "☆".repeat(5 - stars);
+
+        // Extract charts data
+        let ordersByDate = data.ordersByDate || {};
+        const ordersByTeaboy = data.ordersByTeaboy || {};
+
+        // ✅ Filter ordersByDate to last 30 days
+        const now = new Date();
+        const cutoff = new Date(now);
+        cutoff.setDate(now.getDate() - 30);
+
+        const filteredOrdersByDate = {};
+        Object.keys(ordersByDate)
+          .sort((a, b) => new Date(a) - new Date(b)) // ensure chronological order
+          .forEach((dateKey) => {
+            const d = new Date(dateKey);
+            if (d >= cutoff) {
+              filteredOrdersByDate[dateKey] = ordersByDate[dateKey];
+            }
+          });
+
+        // Reassign to filtered data
+        ordersByDate = filteredOrdersByDate;
+
+        // --- Orders by Date (Line Chart) ---
+        new Chart(document.getElementById("ordersByDate"), {
+          type: "line",
+          data: {
+            labels: Object.keys(ordersByDate),
+            datasets: [
+              {
+                label: "Orders per Day (Last 30 Days)",
+                data: Object.values(ordersByDate),
+                borderColor: "#007bff",
+                backgroundColor: "rgba(0,123,255,0.2)",
+                tension: 0.3,
+                fill: true,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                display: true,
+                labels: { color: "#333" },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.parsed.y} orders`,
+                },
+              },
+            },
+            scales: {
+              x: {
+                ticks: { color: "#555" },
+                title: {
+                  display: true,
+                  text: "Date (last 30 days)",
+                  color: "#333",
+                },
+              },
+              y: {
+                ticks: { color: "#555" },
+                title: {
+                  display: true,
+                  text: "Number of Orders",
+                  color: "#333",
+                },
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+
+        // --- Orders by Teaboy (Pie Chart) ---
+        new Chart(document.getElementById("ordersByTeaboy"), {
+          type: "pie",
+          data: {
+            labels: Object.keys(ordersByTeaboy),
+            datasets: [
+              {
+                label: "Orders Served (Last 30 Days)",
+                data: Object.values(ordersByTeaboy),
+                backgroundColor: [
+                  "#007bff",
+                  "#28a745",
+                  "#ffc107",
+                  "#dc3545",
+                  "#6f42c1",
+                  "#17a2b8",
+                  "#fd7e14",
+                  "#20c997",
+                ],
+                borderWidth: 1,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: {
+                position: "right",
+                labels: {
+                  boxWidth: 15,
+                  color: "#333",
+                },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (ctx) => `${ctx.label}: ${ctx.raw} orders`,
                 },
               },
             },

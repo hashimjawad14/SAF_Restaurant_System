@@ -13,6 +13,7 @@
 
       #c_logo {
         border-radius: 20px;
+        background: white;
       }
 
       body {
@@ -38,7 +39,7 @@
       }
 
       .container {
-        background: linear-gradient(135deg, #b8a567 0%, #f7f3e9 100%);
+        background: linear-gradient(135deg, #00785c4f 0%, #a574014a 100%);
         border-radius: 24px;
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
         padding: 48px 40px;
@@ -123,6 +124,8 @@
 
       .company-name {
         text-align: center;
+        background-color: black;
+        color: white;
         font-size: 11px;
         font-weight: 600;
         margin-bottom: 8px;
@@ -893,7 +896,9 @@
       <div class="logo" id="companyLogo">
         <img src="/logo_ai.png" alt="Logo" id="c_logo" />
       </div>
-      <div class="company-name" id="companyName"></div>
+      <div class="company-name" id="companyName">
+        قائمة المشروبات | Drinks Menu
+      </div>
       <h1 id="deskTitle">Order Beverages</h1>
       <p class="subtitle">Select your drinks for delivery</p>
       <div class="location-info" id="locationInfo">Loading location...</div>
@@ -1576,7 +1581,9 @@
           }
         }
         const companyNameEl = document.getElementById("companyName");
-        if (companyNameEl) companyNameEl.textContent = config.name || "";
+        if (companyNameEl)
+          companyNameEl.textContent =
+            config.name || "قائمة المشروبات | Drinks Menu";
         const logoEl = document.getElementById("companyLogo");
         if (logoEl) {
           if (config.logo)

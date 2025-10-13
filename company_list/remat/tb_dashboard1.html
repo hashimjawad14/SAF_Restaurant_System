@@ -665,7 +665,7 @@
     <div class="dashboard-container">
       <div class="header">
         <div class="header-left">
-          <h1 class="dashboard-title">Admin Dashboard</h1>
+          <h1 class="dashboard-title">Orders Zone 1</h1>
           <p class="dashboard-subtitle">Remat Al-Riyadh</p>
         </div>
         <div class="header-right">
@@ -722,13 +722,17 @@
           </div>
           <div class="control-group">
             <label>&nbsp;</label>
-            <button class="clear-btn" id="clearBtn">Clear All Orders</button>
+            <button class="clear-btn" id="clearBtn" style="display: none">
+              Clear All Orders
+            </button>
           </div>
-          <button id="statsBtn" class="action-btn">📊 Statistics</button>
+          <button id="statsBtn" class="action-btn" style="display: none">
+            📊 Statistics
+          </button>
         </div>
       </div>
 
-      <div class="stats" id="statsContainer">
+      <div class="stats" id="statsContainer" style="display: none">
         <div class="stat-card">
           <div class="stat-number" id="totalOrders">0</div>
           <div class="stat-label">Total Orders</div>
@@ -866,19 +870,21 @@
           // === Detect companyId from URL ===
           const urlParams = new URLSearchParams(window.location.search);
           this.companyId = COMPANY_CODE; // 👈 always use manual code
-          // this.apiBase = "/api/orders";
-          this.apiBase = "http://localhost:4000/api/orders";
+          this.apiBase = "/api/orders";
+          //   this.apiBase = "http://localhost:4000/api/orders";
 
           this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
 
-          // Desk range (can be customized)
           this.startDesk = 1;
-          this.endDesk = 160;
-
-          // === Define custom desk numbers here ===
-          this.customDesks = [];
+          this.endDesk = 25;
 
           this.firstLoad = true;
+
+          // === Define custom desk numbers here ===
+          this.customDesks = [
+            103, 104, 105, 106, 107, 120, 121, 122, 123, 124, 125, 126, 127,
+            128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138,
+          ];
           this.allowedDesks = this.buildAllowedDeskSet();
           this.pollInterval = null;
 
@@ -1127,6 +1133,9 @@
           }
 
           this.filteredOrders = base.filter((order) => {
+            // 👇 HIDE completed orders automatically
+            if (order.status === "completed") return false;
+
             const statusMatch =
               statusFilter === "all" || order.status === statusFilter;
 
@@ -1135,7 +1144,6 @@
               String(this.getDeskNumber(order) ?? order.desk) ===
                 String(deskFilter);
 
-            // fallback to common alternate timestamp keys
             const tsRaw =
               order.timestamp ??
               order.createdAt ??
@@ -1150,10 +1158,7 @@
 
             // parse timestamp to Date
             const orderDate = parseOrderTimestampToDate(tsRaw);
-            if (!orderDate) {
-              // no valid timestamp -> treat as not matching the selected date
-              return false && statusMatch && deskMatchInput;
-            }
+            if (!orderDate) return false;
 
             const dateMatch = orderDate >= rangeStart && orderDate <= rangeEnd;
 

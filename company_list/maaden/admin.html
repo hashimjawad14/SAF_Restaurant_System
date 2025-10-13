@@ -1,106 +1,161 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>Beverage Orders Dashboard</title>
+
+    <!-- Use a crisp modern font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+
     <style>
+      /* --- Reset & base --- */
       * {
+        box-sizing: border-box;
         margin: 0;
         padding: 0;
-        box-sizing: border-box;
       }
-
+      html,
       body {
-        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-          Oxygen, Ubuntu, Cantarell, sans-serif;
-        background: linear-gradient(135deg, #3a3a3a 0%, #000000 100%);
-        min-height: 100vh;
-        color: #1a1a1a;
+        height: 100%;
       }
 
+      /* === Page background: elegant light -> medium dark hybrid ===
+         Soft airy base with subtle teal/indigo radial accents.
+         Keeps depth but is much lighter overall for readability.
+      */
+      body {
+        font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial;
+        background: radial-gradient(
+            1000px 450px at 8% 12%,
+            rgba(99, 102, 241, 0.12),
+            transparent 8%
+          ),
+          radial-gradient(
+            900px 420px at 92% 88%,
+            rgba(16, 185, 129, 0.1),
+            transparent 8%
+          ),
+          linear-gradient(180deg, #f7fafc 0%, #eef2f6 60%, #e6ebf2 100%);
+        color: #0f1724; /* dark slate for primary text */
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        min-height: 100vh;
+        padding: 28px;
+        transition: background 0.4s ease;
+      }
+
+      /* container */
       .dashboard-container {
+        max-width: 1200px;
+        margin: 0 auto;
         min-height: 100vh;
-        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
       }
 
+      /* header: glassy card with subtle shadow and darker text */
       .header {
-        background: white;
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         display: flex;
-        justify-content: between;
         align-items: center;
-        flex-wrap: wrap;
-        gap: 16px;
+        justify-content: space-between;
+        gap: 18px;
+        padding: 20px;
+        border-radius: 14px;
+        backdrop-filter: blur(8px) saturate(120%);
+        background: rgba(
+          255,
+          255,
+          255,
+          0.68
+        ); /* lighter card to contrast with page */
+        border: 1px solid rgba(30, 41, 59, 0.06);
+        box-shadow: 0 8px 30px rgba(2, 6, 23, 0.06);
+        overflow: hidden;
+        animation: fadeInUp 0.5s ease both;
       }
 
       .header-left {
-        flex: 1;
+        min-width: 0;
       }
-
       .dashboard-title {
-        font-size: 28px;
+        font-size: 22px;
         font-weight: 800;
-        color: #1a1a1a;
-        margin-bottom: 8px;
-        letter-spacing: -0.5px;
+        color: #0b1220; /* strong dark */
+        line-height: 1;
+        letter-spacing: -0.4px;
       }
-
       .dashboard-subtitle {
-        color: #6b7280;
-        font-size: 16px;
+        font-size: 13px;
+        color: #475569;
+        margin-top: 6px;
       }
 
       .header-right {
         display: flex;
         align-items: center;
-        gap: 16px;
+        gap: 12px;
       }
 
+      /* status indicator — bright accent but readable text */
       .status-indicator {
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        gap: 8px;
-        padding: 8px 16px;
-        background: #10b981;
-        color: white;
-        border-radius: 20px;
-        font-size: 14px;
-        font-weight: 600;
+        gap: 10px;
+        padding: 8px 14px;
+        border-radius: 999px;
+        font-weight: 700;
+        color: #06203c;
+        background: rgba(99, 255, 186, 0.95);
+        box-shadow: 0 6px 18px rgba(91, 198, 255, 0.08),
+          inset 0 -4px 16px rgba(255, 255, 255, 0.04);
+        font-size: 13px;
       }
-
       .status-dot {
-        width: 8px;
-        height: 8px;
-        background: currentColor;
+        width: 10px;
+        height: 10px;
         border-radius: 50%;
-        animation: pulse 2s infinite;
+        background: rgba(8, 10, 10, 0.9);
+        box-shadow: 0 0 10px rgba(91, 198, 255, 0.9);
+        animation: pulse 1.8s infinite;
       }
 
       @keyframes pulse {
-        0%,
-        100% {
+        0% {
+          transform: scale(1);
           opacity: 1;
         }
         50% {
-          opacity: 0.5;
+          transform: scale(1.2);
+          opacity: 0.7;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
         }
       }
 
+      /* controls / filters card — elevated glass */
       .controls {
-        background: white;
-        border-radius: 16px;
-        padding: 24px;
-        margin-bottom: 24px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        display: block;
+        padding: 18px;
+        border-radius: 12px;
+        background: rgba(255, 255, 255, 0.72);
+        border: 1px solid rgba(30, 41, 59, 0.06);
+        backdrop-filter: blur(6px);
+        box-shadow: 0 10px 30px rgba(2, 6, 23, 0.06);
+        animation: fadeInUp 0.55s ease both;
       }
 
       .controls-row {
         display: flex;
-        gap: 16px;
+        gap: 12px;
         align-items: center;
         flex-wrap: wrap;
       }
@@ -109,438 +164,500 @@
         display: flex;
         flex-direction: column;
         gap: 8px;
+        min-width: 150px;
       }
-
       .control-group label {
-        font-size: 14px;
-        font-weight: 600;
-        color: #4a4a4a;
+        color: #475569;
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
       }
 
       select,
+      input[type="date"],
+      input[type="number"],
       input {
-        padding: 12px 16px;
-        border: 2px solid #e5e5e5;
-        border-radius: 8px;
+        appearance: none;
+        padding: 10px 12px;
+        border-radius: 10px;
+        background: #ffffff;
+        color: #0f1724;
+        border: 1px solid rgba(20, 24, 28, 0.06);
         font-size: 14px;
         outline: none;
-        transition: all 0.2s ease;
-        background: white;
+        transition: all 0.18s ease;
+        box-shadow: 0 2px 8px rgba(15, 23, 36, 0.03) inset;
       }
-
       select:focus,
       input:focus {
-        border-color: #667eea;
-        box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        transform: translateY(-2px);
+        border-color: rgba(91, 198, 255, 0.9);
+        box-shadow: 0 8px 30px rgba(91, 198, 255, 0.08),
+          0 1px 0 rgba(255, 255, 255, 0.02) inset;
+        background: #ffffff;
       }
 
+      /* primary and secondary action buttons */
       .refresh-btn,
-      .clear-btn {
-        padding: 12px 20px;
+      .clear-btn,
+      .action-btn,
+      .tiny-btn {
+        cursor: pointer;
         border: none;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 14px;
+        border-radius: 12px;
+        padding: 10px 14px;
+        font-weight: 700;
+        font-size: 13px;
+        transition: transform 0.18s ease, box-shadow 0.18s ease,
+          opacity 0.12s ease;
       }
-
       .refresh-btn {
-        background: linear-gradient(135deg, #66ea9f 0%, #4ba274 100%);
-        color: white;
+        background: linear-gradient(90deg, #bbf7d0, #10b981);
+        color: black;
+        box-shadow: 0 8px 30px rgba(96, 165, 250, 0.1);
       }
-
       .refresh-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 234, 172, 0.3);
+        transform: translateY(-4px);
+        box-shadow: 0 18px 50px rgba(96, 165, 250, 0.12);
       }
 
       .clear-btn {
-        background: #ef4444;
-        color: white;
+        background: linear-gradient(90deg, #ff7a7a, #ef4444);
+        color: #fff;
+        box-shadow: 0 8px 30px rgba(239, 68, 68, 0.08);
       }
-
       .clear-btn:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
-      }
-
-      .stats {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        gap: 20px;
-        margin-bottom: 24px;
-      }
-
-      .stat-card {
-        background: white;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: all 0.3s ease;
-      }
-
-      .stat-card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-      }
-
-      .stat-number {
-        font-size: 32px;
-        font-weight: 800;
-        color: #667eea;
-        margin-bottom: 8px;
-      }
-
-      .stat-label {
-        font-size: 14px;
-        color: #6b7280;
-        font-weight: 600;
-      }
-
-      .orders-container {
-        background: white;
-        border-radius: 16px;
-        padding: 24px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-      }
-
-      .orders-header {
-        display: flex;
-        justify-content: between;
-        align-items: center;
-        margin-bottom: 20px;
-        padding-bottom: 16px;
-        border-bottom: 2px solid #f0f0f0;
-      }
-
-      .orders-title {
-        font-size: 20px;
-        font-weight: 700;
-        color: #1a1a1a;
-      }
-
-      .orders-count {
-        background: #667eea;
-        color: white;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-      }
-
-      .orders-list {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        max-height: 600px;
-        overflow-y: auto;
-      }
-
-      .order-card {
-        border: 2px solid #f0f0f0;
-        border-radius: 12px;
-        padding: 20px;
-        /* transition: all 0.3s ease; */
-        position: relative;
-      }
-
-      .order-card:hover {
-        border-color: #667eea;
-        /* transform: translateX(4px); */
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
-      }
-
-      .order-card.pending {
-        border-left: 4px solid #f59e0b;
-        background: linear-gradient(135deg, #fefbf5 0%, #fef9f0 100%);
-      }
-
-      .order-card.in-progress {
-        border-left: 4px solid #3b82f6;
-        background: linear-gradient(135deg, #f7f9ff 0%, #f0f4ff 100%);
-      }
-
-      .order-card.completed {
-        border-left: 4px solid #10b981;
-        background: linear-gradient(135deg, #f7fef9 0%, #f0fff4 100%);
-      }
-
-      .order-header {
-        display: flex;
-        justify-content: between;
-        align-items: flex-start;
-        margin-bottom: 16px;
-      }
-
-      .order-info {
-        flex: 1;
-      }
-
-      .order-id {
-        font-size: 18px;
-        font-weight: 700;
-        color: #1a1a1a;
-        margin-bottom: 4px;
-      }
-
-      .order-meta {
-        font-size: 14px;
-        color: #6b7280;
-        display: flex;
-        gap: 16px;
-        flex-wrap: wrap;
-      }
-
-      .order-status {
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 12px;
-        font-weight: 600;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-      }
-
-      .order-status.pending {
-        background: #f59e0b;
-        color: white;
-      }
-
-      .order-status.in-progress {
-        background: #3b82f6;
-        color: white;
-      }
-
-      .order-status.completed {
-        background: #10b981;
-        color: white;
-      }
-
-      .order-items {
-        margin-bottom: 16px;
-      }
-
-      .items-title {
-        font-size: 14px;
-        font-weight: 600;
-        color: #4a4a4a;
-        margin-bottom: 8px;
-      }
-
-      .items-list {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 8px;
-      }
-
-      .item-tag {
-        background: #667eea;
-        color: white;
-        padding: 4px 12px;
-        border-radius: 16px;
-        font-size: 13px;
-        font-weight: 500;
-      }
-
-      .order-actions {
-        display: flex;
-        gap: 8px;
-        flex-wrap: wrap;
-      }
-
-      .action-btn {
-        padding: 12px 20px;
-        border: 1px solid black;
-        border-radius: 8px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.2s ease;
-        font-size: 14px;
-        margin-top: 25px;
-        background-color: rgb(241, 241, 241);
-      }
-
-      .start-btn {
-        background: #3b82f6;
-        color: white;
-      }
-
-      .complete-btn {
-        background: #10b981;
-        color: white;
-      }
-
-      .delete-btn {
-        background: #ef4444;
-        color: white;
-      }
-
-      .action-btn:hover {
-        transform: translateY(-1px);
-        opacity: 0.9;
-      }
-
-      .empty-state {
-        text-align: center;
-        padding: 60px 20px;
-        color: #6b7280;
-      }
-
-      .empty-state svg {
-        width: 64px;
-        height: 64px;
-        margin-bottom: 16px;
-        opacity: 0.5;
-      }
-
-      .empty-state h3 {
-        font-size: 18px;
-        margin-bottom: 8px;
-      }
-
-      .empty-state p {
-        font-size: 14px;
-      }
-
-      .notification {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: white;
-        border-radius: 12px;
-        padding: 16px 20px;
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-        transform: translateX(400px);
-        transition: transform 0.3s ease;
-        z-index: 1000;
-        border-left: 4px solid #10b981;
-      }
-
-      .notification.show {
-        transform: translateX(0);
-      }
-
-      .notification-title {
-        font-weight: 600;
-        margin-bottom: 4px;
-      }
-
-      .notification-message {
-        font-size: 14px;
-        color: #6b7280;
-      }
-
-      @media (max-width: 768px) {
-        .dashboard-container {
-          padding: 16px;
-        }
-
-        .header {
-          text-align: center;
-        }
-
-        .header-right {
-          width: 100%;
-          justify-content: center;
-        }
-
-        .controls-row {
-          flex-direction: column;
-          align-items: stretch;
-        }
-
-        .control-group {
-          width: 100%;
-        }
-
-        .refresh-btn,
-        .clear-btn {
-          width: 100%;
-        }
-
-        .stats {
-          grid-template-columns: repeat(2, 1fr);
-        }
-
-        .order-meta {
-          flex-direction: column;
-          gap: 8px;
-        }
-
-        .order-header {
-          flex-direction: column;
-          gap: 12px;
-        }
-
-        .order-actions {
-          width: 100%;
-        }
-
-        .action-btn {
-          flex: 1;
-        }
+        transform: translateY(-3px);
       }
 
       .tiny-btn {
         padding: 8px 12px;
         border-radius: 10px;
-        font-size: 12px;
-        font-weight: 700;
-        border: 1px solid #e5e7eb;
         background: #ffffff;
-        color: #111827;
-        cursor: pointer;
-        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        color: #0f1724;
+        border: 1px solid rgba(30, 41, 59, 0.06);
+        box-shadow: 0 4px 18px rgba(2, 6, 23, 0.04);
       }
       .tiny-btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      }
-      body.dashboard-company .tiny-btn {
-        border-color: #e0e7ff;
-        background: #f8f9ff;
-        color: #111827;
+        transform: translateY(-3px);
       }
 
-      .order-note-display {
-        background: #f9fafb;
-        border-left: 3px solid #667eea;
-        padding: 8px 12px;
-        border-radius: 6px;
-        font-size: 13px;
-        color: #374151;
-        margin: 10px 0;
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 16px;
+        animation: fadeInUp 0.6s ease both;
       }
 
-      .order-rating {
-        margin-top: 14px;
+      .stat-card {
+        padding: 16px;
+        border-radius: 12px;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 251, 253, 0.96)
+        );
+        border: 1px solid rgba(18, 23, 28, 0.04);
+        box-shadow: 0 10px 30px rgba(15, 23, 36, 0.04);
         display: flex;
         flex-direction: column;
         gap: 8px;
+        align-items: flex-start;
+        transition: transform 0.18s ease, box-shadow 0.18s ease;
+      }
+      .stat-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 22px 60px rgba(15, 23, 36, 0.06);
+      }
+
+      .stat-number {
+        font-size: 28px;
+        color: #0b1220;
+        font-weight: 800;
+        letter-spacing: -0.6px;
+      }
+      .stat-label {
+        font-size: 12px;
+        color: #475569;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+
+      /* Orders container */
+      .orders-container {
+        padding: 18px;
+        border-radius: 14px;
+        background: rgba(255, 255, 255, 0.98);
+        border: 1px solid rgba(18, 23, 28, 0.04);
+        box-shadow: 0 12px 40px rgba(15, 23, 36, 0.05);
+        animation: fadeInUp 0.62s ease both;
+      }
+
+      .orders-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px;
+        margin-bottom: 16px;
+      }
+      .orders-title {
+        font-size: 16px;
+        font-weight: 800;
+        color: #0b1220;
+      }
+      .orders-count {
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 12px;
+        font-weight: 800;
+        color: white;
+        background: #077487;
+        box-shadow: 0 8px 26px rgba(124, 58, 237, 0.06);
+      }
+
+      .orders-list {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        max-height: 56vh;
+        overflow-y: auto;
+        padding-right: 6px;
+      }
+      .orders-list::-webkit-scrollbar {
+        width: 8px;
+      }
+      .orders-list::-webkit-scrollbar-thumb {
+        background: rgba(15, 23, 36, 0.08);
+        border-radius: 8px;
+      }
+
+      /* Order card (keep same classes & structure so JS works)
+         Cards are intentionally lighter than background so they stand out.
+      */
+      .order-card {
+        padding: 18px;
+        border-radius: 12px;
+        border: 1px solid rgba(15, 23, 36, 0.04);
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 251, 253, 0.96)
+        );
+        display: block;
+        transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1),
+          box-shadow 0.18s ease, border-color 0.18s ease;
+        box-shadow: 0 8px 22px rgba(15, 23, 36, 0.04);
+      }
+      .order-card:hover {
+        transform: translateY(-6px) scale(1.002);
+        box-shadow: 0 30px 70px rgba(15, 23, 36, 0.06);
+      }
+
+      /* statuses — keep class names (pending, in-progress, completed) */
+      .order-card.pending {
+        border-left: 6px solid #facc15;
+        background: linear-gradient(180deg, #fff9eb, #fffefc);
+      }
+      .order-card.in-progress {
+        border-left: 6px solid #3b82f6;
+        background: linear-gradient(180deg, #f5fbff, #ffffff);
+      }
+      .order-card.completed {
+        border-left: 6px solid #10b981;
+        background: linear-gradient(180deg, #f6fffa, #ffffff);
+      }
+
+      .order-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
+
+      .order-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .order-id {
+        color: #0b1220;
+        font-weight: 800;
+        font-size: 16px;
+      }
+      .order-meta {
+        color: #475569;
+        font-size: 13px;
+        display: flex;
+        gap: 12px;
+        margin-top: 8px;
+        flex-wrap: wrap;
+      }
+
+      .order-status-wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        min-width: 120px;
+      }
+
+      .order-status {
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-weight: 800;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+        display: inline-block;
+        color: #061124;
+        background: linear-gradient(90deg, #d1fae5, #60a5fa);
+        box-shadow: 0 6px 18px rgba(96, 165, 250, 0.06);
+      }
+      .order-status.pending {
+        background: linear-gradient(90deg, #fde047, #f59e0b);
+        color: #06203c;
+      }
+      .order-status.in-progress {
+        background: linear-gradient(90deg, #bfdbfe, #60a5fa);
+        color: #06203c;
+      }
+      .order-status.completed {
+        background: linear-gradient(90deg, #bbf7d0, #10b981);
+        color: #06203c;
+      }
+
+      .order-time-taken {
+        font-size: 12px;
+        color: #334155;
+        background: rgba(15, 23, 36, 0.03);
+        padding: 6px 10px;
+        border-radius: 8px;
+        white-space: nowrap;
+        box-shadow: 0 3px 8px rgba(15, 23, 36, 0.03);
+      }
+
+      .order-items {
+        margin-bottom: 12px;
+      }
+      .items-title {
+        font-size: 13px;
+        font-weight: 700;
+        color: #0b1220;
+        margin-bottom: 8px;
+      }
+      .items-list {
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+
+      .item-tag {
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: #077487;
+        color: #fff;
+        font-weight: 700;
+        font-size: 13px;
+        box-shadow: 0 6px 18px rgba(124, 58, 237, 0.06);
+      }
+
+      .order-note-display {
+        margin: 10px 0;
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.98),
+          rgba(250, 251, 253, 0.96)
+        );
+        border-left: 3px solid rgba(102, 126, 234, 0.6);
+        padding: 10px 12px;
+        border-radius: 8px;
+        color: #374151;
+        font-size: 13px;
+      }
+
+      .order-rating {
+        margin-top: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
       }
 
       .order-rating h4 {
-        font-size: 14px;
-        font-weight: 600;
-        color: #4b5563; /* gray-700 */
-        margin-bottom: 2px;
+        font-size: 13px;
+        color: #0b1220;
+        font-weight: 800;
+        margin-bottom: 4px;
+      }
+
+      .order-rating .rating-block,
+      .order-rating .review-block {
+        display: flex;
+        flex-direction: column;
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 8px;
+        padding: 10px 12px;
+        border-left: 3px solid rgba(250, 204, 21, 0.6);
+        box-shadow: 0 4px 12px rgba(15, 23, 36, 0.05);
       }
 
       .order-rating .stars {
-        color: #facc15; /* yellow-400 */
-        font-size: 18px;
+        font-size: 16px;
+        color: #f59e0b;
         letter-spacing: 2px;
       }
 
       .order-rating .review {
-        background: #f9fafb;
-        border-left: 3px solid #facc15;
-        padding: 6px 10px;
-        border-radius: 6px;
+        background: transparent;
+        color: #334155;
         font-size: 13px;
-        color: #374151;
-        margin-bottom: 15px; /* spacing below review */
+        line-height: 1.4;
+      }
+
+      .order-actions {
+        display: flex;
+        gap: 8px;
+        margin-top: 12px;
+        flex-wrap: wrap;
+      }
+
+      .action-btn {
+        padding: 10px 14px;
+        font-size: 14px;
+        margin-top: 17px;
+        font-weight: 800;
+        border-radius: 10px;
+        border: 1px solid rgba(15, 23, 36, 0.04);
+        background: #ececec;
+        color: #0b1220;
+        cursor: pointer;
+        transition: transform 0.14s ease, box-shadow 0.14s ease,
+          opacity 0.14s ease;
+      }
+      .action-btn:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 14px 40px rgba(15, 23, 36, 0.06);
+      }
+
+      .start-btn {
+        background: linear-gradient(90deg, #c596f6, #7c3aed);
+        color: #fff;
+        border: none;
+        box-shadow: 0 12px 36px rgba(124, 58, 237, 0.06);
+      }
+      .complete-btn {
+        background: linear-gradient(90deg, #34d399, #10b981);
+        color: #04201a;
+        border: none;
+        box-shadow: 0 12px 36px rgba(16, 185, 129, 0.06);
+      }
+      .delete-btn {
+        background: linear-gradient(90deg, #ff7a7a, #ef4444);
+        color: #fff;
+        border: none;
+        box-shadow: 0 12px 36px rgba(239, 68, 68, 0.06);
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        color: #6b7280;
+      }
+      .empty-state svg {
+        width: 72px;
+        height: 72px;
+        margin-bottom: 14px;
+        opacity: 0.6;
+        color: rgba(15, 23, 36, 0.06);
+      }
+
+      /* notification */
+      .notification {
+        position: fixed;
+        top: 22px;
+        right: 22px;
+        background: rgba(255, 255, 255, 0.98);
+        border-radius: 12px;
+        padding: 14px 18px;
+        box-shadow: 0 20px 60px rgba(15, 23, 36, 0.08);
+        border-left: 4px solid rgba(16, 185, 129, 0.95);
+        transform: translateX(420px);
+        transition: transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1),
+          opacity 0.25s ease;
+        z-index: 1200;
+      }
+      .notification.show {
+        transform: translateX(0);
+      }
+      .notification-title {
+        font-weight: 800;
+        color: #0b1220;
+        margin-bottom: 4px;
+      }
+      .notification-message {
+        color: #334155;
+        font-size: 13px;
+      }
+
+      /* small helpers */
+      .tiny-muted {
+        color: #6b7280;
+        font-size: 12px;
+      }
+
+      /* responsive */
+      @media (max-width: 980px) {
+        .stats {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .orders-list {
+          max-height: 46vh;
+        }
+      }
+      @media (max-width: 720px) {
+        body {
+          padding: 14px;
+        }
+        .dashboard-container {
+          gap: 14px;
+        }
+        .header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+        .controls-row {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .control-group {
+          width: 100%;
+          min-width: 0;
+        }
+        .orders-list {
+          max-height: 48vh;
+        }
+        .order-header {
+          flex-direction: column;
+          align-items: stretch;
+          gap: 10px;
+        }
+        .order-status-wrapper {
+          align-items: flex-start;
+        }
+      }
+
+      /* subtle animations */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(6px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
       }
     </style>
   </head>
@@ -549,7 +666,7 @@
       <div class="header">
         <div class="header-left">
           <h1 class="dashboard-title">Admin Dashboard</h1>
-          <p class="dashboard-subtitle">Corporate Beverage Solutions</p>
+          <p class="dashboard-subtitle">Maaden</p>
         </div>
         <div class="header-right">
           <button
@@ -584,6 +701,12 @@
               <option value="completed">Completed</option>
             </select>
           </div>
+
+          <div class="control-group">
+            <label for="dateFilter">Filter by Date</label>
+            <input type="date" id="dateFilter" />
+          </div>
+
           <div class="control-group">
             <label for="deskFilter">Filter by Desk</label>
             <input
@@ -662,6 +785,61 @@
       document.getElementById("statsBtn").addEventListener("click", () => {
         window.location.href = `/company_list/${COMPANY_CODE}/stats.html`;
       });
+
+      // --- Helper: robust parse of order timestamp into a Date (local-aware) ---
+      function parseOrderTimestampToDate(ts) {
+        if (ts == null) return null;
+
+        // Already a Date
+        if (ts instanceof Date) {
+          return isNaN(ts) ? null : ts;
+        }
+
+        // Number or numeric-string (epoch seconds or ms)
+        if (typeof ts === "number" || /^\d+$/.test(String(ts))) {
+          let n = Number(ts);
+          // convert 10-digit seconds to ms
+          if (String(n).length === 10) n = n * 1000;
+          const d = new Date(n);
+          return isNaN(d) ? null : d;
+        }
+
+        let s = String(ts).trim();
+
+        // If format is "YYYY-MM-DD" — treat as local midnight
+        if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
+          const d = new Date(s + "T00:00:00"); // local midnight
+          if (!isNaN(d)) return d;
+        }
+
+        // If there's a space between date and time, convert to 'T' to help parsing:
+        // "2025-10-06 12:34:56" => "2025-10-06T12:34:56"
+        s = s.replace(/\s+/, "T");
+
+        // If timezone present (Z or +HH:MM or +HHMM), Date will parse it and convert to local
+        if (
+          /[zZ]$/.test(s) ||
+          /[+\-]\d{2}:\d{2}$/.test(s) ||
+          /[+\-]\d{4}$/.test(s)
+        ) {
+          const d = new Date(s);
+          if (!isNaN(d)) return d;
+        }
+
+        // Otherwise, treat the string as local (no timezone) by letting Date parse it (modern browsers treat "YYYY-MM-DDTHH:mm:ss" as local)
+        const dFallback = new Date(s);
+        return isNaN(dFallback) ? null : dFallback;
+      }
+
+      // Helper: start/end of day (local)
+      function startOfLocalDayFromYYYYMMDD(yyyyMmDd) {
+        const [y, m, d] = yyyyMmDd.split("-").map(Number);
+        return new Date(y, m - 1, d, 0, 0, 0, 0);
+      }
+      function endOfLocalDayFromYYYYMMDD(yyyyMmDd) {
+        const [y, m, d] = yyyyMmDd.split("-").map(Number);
+        return new Date(y, m - 1, d, 23, 59, 59, 999);
+      }
 
       function unlockAudio() {
         const sound = document.getElementById("notificationSound");
@@ -763,6 +941,16 @@
             .getElementById("statusFilter")
             ?.addEventListener("change", () => this.filterOrders());
           document
+            .getElementById("dateFilter")
+            ?.addEventListener("change", () => this.filterOrders());
+          document
+            .getElementById("dateFilter")
+            .addEventListener("dblclick", () => {
+              document.getElementById("dateFilter").value = "";
+              dashboard.filterOrders();
+            });
+
+          document
             .getElementById("deskFilter")
             ?.addEventListener("input", () => this.filterOrders());
           document
@@ -771,6 +959,10 @@
           document
             .getElementById("clearBtn")
             ?.addEventListener("click", () => this.clearAllOrders());
+
+          document
+            .getElementById("refreshBtn")
+            .addEventListener("click", () => this.loadOrders());
         }
 
         startPolling() {
@@ -832,19 +1024,71 @@
           this.firstLoad = false;
         }
 
+        // filterOrders() {
+        //   const statusFilter = document.getElementById("statusFilter").value;
+        //   const deskFilter = document.getElementById("deskFilter").value;
+
+        //   const base = this.getOrdersInRange();
+        //   this.filteredOrders = base.filter((order) => {
+        //     const statusMatch =
+        //       statusFilter === "all" || order.status === statusFilter;
+        //     const deskMatchInput =
+        //       !deskFilter ||
+        //       String(this.getDeskNumber(order) ?? order.desk) ===
+        //         String(deskFilter);
+        //     return statusMatch && deskMatchInput;
+        //   });
+
+        //   this.renderOrders();
+        // }
+
         filterOrders() {
           const statusFilter = document.getElementById("statusFilter").value;
           const deskFilter = document.getElementById("deskFilter").value;
+          const dateFilter = document.getElementById("dateFilter").value; // "YYYY-MM-DD" or ""
 
           const base = this.getOrdersInRange();
+
+          // Precompute range if dateFilter is set
+          let rangeStart = null;
+          let rangeEnd = null;
+          if (dateFilter) {
+            rangeStart = startOfLocalDayFromYYYYMMDD(dateFilter);
+            rangeEnd = endOfLocalDayFromYYYYMMDD(dateFilter);
+          }
+
           this.filteredOrders = base.filter((order) => {
             const statusMatch =
               statusFilter === "all" || order.status === statusFilter;
+
             const deskMatchInput =
               !deskFilter ||
               String(this.getDeskNumber(order) ?? order.desk) ===
                 String(deskFilter);
-            return statusMatch && deskMatchInput;
+
+            // fallback to common alternate timestamp keys
+            const tsRaw =
+              order.timestamp ??
+              order.createdAt ??
+              order.time ??
+              order.date ??
+              null;
+
+            // If no date filter selected, accept immediately (so other filters still apply)
+            if (!dateFilter) {
+              return statusMatch && deskMatchInput;
+            }
+
+            // parse timestamp to Date
+            const orderDate = parseOrderTimestampToDate(tsRaw);
+            if (!orderDate) {
+              // no valid timestamp -> treat as not matching the selected date
+              return false && statusMatch && deskMatchInput;
+            }
+
+            const dateMatch = orderDate >= rangeStart && orderDate <= rangeEnd;
+
+            return statusMatch && deskMatchInput && dateMatch;
           });
 
           this.renderOrders();
@@ -876,6 +1120,99 @@
           // this.attachOrderActions();
         }
 
+        //   renderOrderCard(order) {
+        //     const formattedTime = new Date(order.timestamp).toLocaleString();
+        //     const deskNum = this.getDeskNumber(order);
+        //     const deskLabel =
+        //       deskNum != null
+        //         ? `Desk #${deskNum}`
+        //         : order.desk
+        //         ? `Desk #${order.desk}`
+        //         : order.serviceArea || "Desk";
+
+        //     const itemCounts = {};
+        //     (order.items || []).forEach((item) => {
+        //       itemCounts[item] = (itemCounts[item] || 0) + 1;
+        //     });
+
+        //     const itemsHtml = Object.entries(itemCounts)
+        //       .map(
+        //         ([name, count]) =>
+        //           `<span class="item-tag">${name}${
+        //             count > 1 ? ` × ${count}` : ""
+        //           }</span>`
+        //       )
+        //       .join("");
+
+        //     // ⭐ Build rating stars if rating exists
+        //     let ratingHtml = "";
+        //     if (order.rating && order.rating.stars) {
+        //       const stars = Array.from({ length: 5 }, (_, i) =>
+        //         i < order.rating.stars ? "★" : "☆"
+        //       ).join("");
+        //       ratingHtml = `
+        // <div class="order-rating">
+        //   <div>
+        //     <h4>Rating:</h4>
+        //     <div class="stars">${stars}</div>
+        //   </div>
+        //   ${
+        //     order.rating.review
+        //       ? `<div>
+        //            <h4>Review:</h4>
+        //            <div class="review">${order.rating.review}</div>
+        //          </div>`
+        //       : ""
+        //   }
+        // </div>`;
+        //     }
+
+        //     return `
+        // <div class="order-card ${order.status}" data-order-id="${String(
+        //       order.id
+        //     )}">
+        //   <div class="order-header">
+        //     <div class="order-info">
+        //       <div class="order-id">${deskLabel}</div>
+        //       <div class="order-meta">
+        //         <span>📍 ${order.location ?? "-"}</span>
+        //         <span>🕐 ${formattedTime}</span>
+        //         <span>👥 ${
+        //           (order.teaboyName || order.serviceAreaName) ?? "-"
+        //         }</span>
+        //       </div>
+        //     </div>
+        //     <div class="order-status ${order.status}">${order.status.replace(
+        //       "-",
+        //       " "
+        //     )}</div>
+        //   </div>
+        //   <div class="order-items">
+        //     <div class="items-title">Items Ordered:</div>
+        //     <div class="items-list">${itemsHtml}</div>
+        //   </div>
+        //   ${
+        //     order.orderNote
+        //       ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+        //       : ""
+        //   }
+        //   ${ratingHtml}
+        //   <div class="order-actions">
+        //     ${
+        //       order.status === "pending"
+        //         ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
+        //         : ""
+        //     }
+        //     ${
+        //       order.status === "in-progress"
+        //         ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+        //         : ""
+        //     }
+        //     <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
+        //   </div>
+        // </div>`;
+        //   }
+
         renderOrderCard(order) {
           const formattedTime = new Date(order.timestamp).toLocaleString();
           const deskNum = this.getDeskNumber(order);
@@ -900,6 +1237,53 @@
             )
             .join("");
 
+          // Helper: format a duration in ms -> "1h 2m 5s" (no leading zeros)
+          function formatDuration(ms) {
+            if (!Number.isFinite(ms) || ms <= 0) return null;
+            let totalSec = Math.floor(ms / 1000);
+            const days = Math.floor(totalSec / 86400);
+            totalSec %= 86400;
+            const hrs = Math.floor(totalSec / 3600);
+            totalSec %= 3600;
+            const mins = Math.floor(totalSec / 60);
+            const secs = totalSec % 60;
+            const parts = [];
+            if (days) parts.push(`${days}d`);
+            if (hrs) parts.push(`${hrs}h`);
+            if (mins) parts.push(`${mins}m`);
+            if (secs || parts.length === 0) parts.push(`${secs}s`);
+            return parts.join(" ");
+          }
+
+          // Determine valid start and end times
+          const start = order.startedAt ? new Date(order.startedAt) : null;
+          const end = order.completedAt ? new Date(order.completedAt) : null;
+
+          // Build time-taken HTML (sibling to the status)
+          let timeTakenHtml = "";
+          if (
+            order.status === "completed" &&
+            start &&
+            end &&
+            !isNaN(start) &&
+            !isNaN(end) &&
+            end >= start
+          ) {
+            const diffMs = end - start;
+            const pretty = formatDuration(diffMs);
+            if (pretty)
+              timeTakenHtml = `<div class="order-time-taken">⏱️ Time Taken: ${pretty}</div>`;
+          } else if (order.status === "in-progress" && start && !isNaN(start)) {
+            // show elapsed so far (will update when UI re-renders/polls)
+            const diffMs = Date.now() - start.getTime();
+            const pretty = formatDuration(diffMs);
+            if (pretty)
+              timeTakenHtml = `<div class="order-time-taken">⏱️ In progress: ${pretty} so far</div>`;
+          } else {
+            // if status completed but dates invalid, optionally show N/A -- keep empty so it doesn't clutter
+            timeTakenHtml = "";
+          }
+
           // ⭐ Build rating stars if rating exists
           let ratingHtml = "";
           if (order.rating && order.rating.stars) {
@@ -907,66 +1291,71 @@
               i < order.rating.stars ? "★" : "☆"
             ).join("");
             ratingHtml = `
-      <div class="order-rating">
-        <div>
-          <h4>Rating:</h4>
-          <div class="stars">${stars}</div>
-        </div>
-        ${
-          order.rating.review
-            ? `<div>
-                 <h4>Review:</h4>
-                 <div class="review">${order.rating.review}</div>
-               </div>`
-            : ""
-        }
-      </div>`;
+  <div class="order-rating">
+    <div class="rating-block">
+      <h4>Rating:</h4>
+      <div class="stars">${stars}</div>
+    </div>
+    ${
+      order.rating.review
+        ? `<div class="review-block">
+             <h4>Review:</h4>
+             <div class="review">${order.rating.review}</div>
+           </div>`
+        : ""
+    }
+  </div>`;
           }
 
           return `
-      <div class="order-card ${order.status}" data-order-id="${String(
-            order.id
-          )}">
-        <div class="order-header">
-          <div class="order-info">
-            <div class="order-id">${deskLabel}</div>
-            <div class="order-meta">
-              <span>📍 ${order.location ?? "-"}</span>
-              <span>🕐 ${formattedTime}</span>
-              <span>👥 ${
-                (order.teaboyName || order.serviceAreaName) ?? "-"
-              }</span>
-            </div>
+    <div class="order-card ${order.status}" data-order-id="${String(order.id)}">
+      <div class="order-header">
+        <div class="order-info">
+          <div class="order-id">${deskLabel}</div>
+          <div class="order-meta">
+            <span>📍 ${order.location ?? "-"}</span>
+            <span>🕐 ${formattedTime}</span>
+            <span>👥 ${
+              (order.teaboyName || order.serviceAreaName) ?? "-"
+            }</span>
           </div>
+        </div>
+
+        <!-- status + timeTaken are siblings; timeTaken appears below the flag -->
+        <div class="order-status-wrapper">
           <div class="order-status ${order.status}">${order.status.replace(
             "-",
             " "
           )}</div>
+          ${timeTakenHtml}
         </div>
-        <div class="order-items">
-          <div class="items-title">Items Ordered:</div>
-          <div class="items-list">${itemsHtml}</div>
-        </div>
+      </div>
+
+      <div class="order-items">
+        <div class="items-title">Items Ordered:</div>
+        <div class="items-list">${itemsHtml}</div>
+      </div>
+
+      ${
+        order.orderNote
+          ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+          : ""
+      }
+      ${ratingHtml}
+      <div class="order-actions">
         ${
-          order.orderNote
-            ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+          order.status === "pending"
+            ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
             : ""
         }
-        ${ratingHtml}
-        <div class="order-actions">
-          ${
-            order.status === "pending"
-              ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
-              : ""
-          }
-          ${
-            order.status === "in-progress"
-              ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
-              : ""
-          }
-          <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
-        </div>
-      </div>`;
+        ${
+          order.status === "in-progress"
+            ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+            : ""
+        }
+        <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
+      </div>
+    </div>`;
         }
 
         attachOrderActions() {

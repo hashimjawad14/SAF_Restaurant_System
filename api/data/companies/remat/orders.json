@@ -1,623 +1,1516 @@
 [
   {
-    "id": "1758753081627",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
+    "id": "ORD-1760282395495-255",
+    "desk": "142",
     "items": [
       "Espresso",
-      "Espresso"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:31:21.627Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758753237460",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Espresso"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:33:57.460Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754155295",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Espresso",
-      "Espresso"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:49:15.295Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754157312",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Americano"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:49:17.312Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754160239",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:49:20.239Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754283125",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Americano"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:51:23.125Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754338334",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Espresso",
-      "Espresso"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:52:18.334Z",
-    "location": "A - 12",
-    "orderNote": ""
-  },
-  {
-    "id": "1758754475230",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-24T22:54:35.229Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 5,
-      "review": "",
-      "timestamp": "2025-09-24T22:54:53.953Z"
-    }
-  },
-  {
-    "id": "1758800718153",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T11:45:18.152Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 5,
-      "review": "Perfect",
-      "timestamp": "2025-09-25T11:45:35.658Z"
-    }
-  },
-  {
-    "id": "1758801492798",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino",
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T11:58:12.797Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 5,
-      "review": "Perfect",
-      "timestamp": "2025-09-25T11:58:37.110Z"
-    }
-  },
-  {
-    "id": "1758802366226",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino",
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T12:12:46.226Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 5,
-      "review": "Perfect",
-      "timestamp": "2025-09-25T12:12:58.352Z"
-    }
-  },
-  {
-    "id": "1758803159944",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T12:25:59.944Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 2,
-      "review": "ok",
-      "timestamp": "2025-09-25T12:26:15.507Z"
-    }
-  },
-  {
-    "id": "1758804846057",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino",
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T12:54:06.057Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 2,
-      "review": "ok",
-      "timestamp": "2025-09-25T12:54:17.940Z"
-    }
-  },
-  {
-    "id": "1758805359455",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T13:02:39.455Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 2,
-      "review": "ok",
-      "timestamp": "2025-09-25T13:02:55.931Z"
-    }
-  },
-  {
-    "id": "1758805624083",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "serviceAreaName": "Ahmed",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T13:07:04.083Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "rating": {
-      "stars": 2,
-      "review": "ok",
-      "timestamp": "2025-09-25T13:07:27.875Z"
-    }
-  },
-  {
-    "id": "1758807795970",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Espresso"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-25T13:43:15.970Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1758991681966",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-27T16:48:01.964Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "",
-      "timestamp": "2025-09-27T16:48:23.338Z"
-    }
-  },
-  {
-    "id": "1759097913841",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-28T22:18:33.839Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-09-28T22:18:33.839Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "perfect",
-      "timestamp": "2025-09-28T22:19:06.392Z"
-    },
-    "completedAt": "2025-09-28T22:22:08.485Z"
-  },
-  {
-    "id": "1759148770878",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-29T12:26:10.878Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-09-29T12:26:10.878Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759149351314",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-29T12:35:51.314Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-09-29T12:35:51.314Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759149544359",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-29T12:39:04.359Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-09-29T12:39:04.359Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759150382890",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino",
-      "Cappuccino"
-    ],
-    "status": "completed",
-    "timestamp": "2025-09-29T12:53:02.890Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-09-29T12:53:02.890Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "perfect",
-      "timestamp": "2025-09-29T12:53:14.626Z"
-    },
-    "completedAt": "2025-09-29T12:57:00.342Z"
-  },
-  {
-    "id": "1759150707371",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
       "Americano",
+      "Cappuccino × 2",
+      "Latte",
+      "Flat White"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-09T12:18:22Z",
+    "orderTime": "12:18:22 PM",
+    "orderDate": "10/09/2025",
+    "orderNote": "Cappuccino + sugar",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395497-300",
+    "desk": "63",
+    "items": [
+      "Mint Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK63",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-2",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-09T12:01:43Z",
+    "orderTime": "12:01:43 PM",
+    "orderDate": "10/09/2025",
+    "orderNote": "No suger",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395499-663",
+    "desk": "136",
+    "items": [
+      "Cappuccino",
+      "Black Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK136",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-17",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-09T10:19:04Z",
+    "orderTime": "10:19:04 AM",
+    "orderDate": "10/09/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395501-428",
+    "desk": "130",
+    "items": [
+      "Milk Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK130",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-11",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-09T09:22:10Z",
+    "orderTime": "09:22:10 AM",
+    "orderDate": "10/09/2025",
+    "orderNote": "stafina sugar",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395503-595",
+    "desk": "156",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK156",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-09T09:03:59Z",
+    "orderTime": "09:03:59 AM",
+    "orderDate": "10/09/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395505-539",
+    "desk": "151",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK151",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T16:54:04Z",
+    "orderTime": "04:54:04 PM",
+    "orderDate": "10/08/2025",
+    "orderNote": "No sugar",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395507-973",
+    "desk": "132",
+    "items": [
+      "Double Espresso"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK132",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-13",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T15:22:33Z",
+    "orderTime": "03:22:33 PM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395510-960",
+    "desk": "40",
+    "items": [
       "Americano"
     ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK40",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - E-7 (CEO Office)",
+    "company": "",
+    "companyId": "",
     "status": "completed",
-    "timestamp": "2025-09-29T12:58:27.371Z",
-    "location": "A - 12",
+    "timestamp": "2025-10-08T14:30:59Z",
+    "orderTime": "02:30:59 PM",
+    "orderDate": "10/08/2025",
     "orderNote": "",
-    "startedAt": "2025-09-29T12:58:27.371Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "perfect",
-      "timestamp": "2025-09-29T12:58:39.085Z"
-    },
-    "completedAt": "2025-09-29T12:59:00.740Z"
+    "flag": "old"
   },
   {
-    "id": "1759152868875",
-    "desk": "3",
-    "serviceArea": "DESK3",
+    "id": "ORD-1760282395512-987",
+    "desk": "137",
+    "items": [
+      "Cappuccino"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK137",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-18",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T13:21:46Z",
+    "orderTime": "01:21:46 PM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395514-874",
+    "desk": "137",
+    "items": [
+      "Cappuccino"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK137",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-18",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T13:20:58Z",
+    "orderTime": "01:20:58 PM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395516-174",
+    "desk": "151",
+    "items": [
+      "Flat White"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK151",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T11:43:30Z",
+    "orderTime": "11:43:30 AM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395518-197",
+    "desk": "155",
+    "items": [
+      "Black Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK155",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T11:17:58Z",
+    "orderTime": "11:17:58 AM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395521-303",
+    "desk": "136",
+    "items": [
+      "Black Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK136",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-17",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T10:54:34Z",
+    "orderTime": "10:54:34 AM",
+    "orderDate": "10/08/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395523-235",
+    "desk": "122",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK122",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-08T10:12:41Z",
+    "orderTime": "10:12:41 AM",
+    "orderDate": "10/08/2025",
+    "orderNote": "White and red mug please",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395525-775",
+    "desk": "151",
+    "items": [
+      "Flat White"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK151",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T13:34:06Z",
+    "orderTime": "01:34:06 PM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395527-302",
+    "desk": "40",
+    "items": [
+      "Cappuccino"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK40",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - E-7 (CEO Office)",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T12:56:45Z",
+    "orderTime": "12:56:45 PM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395530-558",
+    "desk": "136",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK136",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-17",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T10:53:45Z",
+    "orderTime": "10:53:45 AM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395532-557",
+    "desk": "159",
+    "items": [
+      "Americano"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK159",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-11",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T10:24:58Z",
+    "orderTime": "10:24:58 AM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395534-650",
+    "desk": "122",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK122",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T10:24:33Z",
+    "orderTime": "10:24:33 AM",
+    "orderDate": "10/07/2025",
+    "orderNote": "With the white and red mug please",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395536-224",
+    "desk": "142",
+    "items": [
+      "Red Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T08:33:52Z",
+    "orderTime": "08:33:52 AM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395537-190",
+    "desk": "142",
+    "items": [
+      "Espresso × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-07T08:33:30Z",
+    "orderTime": "08:33:30 AM",
+    "orderDate": "10/07/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395540-518",
+    "desk": "87",
+    "items": [
+      "Saudi Coffee",
+      "Mint Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK87",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room J-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T16:03:11Z",
+    "orderTime": "04:03:11 PM",
+    "orderDate": "10/06/2025",
+    "orderNote": "Sugar 3 pices",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395542-474",
+    "desk": "132",
+    "items": [
+      "Double Espresso"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK132",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-13",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T15:10:00Z",
+    "orderTime": "03:10:00 PM",
+    "orderDate": "10/06/2025",
+    "orderNote": "Please make strong",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395544-360",
+    "desk": "33",
+    "items": [
+      "Double Espresso"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK33",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Meeting Room D-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T12:01:03Z",
+    "orderTime": "12:01:03 PM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395546-600",
+    "desk": "30",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK30",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Meeting Room D-5",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T12:00:04Z",
+    "orderTime": "12:00:04 PM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395548-389",
+    "desk": "134",
+    "items": [
+      "Cappuccino × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK134",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-15",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T11:52:34Z",
+    "orderTime": "11:52:34 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395549-860",
+    "desk": "142",
+    "items": [
+      "Espresso × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T11:02:09Z",
+    "orderTime": "11:02:09 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395552-959",
+    "desk": "122",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK122",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T10:08:37Z",
+    "orderTime": "10:08:37 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "White and red mug",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395554-304",
+    "desk": "46",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK46",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - F-2 (Board Room)",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T09:59:33Z",
+    "orderTime": "09:59:33 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395556-342",
+    "desk": "144",
+    "items": [
+      "Red Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T09:40:21Z",
+    "orderTime": "09:40:21 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395558-753",
+    "desk": "142",
+    "items": [
+      "Double Espresso",
+      "Saudi Coffee × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T08:37:48Z",
+    "orderTime": "08:37:48 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395560-501",
+    "desk": "142",
+    "items": [
+      "Milk Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T08:30:32Z",
+    "orderTime": "08:30:32 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395562-634",
+    "desk": "142",
+    "items": [
+      "Espresso × 5"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-06T08:28:32Z",
+    "orderTime": "08:28:32 AM",
+    "orderDate": "10/06/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395564-329",
+    "desk": "32",
+    "items": [
+      "Milk Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK32",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Meeting Room D-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-05T11:59:56Z",
+    "orderTime": "11:59:56 AM",
+    "orderDate": "10/05/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395566-526",
+    "desk": "62",
+    "items": [
+      "Espresso × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK62",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-05T08:09:22Z",
+    "orderTime": "08:09:22 AM",
+    "orderDate": "10/05/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395568-463",
+    "desk": "62",
+    "items": [
+      "Lemon Ginger Tea × 10"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK62",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-05T08:05:40Z",
+    "orderTime": "08:05:40 AM",
+    "orderDate": "10/05/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395570-212",
+    "desk": "19",
+    "items": [
+      "Latte"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK19",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Meeting Room C-2",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T15:24:31Z",
+    "orderTime": "03:24:31 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395571-337",
+    "desk": "62",
+    "items": [
+      "Mint Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK62",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T14:15:51Z",
+    "orderTime": "02:15:51 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395574-328",
+    "desk": "62",
+    "items": [
+      "Espresso × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK62",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T14:15:08Z",
+    "orderTime": "02:15:08 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395576-563",
+    "desk": "145",
+    "items": [
+      "Espresso × 4"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK145",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T14:10:03Z",
+    "orderTime": "02:10:03 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395578-797",
+    "desk": "69",
+    "items": [
+      "Red Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK69",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - G-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T14:04:56Z",
+    "orderTime": "02:04:56 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395580-675",
+    "desk": "145",
     "items": [
       "Espresso"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-29T13:34:28.873Z",
-    "location": "C - 10",
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK145",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T13:59:49Z",
+    "orderTime": "01:59:49 PM",
+    "orderDate": "10/02/2025",
     "orderNote": "",
-    "startedAt": "2025-09-29T13:34:28.873Z",
-    "teaboyName": "Ali"
+    "flag": "old"
   },
   {
-    "id": "1759166547808",
-    "desk": "1",
-    "serviceArea": "DESK1",
+    "id": "ORD-1760282395581-812",
+    "desk": "78",
+    "items": [
+      "Latte"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK78",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room I-1",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T13:25:04Z",
+    "orderTime": "01:25:04 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "Medium sugar",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395583-286",
+    "desk": "142",
+    "items": [
+      "Mint Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T13:01:23Z",
+    "orderTime": "01:01:23 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395586-258",
+    "desk": "142",
+    "items": [
+      "Mint Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T13:01:03Z",
+    "orderTime": "01:01:03 PM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395588-918",
+    "desk": "142",
+    "items": [
+      "Mint Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T10:20:31Z",
+    "orderTime": "10:20:31 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395590-760",
+    "desk": "122",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK122",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Office L-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T10:07:56Z",
+    "orderTime": "10:07:56 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "With the white /red mug please",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395592-613",
+    "desk": "108",
+    "items": [
+      "Espresso × 3"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK108",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Meeting Room D-9",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:42:57Z",
+    "orderTime": "08:42:57 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395594-593",
+    "desk": "144",
+    "items": [
+      "Cappuccino"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:40:37Z",
+    "orderTime": "08:40:37 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395597-784",
+    "desk": "144",
+    "items": [
+      "Double Espresso"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:40:05Z",
+    "orderTime": "08:40:05 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "Mozmmel",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395599-745",
+    "desk": "144",
+    "items": [
+      "Milk Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:39:15Z",
+    "orderTime": "08:39:15 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "Mozammel",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395601-882",
+    "desk": "144",
+    "items": [
+      "Americano × 3"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:21:57Z",
+    "orderTime": "08:21:57 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395603-519",
+    "desk": "144",
+    "items": [
+      "Green Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:21:08Z",
+    "orderTime": "08:21:08 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395605-456",
+    "desk": "145",
+    "items": [
+      "Lemon Ginger Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK145",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:20:13Z",
+    "orderTime": "08:20:13 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395607-885",
+    "desk": "144",
     "items": [
       "Espresso",
-      "Cappuccino"
+      "Lemon Ginger Tea"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-29T17:22:27.807Z",
-    "location": "A - 12",
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T08:19:35Z",
+    "orderTime": "08:19:35 AM",
+    "orderDate": "10/02/2025",
     "orderNote": "",
-    "startedAt": "2025-09-29T17:22:27.807Z",
-    "teaboyName": "Ahmed"
+    "flag": "old"
   },
   {
-    "id": "1759166855399",
-    "desk": "1",
-    "serviceArea": "DESK1",
+    "id": "ORD-1760282395610-692",
+    "desk": "142",
     "items": [
+      "Cappuccino"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK142",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-02T07:11:47Z",
+    "orderTime": "07:11:47 AM",
+    "orderDate": "10/02/2025",
+    "orderNote": "mozammel",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395612-411",
+    "desk": "144",
+    "items": [
+      "Mint Tea × 2"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK144",
+    "serviceAreaName": "Hisham",
+    "location": "Zone 2 - Office M-6",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-01T15:50:05Z",
+    "orderTime": "03:50:05 PM",
+    "orderDate": "10/01/2025",
+    "orderNote": "1 with brown sugar and one stevia",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395614-869",
+    "desk": "153",
+    "items": [
+      "Americano"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK153",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-5",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-01T13:21:47Z",
+    "orderTime": "01:21:47 PM",
+    "orderDate": "10/01/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395616-450",
+    "desk": "156",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK156",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-10-01T10:51:05Z",
+    "orderTime": "10:51:05 AM",
+    "orderDate": "10/01/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395618-680",
+    "desk": "151",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK151",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-30T16:21:41Z",
+    "orderTime": "04:21:41 PM",
+    "orderDate": "09/30/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395621-127",
+    "desk": "86",
+    "items": [
+      "Americano"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK86",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room I-9",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-30T13:45:38Z",
+    "orderTime": "01:45:38 PM",
+    "orderDate": "09/30/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395623-584",
+    "desk": "155",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK155",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-7",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-30T13:04:37Z",
+    "orderTime": "01:04:37 PM",
+    "orderDate": "09/30/2025",
+    "orderNote": "Medium sugar",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395625-354",
+    "desk": "151",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK151",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-3",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-29T15:44:47Z",
+    "orderTime": "03:44:47 PM",
+    "orderDate": "09/29/2025",
+    "orderNote": "No sugger",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395627-608",
+    "desk": "152",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK152",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-4",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-28T16:23:54Z",
+    "orderTime": "04:23:54 PM",
+    "orderDate": "09/28/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395629-495",
+    "desk": "158",
+    "items": [
+      "Black Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK158",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-10",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-28T12:59:26Z",
+    "orderTime": "12:59:26 PM",
+    "orderDate": "09/28/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395631-878",
+    "desk": "102",
+    "items": [
+      "Black Coffee"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK102",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room K-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-28T08:47:43Z",
+    "orderTime": "08:47:43 AM",
+    "orderDate": "09/28/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395634-267",
+    "desk": "102",
+    "items": [
+      "Milk Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK102",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room K-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-25T13:53:20Z",
+    "orderTime": "01:53:20 PM",
+    "orderDate": "09/25/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395636-574",
+    "desk": "102",
+    "items": [
+      "Flat White"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK102",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Meeting Room K-8",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-25T11:38:29Z",
+    "orderTime": "11:38:29 AM",
+    "orderDate": "09/25/2025",
+    "orderNote": "",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760282395638-469",
+    "desk": "158",
+    "items": [
+      "Red Tea"
+    ],
+    "itemsDetailed": [],
+    "itemsByCategory": {},
+    "serviceArea": "DESK158",
+    "serviceAreaName": "Michael",
+    "location": "Zone 3 - Office N-10",
+    "company": "",
+    "companyId": "",
+    "status": "completed",
+    "timestamp": "2025-09-24T14:39:52Z",
+    "orderTime": "02:39:52 PM",
+    "orderDate": "09/24/2025",
+    "orderNote": "Bring water please as well",
+    "flag": "old"
+  },
+  {
+    "id": "ORD-1760301695273-1",
+    "desk": "1",
+    "items": [
+      "Espresso",
       "Espresso"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-29T17:27:35.399Z",
-    "location": "A - 12",
-    "orderNote": "No sugar",
-    "startedAt": "2025-09-29T17:27:35.399Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "",
-      "timestamp": "2025-09-29T17:27:59.814Z"
-    }
+    "itemsDetailed": [
+      {
+        "id": "espresso",
+        "name": "Espresso",
+        "quantity": 2
+      }
+    ],
+    "itemsByCategory": {
+      "coffee": [
+        "Espresso (2)"
+      ],
+      "tea": []
+    },
+    "serviceArea": "DESK1",
+    "serviceAreaName": "Julius",
+    "location": "Zone 1 - Meeting Room A-1",
+    "company": "قائمة المشروبات | Drinks Menu",
+    "companyId": "original-tea",
+    "status": "completed",
+    "timestamp": "2025-10-12T20:41:35.273Z",
+    "orderTime": "11:41:35 PM",
+    "orderDate": "10/12/2025",
+    "orderNote": "Test",
+    "completedAt": "2025-10-12T20:41:50.372Z"
   },
   {
-    "id": "1759166959776",
+    "id": "1760364303673",
     "desk": "1",
     "serviceArea": "DESK1",
     "items": [
-      "Cappuccino"
+      "Flat White"
     ],
     "status": "pending",
-    "timestamp": "2025-09-29T17:29:19.776Z",
-    "location": "A - 12",
+    "timestamp": "2025-10-13T14:05:03.671Z",
+    "location": "Zone 1 - Meeting Room A-1",
     "orderNote": "extra sugar",
-    "startedAt": "2025-09-29T17:29:19.776Z",
-    "teaboyName": "Ahmed"
+    "startedAt": "2025-10-13T14:05:03.671Z",
+    "teaboyName": "Julius"
   },
   {
-    "id": "1759167057296",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Espresso"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-29T17:30:57.295Z",
-    "location": "A - 12",
-    "orderNote": "no sugar",
-    "startedAt": "2025-09-29T17:30:57.295Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "perfect",
-      "timestamp": "2025-09-29T17:31:15.217Z"
-    }
-  },
-  {
-    "id": "1759168131073",
+    "id": "1760369556430",
     "desk": "1",
     "serviceArea": "DESK1",
     "items": [
       "Cappuccino"
     ],
-    "status": "pending",
-    "timestamp": "2025-09-29T17:48:51.073Z",
-    "location": "A - 12",
-    "orderNote": "no sugar",
-    "startedAt": "2025-09-29T17:48:51.073Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "good",
-      "timestamp": "2025-09-29T17:50:04.334Z"
-    }
-  },
-  {
-    "id": "1759168362516",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-09-29T17:52:42.515Z",
-    "location": "A - 12",
+    "status": "completed",
+    "timestamp": "2025-10-13T15:32:36.430Z",
+    "location": "Zone 1 - Meeting Room A-1",
     "orderNote": "",
-    "startedAt": "2025-09-29T17:52:42.515Z",
-    "teaboyName": "Ahmed",
-    "rating": {
-      "stars": 5,
-      "review": "good",
-      "timestamp": "2025-09-29T17:52:58.224Z"
-    }
+    "startedAt": "2025-10-13T15:32:36.430Z",
+    "teaboyName": "Julius",
+    "completedAt": "2025-10-13T15:41:35.979Z"
   },
   {
-    "id": "1759168385642",
+    "id": "1760371989675",
     "desk": "1",
     "serviceArea": "DESK1",
     "items": [
-      "Cappuccino"
+      "Lemon Ginger Tea"
     ],
     "status": "pending",
-    "timestamp": "2025-09-29T17:53:05.642Z",
-    "location": "A - 12",
+    "timestamp": "2025-10-13T16:13:09.675Z",
+    "location": "Zone 1 - Meeting Room A-1",
     "orderNote": "",
-    "startedAt": "2025-09-29T17:53:05.642Z",
-    "teaboyName": "Ahmed"
+    "startedAt": "2025-10-13T16:13:09.675Z",
+    "teaboyName": "Julius"
   },
   {
-    "id": "1759350996866",
+    "id": "1760372015569",
     "desk": "1",
     "serviceArea": "DESK1",
     "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:36:36.866Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:36:36.866Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759351009390",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:36:49.390Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:36:49.390Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759351304041",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:41:44.041Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:41:44.041Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759351722592",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:48:42.592Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:48:42.592Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759351843915",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:50:43.915Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:50:43.915Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759352055491",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
-    ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:54:15.491Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:54:15.491Z",
-    "teaboyName": "Ahmed"
-  },
-  {
-    "id": "1759352110036",
-    "desk": "1",
-    "serviceArea": "DESK1",
-    "items": [
-      "Cappuccino"
+      "Milk Tea",
+      "Milk Tea",
+      "Lemon Ginger Tea"
     ],
     "status": "in-progress",
-    "timestamp": "2025-10-01T20:55:10.036Z",
-    "location": "A - 12",
-    "orderNote": "",
-    "startedAt": "2025-10-01T20:55:10.036Z",
-    "teaboyName": "Ahmed"
+    "timestamp": "2025-10-13T16:13:35.569Z",
+    "location": "Zone 1 - Meeting Room A-1",
+    "orderNote": "extra sugar",
+    "startedAt": "2025-10-13T16:13:35.569Z",
+    "teaboyName": "Julius",
+    "rating": {
+      "stars": 5,
+      "review": "good",
+      "timestamp": "2025-10-13T16:13:50.077Z"
+    }
   },
   {
-    "id": "1759352203274",
+    "id": "1760384984294",
     "desk": "1",
     "serviceArea": "DESK1",
     "items": [
-      "Cappuccino"
+      "Espresso"
     ],
-    "status": "pending",
-    "timestamp": "2025-10-01T20:56:43.274Z",
-    "location": "A - 12",
+    "status": "completed",
+    "timestamp": "2025-10-13T19:49:44.294Z",
+    "location": "Zone 1 - Meeting Room A-1",
     "orderNote": "",
-    "startedAt": "2025-10-01T20:56:43.274Z",
-    "teaboyName": "Ahmed"
+    "startedAt": "2025-10-13T19:49:44.294Z",
+    "teaboyName": "Julius",
+    "completedAt": "2025-10-13T19:50:22.883Z"
+  },
+  {
+    "id": "1760384989277",
+    "desk": "1",
+    "serviceArea": "DESK1",
+    "items": [
+      "Saudi Coffee"
+    ],
+    "status": "completed",
+    "timestamp": "2025-10-13T19:49:49.277Z",
+    "location": "Zone 1 - Meeting Room A-1",
+    "orderNote": "",
+    "startedAt": "2025-10-13T19:49:49.277Z",
+    "teaboyName": "Julius",
+    "completedAt": "2025-10-13T19:50:31.394Z"
   }
 ]
