@@ -866,17 +866,13 @@
           // === Detect companyId from URL ===
           const urlParams = new URLSearchParams(window.location.search);
           this.companyId = COMPANY_CODE; // 👈 always use manual code
-          this.apiBase = "/api/orders";
           // this.apiBase = "http://localhost:4000/api/orders";
-
+          this.apiBase = "/api/orders";
           this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
 
           // Desk range (can be customized)
           this.startDesk = 1;
-          this.endDesk = 160;
-
-          // === Define custom desk numbers here ===
-          this.customDesks = [];
+          this.endDesk = 10;
 
           this.firstLoad = true;
           this.allowedDesks = this.buildAllowedDeskSet();
@@ -885,34 +881,14 @@
           this.init();
         }
 
-        // buildAllowedDeskSet() {
-        //   const set = new Set();
-        //   for (let i = this.startDesk; i <= this.endDesk; i++) {
-        //     set.add(String(i));
-        //     set.add(`DESK${i}`);
-        //     set.add(`desk${i}`);
-        //     set.add(`id-${i}`);
-        //   }
-        //   return set;
-        // }
-
         buildAllowedDeskSet() {
           const set = new Set();
-
-          // Add range desks
           for (let i = this.startDesk; i <= this.endDesk; i++) {
             set.add(String(i));
             set.add(`DESK${i}`);
             set.add(`desk${i}`);
+            set.add(`id-${i}`);
           }
-
-          // Add custom desks
-          for (const d of this.customDesks) {
-            set.add(String(d));
-            set.add(`DESK${d}`);
-            set.add(`desk${d}`);
-          }
-
           return set;
         }
 
@@ -983,6 +959,10 @@
           document
             .getElementById("clearBtn")
             ?.addEventListener("click", () => this.clearAllOrders());
+
+          document
+            .getElementById("refreshBtn")
+            .addEventListener("click", () => this.loadOrders());
         }
 
         startPolling() {
@@ -1012,74 +992,12 @@
         handleOrdersUpdate(newOrders, silent) {
           const prevIds = new Set(this.orders.map((o) => String(o.id)));
 
-          // if (!this.firstLoad) {
-          // const newlyAddedInRange = [...newOrders]
-          //   .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          //   .find(
-          //     (o) =>
-          //       !prevIds.has(String(o.id)) && this.isDeskInAllowedRange(o)
-          //   );
-
-          // if (newlyAddedInRange) {
-          //   const deskNum = this.getDeskNumber(newlyAddedInRange);
-          //   const label =
-          //     deskNum != null
-          //       ? `Desk #${deskNum}`
-          //       : newlyAddedInRange.desk ??
-          //         newlyAddedInRange.serviceArea ??
-          //         "-";
-          //   this.showNotification(
-          //     "New Order!",
-          //     `Order received from ${label}`
-          //   );
-          // }
-
-          //   const newlyAddedInRange = [...newOrders]
-          //     .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          //     .find(
-          //       (o) =>
-          //         !prevIds.has(String(o.id)) &&
-          //         this.isDeskInAllowedRange(o) &&
-          //         o.status === "pending" // 👈 only pending orders trigger notification
-          //     );
-
-          //   if (newlyAddedInRange) {
-          //     const deskNum = this.getDeskNumber(newlyAddedInRange);
-          //     const label =
-          //       deskNum != null
-          //         ? `Desk #${deskNum}`
-          //         : newlyAddedInRange.desk ??
-          //           newlyAddedInRange.serviceArea ??
-          //           "-";
-          //     this.showNotification(
-          //       "New Order!",
-          //       `Order received from ${label}`
-          //     );
-          //   }
-          // }
-
-          // this.orders = [...newOrders].sort(
-          //   (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
-          // );
-          // this.filterOrders();
-          // this.updateStats();
-
-          // this.firstLoad = false;
-
-          // Load previously seen order IDs (persistent across reloads)
-          const seenIds = new Set(
-            JSON.parse(localStorage.getItem("seenOrderIds") || "[]")
-          );
-
           if (!this.firstLoad) {
             const newlyAddedInRange = [...newOrders]
               .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
               .find(
                 (o) =>
-                  !prevIds.has(String(o.id)) &&
-                  !seenIds.has(String(o.id)) && // 👈 ignore already-seen orders
-                  this.isDeskInAllowedRange(o) &&
-                  o.status === "pending" // 👈 only pending orders trigger
+                  !prevIds.has(String(o.id)) && this.isDeskInAllowedRange(o)
               );
 
             if (newlyAddedInRange) {
@@ -1097,19 +1015,32 @@
             }
           }
 
-          // ✅ Update seen orders in localStorage
-          const seenList = [
-            ...new Set([...seenIds, ...newOrders.map((o) => String(o.id))]),
-          ];
-          localStorage.setItem("seenOrderIds", JSON.stringify(seenList));
-
           this.orders = [...newOrders].sort(
             (a, b) => new Date(b.timestamp) - new Date(a.timestamp)
           );
           this.filterOrders();
           this.updateStats();
+
           this.firstLoad = false;
         }
+
+        // filterOrders() {
+        //   const statusFilter = document.getElementById("statusFilter").value;
+        //   const deskFilter = document.getElementById("deskFilter").value;
+
+        //   const base = this.getOrdersInRange();
+        //   this.filteredOrders = base.filter((order) => {
+        //     const statusMatch =
+        //       statusFilter === "all" || order.status === statusFilter;
+        //     const deskMatchInput =
+        //       !deskFilter ||
+        //       String(this.getDeskNumber(order) ?? order.desk) ===
+        //         String(deskFilter);
+        //     return statusMatch && deskMatchInput;
+        //   });
+
+        //   this.renderOrders();
+        // }
 
         filterOrders() {
           const statusFilter = document.getElementById("statusFilter").value;
@@ -1169,13 +1100,13 @@
 
           if (this.filteredOrders.length === 0) {
             ordersList.innerHTML = `
-                  <div class="empty-state">
-                    <svg viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Z"/>
-                    </svg>
-                    <h3>No orders found</h3>
-                    <p>Try adjusting filters or wait for new orders</p>
-                  </div>`;
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" fill="currentColor">
+                <path d="M19 7h-3V6a4 4 0 0 0-8 0v1H5a1 1 0 0 0-1 1v11a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3V8a1 1 0 0 0-1-1Z"/>
+              </svg>
+              <h3>No orders found</h3>
+              <p>Try adjusting filters or wait for new orders</p>
+            </div>`;
             ordersCount.textContent = "0 orders";
             return;
           }
@@ -1188,6 +1119,99 @@
             .join("");
           // this.attachOrderActions();
         }
+
+        //   renderOrderCard(order) {
+        //     const formattedTime = new Date(order.timestamp).toLocaleString();
+        //     const deskNum = this.getDeskNumber(order);
+        //     const deskLabel =
+        //       deskNum != null
+        //         ? `Desk #${deskNum}`
+        //         : order.desk
+        //         ? `Desk #${order.desk}`
+        //         : order.serviceArea || "Desk";
+
+        //     const itemCounts = {};
+        //     (order.items || []).forEach((item) => {
+        //       itemCounts[item] = (itemCounts[item] || 0) + 1;
+        //     });
+
+        //     const itemsHtml = Object.entries(itemCounts)
+        //       .map(
+        //         ([name, count]) =>
+        //           `<span class="item-tag">${name}${
+        //             count > 1 ? ` × ${count}` : ""
+        //           }</span>`
+        //       )
+        //       .join("");
+
+        //     // ⭐ Build rating stars if rating exists
+        //     let ratingHtml = "";
+        //     if (order.rating && order.rating.stars) {
+        //       const stars = Array.from({ length: 5 }, (_, i) =>
+        //         i < order.rating.stars ? "★" : "☆"
+        //       ).join("");
+        //       ratingHtml = `
+        // <div class="order-rating">
+        //   <div>
+        //     <h4>Rating:</h4>
+        //     <div class="stars">${stars}</div>
+        //   </div>
+        //   ${
+        //     order.rating.review
+        //       ? `<div>
+        //            <h4>Review:</h4>
+        //            <div class="review">${order.rating.review}</div>
+        //          </div>`
+        //       : ""
+        //   }
+        // </div>`;
+        //     }
+
+        //     return `
+        // <div class="order-card ${order.status}" data-order-id="${String(
+        //       order.id
+        //     )}">
+        //   <div class="order-header">
+        //     <div class="order-info">
+        //       <div class="order-id">${deskLabel}</div>
+        //       <div class="order-meta">
+        //         <span>📍 ${order.location ?? "-"}</span>
+        //         <span>🕐 ${formattedTime}</span>
+        //         <span>👥 ${
+        //           (order.teaboyName || order.serviceAreaName) ?? "-"
+        //         }</span>
+        //       </div>
+        //     </div>
+        //     <div class="order-status ${order.status}">${order.status.replace(
+        //       "-",
+        //       " "
+        //     )}</div>
+        //   </div>
+        //   <div class="order-items">
+        //     <div class="items-title">Items Ordered:</div>
+        //     <div class="items-list">${itemsHtml}</div>
+        //   </div>
+        //   ${
+        //     order.orderNote
+        //       ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+        //       : ""
+        //   }
+        //   ${ratingHtml}
+        //   <div class="order-actions">
+        //     ${
+        //       order.status === "pending"
+        //         ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
+        //         : ""
+        //     }
+        //     ${
+        //       order.status === "in-progress"
+        //         ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+        //         : ""
+        //     }
+        //     <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
+        //   </div>
+        // </div>`;
+        //   }
 
         renderOrderCard(order) {
           const formattedTime = new Date(order.timestamp).toLocaleString();
@@ -1284,55 +1308,54 @@
           }
 
           return `
-          <div class="order-card ${order.status}" data-order-id="${String(
-            order.id
-          )}">
-            <div class="order-header">
-              <div class="order-info">
-                <div class="order-id">${deskLabel}</div>
-                <div class="order-meta">
-                  <span>📍 ${order.location ?? "-"}</span>
-                  <span>🕐 ${formattedTime}</span>
-                  <span>👥 ${
-                    (order.teaboyName || order.serviceAreaName) ?? "-"
-                  }</span>
-                </div>
-              </div>
+    <div class="order-card ${order.status}" data-order-id="${String(order.id)}">
+      <div class="order-header">
+        <div class="order-info">
+          <div class="order-id">${deskLabel}</div>
+          <div class="order-meta">
+            <span>📍 ${order.location ?? "-"}</span>
+            <span>🕐 ${formattedTime}</span>
+            <span>👥 ${
+              (order.teaboyName || order.serviceAreaName) ?? "-"
+            }</span>
+          </div>
+        </div>
 
-              <!-- status + timeTaken are siblings; timeTaken appears below the flag -->
-              <div class="order-status-wrapper">
-                <div class="order-status ${
-                  order.status
-                }">${order.status.replace("-", " ")}</div>
-                ${timeTakenHtml}
-              </div>
-            </div>
+        <!-- status + timeTaken are siblings; timeTaken appears below the flag -->
+        <div class="order-status-wrapper">
+          <div class="order-status ${order.status}">${order.status.replace(
+            "-",
+            " "
+          )}</div>
+          ${timeTakenHtml}
+        </div>
+      </div>
 
-            <div class="order-items">
-              <div class="items-title">Items Ordered:</div>
-              <div class="items-list">${itemsHtml}</div>
-            </div>
+      <div class="order-items">
+        <div class="items-title">Items Ordered:</div>
+        <div class="items-list">${itemsHtml}</div>
+      </div>
 
-            ${
-              order.orderNote
-                ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
-                : ""
-            }
-            ${ratingHtml}
-            <div class="order-actions">
-              ${
-                order.status === "pending"
-                  ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
-                  : ""
-              }
-              ${
-                order.status === "in-progress"
-                  ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
-                  : ""
-              }
-              <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
-            </div>
-          </div>`;
+      ${
+        order.orderNote
+          ? `<div class="order-note-display"><strong>Note:</strong> ${order.orderNote}</div>`
+          : ""
+      }
+      ${ratingHtml}
+      <div class="order-actions">
+        ${
+          order.status === "pending"
+            ? '<button class="action-btn start-btn" data-action="start">Start Order</button>'
+            : ""
+        }
+        ${
+          order.status === "in-progress"
+            ? '<button class="action-btn complete-btn" data-action="complete">Mark Complete</button>'
+            : ""
+        }
+        <button class="action-btn delete-btn" data-action="delete">Delete Order</button>
+      </div>
+    </div>`;
         }
 
         attachOrderActions() {
@@ -1504,6 +1527,14 @@
             this.loadOrders(true);
           }
         }
+
+        // showNotification(title, message) {
+        //   const el = document.getElementById("notification");
+        //   document.getElementById("notificationTitle").textContent = title;
+        //   document.getElementById("notificationMessage").textContent = message;
+        //   el.classList.add("show");
+        //   setTimeout(() => el.classList.remove("show"), 4000);
+        // }
 
         showNotification(title, message) {
           const el = document.getElementById("notification");
