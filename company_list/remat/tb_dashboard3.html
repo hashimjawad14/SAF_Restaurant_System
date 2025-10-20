@@ -938,8 +938,14 @@
 
         isDeskInAllowedRange(order) {
           const n = this.getDeskNumber(order);
-          if (n != null) return n >= this.startDesk && n <= this.endDesk;
+          if (n != null) {
+            return (
+              (n >= this.startDesk && n <= this.endDesk) ||
+              this.customDesks.includes(n)
+            );
+          }
 
+          // fallback string check
           const d = order?.desk != null ? String(order.desk).trim() : "";
           const sa =
             order?.serviceArea != null ? String(order.serviceArea).trim() : "";

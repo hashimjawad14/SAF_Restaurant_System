@@ -636,6 +636,17 @@
         .beverage-category .options-container {
           grid-template-columns: 1fr; /* full width on mobile */
         }
+
+        #itemDiv {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 90%;
+        }
+
+        /* .option-name {
+          padding-left: 10%;
+        } */
       }
 
       /* ===== Settings Page Styles (added) ===== */
@@ -1621,7 +1632,7 @@
                           <label class="option-item" data-item-id="${
                             item.id
                           }" data-category="${categoryKey}">
-                            <div style="display:flex; gap:10px; align-items:center;">
+                            <div style="display:flex; gap:10px; align-items:center;" id="itemDiv">
                               ${imgHtml}
                               <div class="option-name">${item.name}</div>
                             </div>

@@ -627,6 +627,13 @@
           height: 26px;
         }
 
+        #itemDiv {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          width: 90%;
+        }
+
         .category-name {
           font-size: 16px;
         }
@@ -1563,7 +1570,7 @@
               <label class="option-item" data-item-id="${
                 item.id
               }" data-category="${categoryKey}">
-                <div style="display:flex; gap:10px; align-items:center;">
+                <div style="display:flex; gap:10px; align-items:center;" id="itemDiv">
                   ${imgHtml}
                   <div class="option-name">${item.name}</div>
                 </div>

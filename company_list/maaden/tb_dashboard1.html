@@ -665,8 +665,8 @@
     <div class="dashboard-container">
       <div class="header">
         <div class="header-left">
-          <h1 class="dashboard-title">Orders Zone 2</h1>
-          <p class="dashboard-subtitle">Remat Al-Riyadh</p>
+          <h1 class="dashboard-title">Teaboy Dashboard 1</h1>
+          <p class="dashboard-subtitle">Maaden</p>
         </div>
         <div class="header-right">
           <button
@@ -779,7 +779,7 @@
     </div>
 
     <script>
-      const COMPANY_CODE = "remat"; // 👈 set manually per company
+      const COMPANY_CODE = "maaden"; // 👈 set manually per company
 
       function goToSettings() {
         // Build the URL with the current company’s order_menu.html and #settings
@@ -876,17 +876,13 @@
 
           this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
 
-          // === Define your desk range here ===
-          this.startDesk = 26;
-          this.endDesk = 77;
+          this.startDesk = 1;
+          this.endDesk = 10;
 
           this.firstLoad = true;
 
           // === Define custom desk numbers here ===
-          this.customDesks = [
-            108, 109, 110, 111, 112, 113, 139, 140, 141, 142, 143, 144, 145,
-            146, 147, 148,
-          ];
+          this.customDesks = [];
           this.allowedDesks = this.buildAllowedDeskSet();
           this.pollInterval = null;
 
