@@ -1512,5 +1512,19 @@
     "startedAt": "2025-10-13T19:49:49.277Z",
     "teaboyName": "Julius",
     "completedAt": "2025-10-13T19:50:31.394Z"
+  },
+  {
+    "id": "1761401987087",
+    "desk": "2",
+    "serviceArea": "DESK2",
+    "items": [
+      "Lemon Ginger Tea"
+    ],
+    "status": "pending",
+    "timestamp": "2025-10-25T14:19:47.085Z",
+    "location": "Zone 1 - Meeting Room A-2",
+    "orderNote": "",
+    "startedAt": "2025-10-25T14:19:47.085Z",
+    "teaboyName": "Julius"
   }
 ]

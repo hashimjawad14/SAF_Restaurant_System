@@ -58,14 +58,89 @@ function companyMenuPath(companyId) {
 
 const session = require("express-session");
 
+// app.use(
+//   session({
+//     secret: "super-secret-key",
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { maxAge: 24 * 60 * 60 * 1000 }, // default 1 day
+//   })
+// );
+
+app.set("trust proxy", 1); // important if behind proxy or using HTTPS
+
+const isProduction = process.env.NODE_ENV === "production";
+
 app.use(
   session({
     secret: "super-secret-key",
     resave: false,
-    saveUninitialized: true,
-    cookie: { maxAge: 24 * 60 * 60 * 1000 }, // default 1 day
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+      sameSite: isProduction ? "none" : "lax", // lax works for localhost
+      secure: isProduction, // secure only in prod
+      httpOnly: true,
+    },
   })
 );
+
+// const crypto = require("crypto");
+// const activeSlugs = new Map(); // slug -> expiry timestamp
+
+// // Helper to create slug and token
+// function createSlug() {
+//   return crypto.randomBytes(8).toString("hex");
+// }
+
+// // API: user opens from QR
+// app.post("/api/qr/start", (req, res) => {
+//   const { deskId, COMPANY_CODE } = req.body || {};
+//   if (!deskId) return res.status(400).json({ error: "Missing deskId" });
+
+//   const slug = crypto.randomBytes(8).toString("hex");
+//   const expiresAt = Date.now() + 30 * 1000; // 30s validity
+//   activeSlugs.set(slug, expiresAt);
+
+//   console.log(`New slug ${slug} for desk ${deskId} [${COMPANY_CODE}]`);
+
+//   res.json({
+//     redirect: `/company_list/${COMPANY_CODE}/order_menu.html#id-${deskId}&mode=qr&slug=${slug}`,
+//   });
+// });
+
+// // API: verify slug on page load
+// app.post("/api/session/start", (req, res) => {
+//   const { slug } = req.body || {};
+//   if (!slug) return res.status(400).json({ error: "Missing slug" });
+
+//   const expiry = activeSlugs.get(slug);
+//   if (!expiry || expiry < Date.now()) {
+//     return res.json({ expiredSlug: true });
+//   }
+
+//   req.session.slug = slug;
+//   req.session.qrStart = Date.now();
+//   req.session.qrTTL = 30 * 1000;
+//   res.json({ success: true });
+// });
+
+// // Check session
+// app.get("/api/session/check", (req, res) => {
+//   if (req.session.mode === "qr") {
+//     const now = Date.now();
+//     if (req.session.qrStart && now - req.session.qrStart > req.session.qrTTL) {
+//       const slug = req.session.slug;
+//       if (slug) {
+//         const record = usedSlugs.get(slug);
+//         if (record) record.expired = true;
+//       }
+//       console.log(`Session expired for slug ${req.session.slug}`);
+//       return res.json({ expired: true });
+//     }
+//   }
+//   res.json({ expired: false, mode: req.session.mode || "tablet" });
+// });
 
 // Start session
 app.post("/api/session/start", (req, res) => {
@@ -75,12 +150,25 @@ app.post("/api/session/start", (req, res) => {
   req.session.mode = mode;
   if (mode === "qr") {
     req.session.qrStart = Date.now();
-    req.session.qrTTL = 5 * 60 * 1000; // 30s for testing
+    req.session.qrTTL = 15 * 60 * 1000;
   }
 
   console.log(`Session started in ${mode} mode`);
   res.json({ success: true, mode });
 });
+
+// app.get("/api/orders/status", async (req, res) => {
+//   const { id, company } = req.query;
+//   if (!id) return res.status(400).json({ error: "Missing order id" });
+
+//   const companyId = company || "default";
+//   const orders = await readOrders(companyId);
+//   const order = orders.find((o) => String(o.id) === String(id));
+
+//   if (!order) return res.status(404).json({ error: "Order not found" });
+
+//   res.json({ status: order.status });
+// });
 
 // Check session
 app.get("/api/session/check", (req, res) => {
@@ -306,6 +394,38 @@ app.get("/api/stats", async (req, res) => {
       ordersByTeaboy[name] = (ordersByTeaboy[name] || 0) + 1;
     });
 
+    // ✅ Calculate average preparation time per teaboy correctly
+    const avgTimeByTeaboy = {};
+    const timeSums = {};
+    const timeCounts = {};
+
+    orders.forEach((order) => {
+      if (
+        order.status === "completed" &&
+        order.startedAt &&
+        order.completedAt
+      ) {
+        const teaboy = order.teaboyName || order.serviceAreaName || "Unknown";
+        const start = new Date(order.startedAt);
+        const end = new Date(order.completedAt);
+        const diffMins = (end - start) / 60000; // convert ms to minutes
+
+        if (!timeSums[teaboy]) {
+          timeSums[teaboy] = 0;
+          timeCounts[teaboy] = 0;
+        }
+
+        timeSums[teaboy] += diffMins;
+        timeCounts[teaboy] += 1;
+      }
+    });
+
+    Object.keys(timeSums).forEach((teaboy) => {
+      avgTimeByTeaboy[teaboy] = parseFloat(
+        (timeSums[teaboy] / timeCounts[teaboy]).toFixed(1)
+      );
+    });
+
     res.json({
       totalOrders,
       completedOrders,
@@ -313,6 +433,7 @@ app.get("/api/stats", async (req, res) => {
       avgRating,
       ordersByDate,
       ordersByTeaboy,
+      avgTimeByTeaboy,
     });
   } catch (err) {
     console.error("Stats endpoint error:", err);

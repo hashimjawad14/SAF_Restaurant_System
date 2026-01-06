@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Login | Remat Al-Riyadh</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f172a, #1e293b);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        color: white;
+        padding: 20px;
+        overflow: hidden;
+      }
+
+      .login-container {
+        position: relative;
+        width: 100%;
+        max-width: 400px;
+        text-align: center;
+        padding: 40px 30px;
+        border-radius: 20px;
+        background: rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(12px) saturate(180%);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        animation: fadeInUp 0.8s ease both;
+      }
+
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .logo {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        margin-bottom: 20px;
+        border-radius: 16px;
+        background: white;
+        padding: 10px;
+      }
+
+      h1 {
+        font-size: 22px;
+        font-weight: 800;
+        margin-bottom: 6px;
+      }
+
+      p.subtitle {
+        font-size: 14px;
+        color: rgba(255, 255, 255, 0.75);
+        margin-bottom: 28px;
+      }
+
+      input {
+        width: 100%;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        margin-bottom: 20px;
+        transition: all 0.2s ease;
+      }
+
+      input:focus {
+        background: rgba(255, 255, 255, 0.25);
+        box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.5);
+      }
+
+      button {
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #10b981, #059669);
+        color: white;
+        font-weight: 700;
+        font-size: 15px;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 30px rgba(16, 185, 129, 0.3);
+      }
+
+      .error {
+        color: #f87171;
+        font-size: 13px;
+        margin-top: 12px;
+        display: none;
+      }
+
+      .footer {
+        position: absolute;
+        bottom: 16px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+      }
+
+      @media (max-width: 480px) {
+        .login-container {
+          padding: 30px 20px;
+          border-radius: 16px;
+        }
+        h1 {
+          font-size: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="login-container">
+      <img
+        src="/company_list/remat/images/logo_ai.png"
+        alt="Company Logo"
+        class="logo"
+      />
+      <h1>Remat Al-Riyadh</h1>
+      <p class="subtitle">Admin Access Panel</p>
+
+      <input type="password" id="password" placeholder="Enter Password" />
+      <button id="loginBtn">Login</button>
+      <p class="error" id="error">Incorrect password. Please try again.</p>
+    </div>
+
+    <div class="footer">Powered by SAF</div>
+
+    <script nonce="123456">
+      const COMPANY_NAME = "remat";
+
+      const PASSWORD_HASH =
+        "fd0757145e368cb4dfc9afd9df9b948f79edfd16f45a6901f74623bd2251cc7f";
+
+      document.getElementById("loginBtn").addEventListener("click", login);
+
+      async function login() {
+        const pass = document.getElementById("password").value.trim();
+        const encoded = new TextEncoder().encode(pass);
+        const buffer = await crypto.subtle.digest("SHA-256", encoded);
+        const hash = Array.from(new Uint8Array(buffer))
+          .map((b) => b.toString(16).padStart(2, "0"))
+          .join("");
+
+        if (hash === PASSWORD_HASH) {
+          // Store company-specific login key
+          localStorage.setItem(`loggedInFor_${COMPANY_NAME}`, "true");
+          window.location.href = "admin.html";
+        } else {
+          const error = document.getElementById("error");
+          error.style.display = "block";
+          error.textContent = "Incorrect password. Please try again.";
+        }
+      }
+
+      // Allow "Enter" key to submit
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") login();
+      });
+    </script>
+  </body>
+</html>

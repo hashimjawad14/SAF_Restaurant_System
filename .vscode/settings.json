@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/company_list/maaden/order_menu.html"
+    "livePreview.defaultPreviewPath": "/company_list/maaden/order_menu.html",
+    "liveServer.settings.port": 5501
 }

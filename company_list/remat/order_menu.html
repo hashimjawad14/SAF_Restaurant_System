@@ -905,7 +905,11 @@
       </div>
 
       <div class="logo" id="companyLogo">
-        <img src="/logo_ai.png" alt="Logo" id="c_logo" />
+        <img
+          src="/company_list/remat/images/logo_ai.png"
+          alt="Logo"
+          id="c_logo"
+        />
       </div>
       <div class="company-name" id="companyName">
         قائمة المشروبات | Drinks Menu
@@ -1022,9 +1026,9 @@
     <div class="message" id="message"></div>
 
     <div id="ratingPopup" class="rating-popup hidden">
-      <div class="popup-overlay" onclick="closeRatingPopup()"></div>
+      <div class="popup-overlay"></div>
       <div class="popup-content">
-        <button class="close-btn" onclick="closeRatingPopup()">✖</button>
+        <button class="close-btn">✖</button>
         <h3>Rate your order</h3>
         <div class="stars">
           <span class="star" data-value="1">&#9733;</span>
@@ -1037,32 +1041,53 @@
           id="ratingReview"
           placeholder="Leave an optional review"
         ></textarea>
-        <button onclick="submitRating()">Submit</button>
+        <button id="submitRatingBtn">Submit</button>
       </div>
     </div>
 
-    <script>
+    <script nonce="123456">
       const COMPANY_CODE = "remat"; // 👈 set manually per company
       const DEFAULT_COMPANY = "remat"; // fallback if route/company missing
 
+      document.addEventListener("DOMContentLoaded", function () {
+        const overlay = document.querySelector("#ratingPopup .popup-overlay");
+        const closeBtn = document.querySelector("#ratingPopup .close-btn");
+        const submitBtn = document.getElementById("submitRatingBtn");
+
+        overlay.addEventListener("click", closeRatingPopup);
+        closeBtn.addEventListener("click", closeRatingPopup);
+        submitBtn.addEventListener("click", submitRating);
+      });
+
       async function startSessionFromHash() {
-        const hash = window.location.hash; // e.g. "#id-1" or "#id-1&mode=qr"
+        const hash = window.location.hash || ""; // e.g. "#id-1" or "#id-1&mode=qr"
+        const idMatch = hash.match(/id-(\d+)(?:[&$]|$)/);
+        const deskId = idMatch ? idMatch[1] : null;
         let mode = "tablet"; // default
 
-        if (hash && hash.includes("mode=qr")) {
+        if (hash.includes("mode=qr")) {
           mode = "qr";
         }
 
-        // Call backend to start session
+        if (!deskId) {
+          console.warn("No desk ID found in hash:", hash);
+          return;
+        }
+
         try {
           const res = await fetch("/api/session/start", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            credentials: "include", // IMPORTANT: send session cookie
+            credentials: "include", // send session cookie
             body: JSON.stringify({ mode }),
           });
+
           const data = await res.json();
           console.log("Session started:", data);
+
+          // ✅ Properly hide QR params from URL
+          // Use backticks for template literal
+          history.replaceState(null, "", `/qr?id=${deskId}`);
         } catch (err) {
           console.error("Failed to start session:", err);
         }
@@ -1077,11 +1102,11 @@
           const data = await res.json();
           if (data.expired) {
             document.body.innerHTML = `
-        <div style="text-align:center;margin-top:50px;font-family:sans-serif;">
-          <h2>⚠️ Session expired!</h2>
-          <p>Please scan the QR code again.</p>
-        </div>
-      `;
+              <div style="text-align:center;margin-top:50px;font-family:sans-serif;">
+                <h2>⚠️ Session expired!</h2>
+                <p>Please scan the QR code again.</p>
+              </div>
+            `;
           }
         } catch (err) {
           console.error("Session check failed:", err);
@@ -1094,8 +1119,8 @@
       });
 
       /* ===========================
-                               Full client JS — company-aware index page
-                               =========================== */
+                                     Full client JS — company-aware index page
+                                     =========================== */
 
       /* ---------- CONFIG ---------- */
       const API_DESKS_URL = "/api/desks"; // global desks fallback
@@ -1217,23 +1242,63 @@
       };
 
       /* ---------- ROUTING HELPERS ---------- */
+      // function parseRoute() {
+      //   const hash = window.location.hash || "";
+
+      //   // #id-3
+      //   let m = hash.match(/^#id-(\d+)$/i);
+      //   if (m)
+      //     return {
+      //       company: COMPANY_CODE,
+      //       desk: parseInt(m[1], 10),
+      //       isSettings: false,
+      //     };
+
+      //   // #settings
+      //   if (/^#settings$/i.test(hash))
+      //     return { company: COMPANY_CODE, desk: null, isSettings: true };
+
+      //   // default → desk 1
+      //   return { company: COMPANY_CODE, desk: 1, isSettings: false };
+      // }
+
       function parseRoute() {
         const hash = window.location.hash || "";
+        const search = window.location.search || "";
 
-        // #id-3
-        let m = hash.match(/^#id-(\d+)$/i);
-        if (m)
+        // ✅ Handle #id-3 or #id-3&anything
+        let m = hash.match(/^#id-(\d+)(?:[&?].*)?$/i);
+        if (m) {
+          console.log("✅ parseRoute detected desk from hash:", m[1]);
           return {
             company: COMPANY_CODE,
             desk: parseInt(m[1], 10),
             isSettings: false,
           };
+        }
 
-        // #settings
-        if (/^#settings$/i.test(hash))
+        // ✅ Handle /qr?id=12 type URLs (no hash)
+        let q = search.match(/[?&]id=(\d+)/i);
+        if (q) {
+          console.log("✅ parseRoute detected desk from query:", q[1]);
+          return {
+            company: COMPANY_CODE,
+            desk: parseInt(q[1], 10),
+            isSettings: false,
+          };
+        }
+
+        // #settings (hash-based)
+        if (/^#settings(?:[&?].*)?$/i.test(hash)) {
           return { company: COMPANY_CODE, desk: null, isSettings: true };
+        }
 
-        // default → desk 1
+        console.warn(
+          "⚠️ parseRoute defaulted to desk 1 — hash:",
+          hash,
+          "search:",
+          search
+        );
         return { company: COMPANY_CODE, desk: 1, isSettings: false };
       }
 
@@ -1629,46 +1694,47 @@
                 ? `<img class="menu-item-img" src="${item.image}" alt="${item.name}">`
                 : `<div style="width:40px;height:40px;border-radius:8px;background:#f0f0f0;"></div>`;
               return `
-                          <label class="option-item" data-item-id="${
-                            item.id
-                          }" data-category="${categoryKey}">
-                            <div style="display:flex; gap:10px; align-items:center;" id="itemDiv">
-                              ${imgHtml}
-                              <div class="option-name">${item.name}</div>
-                            </div>
-                            <div class="qty-control">
-                              <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
-                              <input type="text" class="qty-input" value="${
-                                quantities[item.id] || 0
-                              }" inputmode="numeric" pattern="[0-9]*" />
-                              <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
-                            </div>
-                          </label>
-                        `;
+                                <label class="option-item" data-item-id="${
+                                  item.id
+                                }" data-category="${categoryKey}">
+                                  <div style="display:flex; gap:10px; align-items:center;" id="itemDiv">
+                                    ${imgHtml}
+                                    <div class="option-name">${item.name}</div>
+                                  </div>
+                                  <div class="qty-control">
+                                    <button type="button" class="qty-btn minus" aria-label="Decrease">−</button>
+                                    <input type="text" class="qty-input" value="${
+                                      quantities[item.id] || 0
+                                    }" inputmode="numeric" pattern="[0-9]*" />
+                                    <button type="button" class="qty-btn plus" aria-label="Increase">+</button>
+                                  </div>
+                                </label>
+                              `;
             })
             .join("");
 
           categoryDiv.innerHTML = `
-                          <div class="category-header" id="${categoryKey}Header">
-                            <div class="category-icon">${
-                              category.icon
-                                ? category.icon.startsWith("<")
-                                  ? category.icon
-                                  : `<span style="font-size:24px">${category.icon}</span>`
-                                : `<svg viewBox="0 0 24 24">${
-                                    catIcons[categoryKey] || catIcons.coffee
-                                  }</svg>`
-                            }
-            </div>
-                            <div class="category-info"><div class="category-name">${
-                              category.name || categoryKey
-                            }</div><div class="category-desc">${
+                                <div class="category-header" id="${categoryKey}Header">
+                                  <div class="category-icon">${
+                                    category.icon
+                                      ? category.icon.startsWith("<")
+                                        ? category.icon
+                                        : `<span style="font-size:24px">${category.icon}</span>`
+                                      : `<svg viewBox="0 0 24 24">${
+                                          catIcons[categoryKey] ||
+                                          catIcons.coffee
+                                        }</svg>`
+                                  }
+                  </div>
+                                  <div class="category-info"><div class="category-name">${
+                                    category.name || categoryKey
+                                  }</div><div class="category-desc">${
             category.desc || ""
           }</div></div>
-                            <div class="category-toggle"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
-                          </div>
-                          <div class="options-container">${itemsHtml}</div>
-                        `;
+                                  <div class="category-toggle"><svg viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg></div>
+                                </div>
+                                <div class="options-container">${itemsHtml}</div>
+                              `;
 
           beverageSection.appendChild(categoryDiv);
 
@@ -1930,22 +1996,22 @@
             const card = document.createElement("div");
             card.className = "desk-card";
             card.innerHTML = `
-                                <h4>Desk ${i}</h4>
-                                <div class="row">
-                                  <div><label>Building</label><input type="text" data-field="building" data-desk="${i}" value="${
+                                      <h4>Desk ${i}</h4>
+                                      <div class="row">
+                                        <div><label>Building</label><input type="text" data-field="building" data-desk="${i}" value="${
               data.building || ""
             }" placeholder="e.g., Building A" /></div>
-                                  <div><label>Room</label><input type="text" data-field="floor" data-desk="${i}" value="${
+                                        <div><label>Room</label><input type="text" data-field="floor" data-desk="${i}" value="${
               data.floor || ""
             }" placeholder="e.g., 2" /></div>
-                                </div>
-                                <div class="row">
-                                  <div><label>Tea Boy Name</label><input type="text" data-field="teaBoy" data-desk="${i}" value="${
+                                      </div>
+                                      <div class="row">
+                                        <div><label>Tea Boy Name</label><input type="text" data-field="teaBoy" data-desk="${i}" value="${
               data.teaBoy || ""
             }" placeholder="e.g., Ahmed" /></div>
-                                  <div><label>Quick Link</label><input type="text" value="/${COMPANY_CODE}/id-${i}" readonly /></div>
-                                </div>
-                              `;
+                                        <div><label>Quick Link</label><input type="text" value="/${COMPANY_CODE}/id-${i}" readonly /></div>
+                                      </div>
+                                    `;
             deskGrid.appendChild(card);
           }
         }
@@ -1978,40 +2044,42 @@
           catDiv.style.marginBottom = "12px";
 
           catDiv.innerHTML = `
-    <h3 style="margin-bottom:8px;font-size:16px;font-weight:700;">
-      Category: ${cat.name || catKey}
-    </h3>
-    <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
-      <input class="cat-key" value="${catKey}" placeholder="category key" />
-      <input class="cat-name" value="${
-        cat.name || ""
-      }" placeholder="Category display name" />
-      <input class="cat-desc" value="${
-        cat.desc || ""
-      }" placeholder="Category description" />
-      
-      <div style="display:flex;align-items:center;gap:6px;">
-        <input class="cat-icon" 
-               value="${
-                 cat.icon && !cat.icon.trim().startsWith("<") ? cat.icon : ""
-               }" 
-               placeholder="emoji or short code" 
-               style="width:160px;" />
-        <div class="cat-icon-preview" 
-             style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #ddd;border-radius:4px;">
-          ${
-            cat.icon && cat.icon.trim().startsWith("<")
-              ? cat.icon // render SVG here
-              : cat.icon || "•" // emoji/placeholder
-          }
-        </div>
-      </div>
+          <h3 style="margin-bottom:8px;font-size:16px;font-weight:700;">
+            Category: ${cat.name || catKey}
+          </h3>
+          <div style="display:flex; gap:8px; align-items:center; margin-bottom:6px;">
+            <input class="cat-key" value="${catKey}" placeholder="category key" />
+            <input class="cat-name" value="${
+              cat.name || ""
+            }" placeholder="Category display name" />
+            <input class="cat-desc" value="${
+              cat.desc || ""
+            }" placeholder="Category description" />
 
-      <button class="add-item tiny-btn">Add Item</button>
-      <button class="remove-cat tiny-btn" title="Remove category">Delete</button>
-    </div>
-    <div class="cat-items" style="margin-top:8px;"></div>
-  `;
+            <div style="display:flex;align-items:center;gap:6px;">
+              <input class="cat-icon"
+                     value="${
+                       cat.icon && !cat.icon.trim().startsWith("<")
+                         ? cat.icon
+                         : ""
+                     }"
+                     placeholder="emoji or short code"
+                     style="width:160px;" />
+              <div class="cat-icon-preview"
+                   style="width:28px;height:28px;display:flex;align-items:center;justify-content:center;overflow:hidden;border:1px solid #ddd;border-radius:4px;">
+                ${
+                  cat.icon && cat.icon.trim().startsWith("<")
+                    ? cat.icon // render SVG here
+                    : cat.icon || "•" // emoji/placeholder
+                }
+              </div>
+            </div>
+
+            <button class="add-item tiny-btn">Add Item</button>
+            <button class="remove-cat tiny-btn" title="Remove category">Delete</button>
+          </div>
+          <div class="cat-items" style="margin-top:8px;"></div>
+        `;
 
           const iconInput = catDiv.querySelector(".cat-icon");
           const preview = catDiv.querySelector(".cat-icon-preview");
@@ -2040,29 +2108,29 @@
               itemDiv.style.alignItems = "center";
               itemDiv.style.marginBottom = "8px";
               itemDiv.innerHTML = `
-  <input class="item-id" value="${
-    item.id || ""
-  }" placeholder="id" style="width:120px"/>
-  <input class="item-name" value="${
-    item.name || ""
-  }" placeholder="name" style="width:220px"/>
-  <input class="item-val" value="${
-    item.value || ""
-  }" placeholder="value" style="width:160px"/>
+        <input class="item-id" value="${
+          item.id || ""
+        }" placeholder="id" style="width:120px"/>
+        <input class="item-name" value="${
+          item.name || ""
+        }" placeholder="name" style="width:220px"/>
+        <input class="item-val" value="${
+          item.value || ""
+        }" placeholder="value" style="width:160px"/>
 
-  <label class="custom-file-upload tiny-btn">
-    Upload Image
-    <input type="file" class="item-image-file" accept="image/*" style="display:none;" />
-  </label>
+        <label class="custom-file-upload tiny-btn">
+          Upload Image
+          <input type="file" class="item-image-file" accept="image/*" style="display:none;" />
+        </label>
 
-  <button class="remove-item tiny-btn">Remove</button>
+        <button class="remove-item tiny-btn">Remove</button>
 
-  ${
-    item.image
-      ? `<img src="${item.image}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
-      : ""
-  }
-`;
+        ${
+          item.image
+            ? `<img src="${item.image}" style="width:48px;height:48px;object-fit:cover;border-radius:6px;">`
+            : ""
+        }
+      `;
 
               itemsWrap.appendChild(itemDiv);
 
@@ -2224,8 +2292,8 @@
         });
 
       /* -----------------------------
-                       Storage helpers (company-aware)
-                       ----------------------------- */
+                             Storage helpers (company-aware)
+                             ----------------------------- */
       function getCompanyKey(baseKey) {
         return `${baseKey}_${COMPANY_CODE}`;
       }
@@ -2342,12 +2410,12 @@
         const style = document.createElement("style");
         style.id = id;
         style.textContent = `
-                      .menu-item-img{ width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #eee;margin-right:8px;}
-                      .option-name{display:flex;align-items:center;gap:8px;}
-                      .beverage-category .options-container{display:flex;flex-wrap:wrap;gap:8px;}
-                      .option-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:#fff;border:1px solid #eee;min-width:260px;max-width:420px;}
-                      .qty-input{width:48px;text-align:center;border-radius:6px;border:1px solid #ddd;padding:6px}
-                    `;
+                            .menu-item-img{ width:40px;height:40px;object-fit:cover;border-radius:8px;flex-shrink:0;border:1px solid #eee;margin-right:8px;}
+                            .option-name{display:flex;align-items:center;gap:8px;}
+                            .beverage-category .options-container{display:flex;flex-wrap:wrap;gap:8px;}
+                            .option-item{display:flex;align-items:center;justify-content:space-between;padding:8px;border-radius:8px;background:#fff;border:1px solid #eee;min-width:260px;max-width:420px;}
+                            .qty-input{width:48px;text-align:center;border-radius:6px;border:1px solid #ddd;padding:6px}
+                          `;
         document.head.appendChild(style);
       })();
     </script>

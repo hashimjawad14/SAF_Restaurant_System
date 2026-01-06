@@ -669,18 +669,20 @@
           <p class="dashboard-subtitle">Remat Al-Riyadh</p>
         </div>
         <div class="header-right">
-          <button
-            id="deskSettingsBtn"
-            class="tiny-btn"
-            title="Configure desks"
-            onclick="goToSettings()"
-          >
+          <button id="deskSettingsBtn" class="tiny-btn" title="Configure desks">
             Desk Settings
           </button>
           <div class="status-indicator">
             <span class="status-dot"></span>
             <span>Live Updates</span>
           </div>
+          <button
+            id="logoutBtn"
+            class="tiny-btn"
+            style="background: #ef4444; color: white"
+          >
+            Logout
+          </button>
         </div>
       </div>
 
@@ -773,8 +775,17 @@
       </div>
     </div>
 
-    <script>
+    <script nonce="123456">
       const COMPANY_CODE = "remat"; // 👈 set manually per company
+
+      if (localStorage.getItem(`loggedInFor_${COMPANY_CODE}`) !== "true") {
+        window.location.href = "login.html";
+      }
+
+      function logout() {
+        localStorage.removeItem(`loggedInFor_${COMPANY_CODE}`);
+        window.location.href = "login.html";
+      }
 
       function goToSettings() {
         // Build the URL with the current company’s order_menu.html and #settings
@@ -785,6 +796,11 @@
       document.getElementById("statsBtn").addEventListener("click", () => {
         window.location.href = `/company_list/${COMPANY_CODE}/stats.html`;
       });
+
+      document
+        .getElementById("deskSettingsBtn")
+        .addEventListener("click", goToSettings);
+      document.getElementById("logoutBtn").addEventListener("click", logout);
 
       // --- Helper: robust parse of order timestamp into a Date (local-aware) ---
       function parseOrderTimestampToDate(ts) {
@@ -866,8 +882,8 @@
           // === Detect companyId from URL ===
           const urlParams = new URLSearchParams(window.location.search);
           this.companyId = COMPANY_CODE; // 👈 always use manual code
-          // this.apiBase = "/api/orders";
-          this.apiBase = "http://localhost:4000/api/orders";
+          this.apiBase = "/api/orders";
+          // this.apiBase = "http://localhost:4000/api/orders";
 
           this.apiEndpoint = `${this.apiBase}?company=${this.companyId}`;
 

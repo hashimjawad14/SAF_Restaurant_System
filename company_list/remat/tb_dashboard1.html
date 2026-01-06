@@ -673,7 +673,6 @@
             id="deskSettingsBtn"
             class="tiny-btn"
             title="Configure desks"
-            onclick="goToSettings()"
             style="display: none"
           >
             Desk Settings
@@ -778,7 +777,7 @@
       </div>
     </div>
 
-    <script>
+    <script nonce="123456">
       const COMPANY_CODE = "remat"; // 👈 set manually per company
 
       function goToSettings() {
@@ -884,7 +883,7 @@
           // === Define custom desk numbers here ===
           this.customDesks = [
             103, 104, 105, 106, 107, 120, 121, 122, 123, 124, 125, 126, 127,
-            128, 129, 130, 131, 132, 133, 134, 135, 136, 137, 138,
+            128, 129, 130, 131, 132, 133, 134, 135, 136, 137,
           ];
           this.allowedDesks = this.buildAllowedDeskSet();
           this.pollInterval = null;

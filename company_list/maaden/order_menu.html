@@ -1016,9 +1016,9 @@
     <div class="message" id="message"></div>
 
     <div id="ratingPopup" class="rating-popup hidden">
-      <div class="popup-overlay" onclick="closeRatingPopup()"></div>
+      <div class="popup-overlay"></div>
       <div class="popup-content">
-        <button class="close-btn" onclick="closeRatingPopup()">✖</button>
+        <button class="close-btn">✖</button>
         <h3>Rate your order</h3>
         <div class="stars">
           <span class="star" data-value="1">&#9733;</span>
@@ -1031,11 +1031,11 @@
           id="ratingReview"
           placeholder="Leave an optional review"
         ></textarea>
-        <button onclick="submitRating()">Submit</button>
+        <button id="submitRatingBtn">Submit</button>
       </div>
     </div>
 
-    <script>
+    <script nonce="123456">
       const COMPANY_CODE = "maaden"; // 👈 set manually per company
       const DEFAULT_COMPANY = "maaden"; // fallback if route/company missing
 
@@ -1049,6 +1049,16 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode: window.ORDER_MODE }),
       }).catch(console.error);
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const overlay = document.querySelector("#ratingPopup .popup-overlay");
+        const closeBtn = document.querySelector("#ratingPopup .close-btn");
+        const submitBtn = document.getElementById("submitRatingBtn");
+
+        overlay.addEventListener("click", closeRatingPopup);
+        closeBtn.addEventListener("click", closeRatingPopup);
+        submitBtn.addEventListener("click", submitRating);
+      });
 
       /* ===========================
                    Full client JS — company-aware index page
@@ -1244,6 +1254,115 @@
           return null;
         }
       }
+
+      // ---------- Polling for order completion ----------
+      let __pollIntervalHandle = null;
+      const POLL_INTERVAL_MS = 6000; // 6 seconds (tunable)
+
+      // Fetch all orders for company and find the tracked order id
+      async function checkOrderStatusFromServer(orderId) {
+        try {
+          const url = `/api/orders?company=${encodeURIComponent(COMPANY_CODE)}`;
+          const res = await fetch(url, { cache: "no-store" });
+          if (!res.ok) {
+            console.warn("Orders fetch failed:", res.status);
+            return null;
+          }
+          const orders = await res.json();
+          if (!Array.isArray(orders)) return null;
+          // find by id loosely (string compare)
+          const found = orders.find((o) => String(o.id) === String(orderId));
+          return found || null;
+        } catch (err) {
+          console.warn("checkOrderStatusFromServer error:", err);
+          return null;
+        }
+      }
+
+      async function startPollingForCompletion() {
+        if (!currentOrderId) return;
+        // stop any existing poll
+        stopPollingForCompletion();
+
+        // immediate check first (fast feedback)
+        try {
+          const ord = await checkOrderStatusFromServer(currentOrderId);
+          if (ord && ord.status === "completed") {
+            onOrderCompleted(ord);
+            return;
+          }
+        } catch (err) {
+          console.warn("initial order check failed:", err);
+        }
+
+        __pollIntervalHandle = setInterval(async () => {
+          try {
+            const ord = await checkOrderStatusFromServer(currentOrderId);
+            if (ord && ord.status === "completed") {
+              stopPollingForCompletion();
+              onOrderCompleted(ord);
+            }
+          } catch (err) {
+            console.warn("poll error:", err);
+            // keep polling — transient errors ok
+          }
+        }, POLL_INTERVAL_MS);
+      }
+
+      function stopPollingForCompletion() {
+        if (__pollIntervalHandle) {
+          clearInterval(__pollIntervalHandle);
+          __pollIntervalHandle = null;
+        }
+      }
+
+      function onOrderCompleted(orderObj) {
+        try {
+          console.log("Order completed detected:", orderObj);
+          // Use showRatingPopup with the order id (existing popup expects ID)
+          // and set currentOrderId to ensure submitRating knows which order to post to.
+          currentOrderId = String(
+            orderObj.id || orderObj._id || currentOrderId
+          );
+          // open rating popup
+          document.getElementById("ratingPopup").classList.remove("hidden");
+          // make sure stars are reset and event handlers present
+          currentRating = 0;
+          document
+            .querySelectorAll(".rating-popup .star")
+            .forEach((s) => s.classList.remove("selected"));
+          // attach star click handlers (if showRatingPopup already does that, it's safe; duplicate handlers are harmless but we clean them)
+          document.querySelectorAll(".rating-popup .star").forEach((star) => {
+            // remove existing handler by cloning (quick safe debind) then re-attach
+            const newStar = star.cloneNode(true);
+            star.parentNode.replaceChild(newStar, star);
+          });
+          document.querySelectorAll(".rating-popup .star").forEach((star) => {
+            star.addEventListener("click", () => {
+              currentRating = parseInt(star.dataset.value, 10);
+              document
+                .querySelectorAll(".rating-popup .star")
+                .forEach((s) =>
+                  s.classList.toggle(
+                    "selected",
+                    parseInt(s.dataset.value, 10) <= currentRating
+                  )
+                );
+            });
+          });
+
+          // optionally focus review textarea
+          const reviewEl = document.getElementById("ratingReview");
+          if (reviewEl) reviewEl.focus();
+        } catch (err) {
+          console.error("onOrderCompleted error:", err);
+        }
+      }
+
+      // Ensure polling stops on page unload (cleanup)
+      window.addEventListener("beforeunload", () => {
+        stopPollingForCompletion();
+      });
 
       // Fetch menu for a company (server supports ?company=)
       async function loadCompanyMenu(companyIdLocal) {
@@ -1750,16 +1869,39 @@
           console.log("Order submitted successfully:", result);
 
           // After order submission success
-          setTimeout(() => {
-            showRatingPopup(order.id);
+          // setTimeout(() => {
+          //   showRatingPopup(order.id);
 
-            // reset stars & textarea for fresh rating
+          //   // reset stars & textarea for fresh rating
+          //   currentRating = 0;
+          //   document.querySelectorAll(".rating-popup .star").forEach((s) => {
+          //     s.classList.remove("selected");
+          //   });
+          //   document.getElementById("ratingReview").value = "";
+          // }, 10000); // 10 seconds
+          // return result;
+
+          // After order submission success — start polling for server-side completion
+          try {
+            // prefer server-returned id if present, otherwise use client-generated order.id
+            const placedOrderId =
+              (result && (result.id || result.orderId)) || order.id;
+            currentOrderId = String(placedOrderId);
+
+            // reset rating UI so it's fresh when shown
             currentRating = 0;
-            document.querySelectorAll(".rating-popup .star").forEach((s) => {
-              s.classList.remove("selected");
-            });
+            document
+              .querySelectorAll(".rating-popup .star")
+              .forEach((s) => s.classList.remove("selected"));
             document.getElementById("ratingReview").value = "";
-          }, 10000); // 10 seconds
+
+            // start polling the orders endpoint for completion
+            startPollingForCompletion();
+
+            console.log("Polling started for order:", currentOrderId);
+          } catch (err) {
+            console.warn("Could not start polling for order completion:", err);
+          }
           return result;
         } catch (err) {
           console.error("submitDashboardOrder error:", err);
