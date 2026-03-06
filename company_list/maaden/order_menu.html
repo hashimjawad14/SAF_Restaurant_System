@@ -3,6 +3,15 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="icon" type="image/x-icon" href="images/favicon2.ico">
+
+        <!-- Apple iPhone Home Screen -->
+<link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon2.png">
+
+<!-- Android Home Screen -->
+<link rel="icon" type="image/png" sizes="192x192" href="images/android-chrome2-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="images/android-chrome2-512x512.png">
+
     <title>Office Beverage Order</title>
     <style>
       * {
@@ -1549,7 +1558,7 @@
           if (dynamic) {
             serviceProviderId = `DESK${currentDeskId}`;
             serviceProvider = {
-              name: dynamic.teaBoy || "Ahmed",
+              name: dynamic.teaBoy || "",
               location: `${dynamic.building || "Zone A"} - ${
                 dynamic.floor || "1"
               }`,
@@ -1590,10 +1599,14 @@
         //   deskTitleEl.textContent = `Desk #${currentDeskId} – Order Beverages`;
         if (locationInfoEl) {
           if (serviceProvider) {
-            const serviceText =
-              config.orderFlow === "telegram"
-                ? `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`
-                : `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`;
+            // const serviceText =
+            //   config.orderFlow === "telegram"
+            //     ? `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`
+            //     : `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`;
+
+            const serviceText = serviceProvider.name && serviceProvider.name.trim() !== ""
+  ? `${serviceProvider.location} • Tea Boy: ${serviceProvider.name}`
+  : `${serviceProvider.location}`;
             locationInfoEl.textContent = serviceText;
           } else {
             locationInfoEl.textContent = "Service area not configured";
